@@ -50,5 +50,3 @@ def color_ascii(img, scale):
     print("Time elapsed:{0}".format(end - start))
 
 color_ascii("pavan.jpg", 0.1)
-
-
