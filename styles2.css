@@ -101,6 +101,7 @@ main {
     text-decoration: underline;
 }
 
+
 /* Footer styling */
 footer {
     text-align: center;
@@ -129,3 +130,6 @@ footer nav a {
 footer nav a:hover {
     text-decoration: underline;
 }
+
+
+
