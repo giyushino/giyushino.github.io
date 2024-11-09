@@ -1,0 +1,128 @@
+/* Reset default styles for consistency */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* General page styling */
+body {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    color: #333;
+    background-color: #F9F9F9;
+    line-height: 1.7;
+    max-width: 800px;
+    margin: auto;
+    padding: 20px;
+}
+
+/* Header styling */
+header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+header h1 {
+    font-size: 2.5em;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+header nav ul {
+    list-style-type: none;
+    margin-top: 10px;
+}
+
+header nav ul li {
+    display: inline;
+    margin: 0 15px;
+}
+
+header nav a {
+    text-decoration: none;
+    color: #555;
+    font-weight: 500;
+}
+
+header nav a:hover {
+    color: #000;
+}
+
+/* Blog post section styling */
+main {
+    margin-top: 20px;
+}
+
+.blog-post article {
+    margin-bottom: 50px;
+    padding-bottom: 30px;
+    border-bottom: 1px solid #EEE;
+}
+
+.blog-post h2 {
+    font-size: 2em;
+    font-weight: 600;
+    color: #222;
+    margin-bottom: 10px;
+}
+
+.post-date {
+    font-size: 0.9em;
+    color: #888;
+    margin-bottom: 20px;
+}
+
+.post-content {
+    font-size: 1.1em;
+    color: #444;
+    margin-bottom: 15px;
+}
+
+.read-more {
+    font-size: 1em;
+    color: #0066CC;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.read-more:hover {
+    color: #0044AA;
+    text-decoration: underline;
+}
+
+/* Footer styling */
+footer {
+    text-align: center;
+    margin-top: 50px;
+    padding-top: 20px;
+    border-top: 1px solid #EEE;
+    color: #555;
+    font-size: 0.9em;
+}
+
+footer nav ul {
+    list-style-type: none;
+    margin-top: 10px;
+}
+
+footer nav ul li {
+    display: inline;
+    margin: 0 10px;
+}
+
+footer nav a {
+    color: #555;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+footer nav a:hover {
+    color: #000;
+    text-decoration: underline;
+}
+
+/* Optional: Add hover effects for links and buttons */
+a {
+    transition: color 0.3s ease;
+}

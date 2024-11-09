@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact - My Blog</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles2.css"> <!-- Link to your CSS file -->
+</head>
+<body>
+
+<!-- Header Section -->
+<header>
+  <h1><a href="index.html" style="text-decoration: none; color: inherit;">My Blog</a></h1>
+</header>
+
+<!-- Main Content -->
+<main>
+  <section class="contact-section">
+    <h2>Contact Me</h2>
+    <p>If you have any questions, feedback, or just want to say hello, feel free to reach out! You can fill out the form below or email me directly at <a href="mailto:your-email@example.com">your-email@example.com</a>.</p>
+
+    <form action="submit_form.php" method="POST" class="contact-form">
+      <div class="form-group">
+        <label for="name">Your Name</label>
+        <input type="text" id="name" name="name" required>
+      </div>
+
+      <div class="form-group">
+        <label for="email">Your Email</label>
+        <input type="email" id="email" name="email" required>
+      </div>
+
+      <div class="form-group">
+        <label for="message">Your Message</label>
+        <textarea id="message" name="message" rows="5" required></textarea>
+      </div>
+
+      <button type="submit" class="submit-button">Send Message</button>
+    </form>
+  </section>
+</main>
+
+<!-- Footer Section -->
+<footer>
+  <p>&copy; 2024 My Blog. All rights reserved.</p>
+  <nav>
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="about.html">About</a></li>
+    </ul>
+  </nav>
+</footer>
+
+</body>
+</html>
