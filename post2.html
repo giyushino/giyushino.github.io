@@ -182,11 +182,26 @@
         paying for computing credits. My workaround? Just shuffle the training set before every epoch to ensure that there's more randomness
         in the training data.
       </p>
-      <img src = "images_for_git/vit19.jpg" alt="shuffle" width="800" style="display: block; margin: 20px auto;">
+      <img src = "images_for_git/real_shuffle.jpg" alt="shuffle" width="800" style="display: block; margin: 20px auto;">
       <p>
         And voilà! We're done! It should work in theory, but I haven't tested it yet. And you need to import random. Thanks for sticking around!
       </p>
-
+      <p>
+        Okay I actually got around to shuffling the training set... and it seems to work!
+        I trained the model on 5000 images for 5 epochs, same as before.
+        The pretraining results were relatively similar both times.
+      </p>
+      <img src = "images_for_git/vit20.jpg" alt="shuffle" width="800" style="display: block; margin: 20px auto;">
+      <p>
+        However, the results after training were AMAZING! Epoch 5 ended with a higher loss
+        value when we shuffled the dataset compared to when we didn't, but it was able to
+        perform much better on unseen data.
+      </p>
+      <img src = "images_for_git/vit21.jpg" alt="shuffle" width="800" style="display: block; margin: 20px auto;">
+      <img src = "images_for_git/vit22.jpg" alt="shuffle" width="800" style="display: block; margin: 20px auto;">
+      <p>
+        So... what's the final takeaway? Just shuffle your training set.
+      </p>
     </section>
   </article>
 
