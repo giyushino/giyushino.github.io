@@ -23,12 +23,79 @@
 <main>
   <article>
     <h2>Fine-tuning a ViT model</h2>
-    <p class="post-date">Posted on October 9, 2024</p>
+    <p class="post-date">Posted on November 9, 2024</p>
     <img src="https://upload.wikimedia.org/wikipedia/commons/f/fb/Petunia_exserta_by_Scott_Zona_-_004_%281%29.jpg" alt="Gardenia" width="400" style="display: block; margin: 20px auto;">
-    <section class="post-content">
-      <p>
-
+    <section class="blog-post">
+      <p>In this post, I'll be going through the steps I went through to fine-tune OpenAI's clip-vit-large-patch14 vision transformers on the CIFAR-10 dataset.
+        In a future post, I would like to detail how visual transformers work, especially the encoder and decoder.
+        To train the model, I used Google Colab, but you can train this model on your personal device if you have an NVIDIA GPU.
+        I trained the model on a very small training set on my own device, and the only problem was speed.
       </p>
+      <p>
+        First, open Google Colab and make sure you're connected to the T4 GPU. Google limits your runtime and computing power,
+        so make sure not to waste it. Next, install and import all the necessary libraries
+      </p>
+      <img src = "images_for_git/vit1.jpg" alt="Libraries" width="800" style="display: block; margin: 20px auto;">
+      <p>
+        Next, load the dataset into Colab using the transformers built in data loader. You can also
+        manually download the tar file from the internet and extract it. In this cell, we're also
+        creating 2 dictionaries which will help us convert from the text labels to their corresponding ids,
+        and vice versa. The dataset is automatically batched into a 50,000 image training set and a 10,000 image test set
+      </p>
+      <img src = "images_for_git/vit2.jpg" alt="Libraries" width="800" style="display: block; margin: 20px auto;">
+      <p>
+        We will then load in the actual model from hugging face. We are using a visual transformer created
+        by OpenAI
+      </p>
+      <img src = "images_for_git/vit3.jpg" alt="Model" width="800" style="display: block; margin: 20px auto;">
+      <p>
+        Here is the first function we will need to write ourselves. This function will process a set number of images
+        and run them through the model. When working with weaker GPUs, even an RTX 4070,
+        this set of images will need to be split into batches so that the model does not overwhelm the VRAM. The model is set
+        to run computations on the GPU detected by Pytorch. If you're running on your own device, you need to download
+        the correct version of Pytorch, as well as the CUDA version that works with your GPU. On my own device, I use
+        CUDA 12.1.
+      </p>
+      <p>
+        For the actual implementation of the code, we first calculate how many batches we will need to run by dividing
+        the total number of images we want to test our model on by how large we want our batch size to be. Normally
+        batch sizes are powers of 2 (i.e. 2, 4, 8, 16, 32, 64), but I just used 10. We create a temporary subset of
+        these images, which will serve as our current batch. The rest is rather self-explanatory, where this subset
+        is processed and ran through the model for our inference.
+      </p>
+      <img src = "images_for_git/vit4.jpg" alt="Batching" width="800" style="display: block; margin: 20px auto;">
+      <p>
+        Side Note: Typically, this model compares visual and textual similarities. In other words, given an input image and multiple labels,
+        the model determines how similar the label is to what is being displayed in the image. In this case, we input the image from the CIFAR-10 dataset
+        and set the labels to be the labels provided in the model. The model then spits out the similarities between the image and all the labels.
+      </p>
+      <p>
+        For example, let's say we want the model to determine if an image is a dog, cat, or bunny (NOT what is happening in our case). Let's say 0 is
+        the id for the label "dog", 1 is the id for the label "cat", and 2 is the id for the label "bunny". If we run the process an image of a cat, as well
+        as the labels ["dog", "cat", "bunny"], the model might output: tensor[0.52, 0.89, 0.18]. The position these values are in are directly related to the labels.
+        This means that the model has correctly captured the relation between the image and the label "cat", finding there to be 89% similarity.
+      </p>
+      <p>
+        However, let's say we're running thousands
+        of images of dogs, cats, and bunnies through the model. In this case, we may only want to know what the model thinks the image is showing. We can take the softmax of this tensor to compute the probability the value in each index is
+        correct. Remember that the index of a value in the list is the id of the label. Finally, we can extract the max value from the tensor, as well as its index in the list.
+        This provides what the model thinks the image is showing, as well as the probability that the model is correct.
+      </p>
+      <img src = "https://images.prismic.io/turing/65980a65531ac2845a2725a1_Mathematical_representation_of_the_softmax_function_48d4f5e786.webp?auto=format,compress" alt="Softmax" width="800" style="display: block; margin: 20px auto;">
+      <p>
+        Although we extracted all the useful information, we now should clean the data up and get it ready to be processed. The data returned from the previous
+        function is still stored in individual batches. First, we will initialize an empty list to store the cleaned data.
+        The first for loop just moves us from one batch to the next, and the second for loop actually reads the data in these batches. We will keep order
+        of all the images by counting through them 1 by 1. We then access the maximum probability for the image, as well as its probability of being correct.
+        We store this information in a list, and append it to the original list. We go through all the images this way.
+      </p>
+      <img src = "images_for_git/vit5.jpg" alt="CleanUp" width="800" style="display: block; margin: 20px auto;">
+      <p>
+        With this clean data, we can finally compute how accurate our model is! First, let's initialize 2 dictionaries where each label has the value 0.
+        One of these dictionaries will help us keep track of how many of each type of image we have seen. The other will keep count of incorrect counts and what
+        the model incorrectly predicted.
+      </p>
+      <img src = "images_for_git/vit6.jpg" alt="Prediction" width="800" style="display: block; margin: 20px auto;">
     </section>
   </article>
 
