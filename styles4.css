@@ -8,8 +8,8 @@
 /* General page styling */
 body {
     font-family: 'Poppins', sans-serif;
-    color: #333;
-    background-color: #F9F9F9;
+    color: #FFFFFF; /* White text */
+    background-color: #293133; /* Dark gray background */
     line-height: 1.6;
     max-width: 800px;
     margin: auto;
@@ -25,7 +25,7 @@ header {
 header h1 {
     font-size: 2.5em;
     font-weight: bold;
-    color: #222222;
+    color: #FFFFFF; /* White for header title */
     margin-bottom: 10px;
 }
 
@@ -41,15 +41,14 @@ header nav ul li {
 /* Header navigation links */
 header nav a {
     text-decoration: none;
-    color: #333333; /* Default color */
+    color: #FFFFFF; /* White text for links */
     font-size: 1.1em;
 }
 
 header nav a:hover {
-    color: #7C4DFF; /* Purple color on hover */
+    color: #FF91C0; /* Light pink on hover */
     text-decoration: underline; /* Optional: Add underline on hover */
 }
-
 
 /* Blog post section styling */
 main {
@@ -59,41 +58,41 @@ main {
 .blog-post article {
     margin-bottom: 40px;
     padding-bottom: 20px;
-    border-bottom: 1px solid #DDDDDD;
+    border-bottom: 1px solid #555555; /* Darker gray for border */
 }
 
 .blog-post h2 {
     font-size: 1.8em;
-    color: #222222;
+    color: #FFFFFF; /* White for sub-headings */
     margin-bottom: 5px;
 }
 
 /* Remove the underline and default link color */
 .blog-post a {
     text-decoration: none; /* Removes underline */
-    color: #000000; /* Choose any color you prefer */
+    color: #FFFFFF; /* White for links */
 }
 
 .blog-post a:hover {
-    color: #7C4DFF; /* Color when hovering over the link */
+    color: #FF91C0; /* Light pink on hover */
 }
 
 /* Additional content styling */
 .post-date {
     font-size: 0.9em;
-    color: #666666;
+    color: #CCCCCC; /* Light gray for post date */
     margin-bottom: 15px;
 }
 
 .post-content {
     font-size: 1.1em;
-    color: #444444;
+    color: #DDDDDD; /* Slightly lighter gray for content */
     margin-bottom: 10px;
 }
 
 .read-more {
     font-size: 1em;
-    color: #0077CC;
+    color: #FF91C0; /* Pink color for read more link */
     text-decoration: none;
 }
 
@@ -101,14 +100,13 @@ main {
     text-decoration: underline;
 }
 
-
 /* Footer styling */
 footer {
     text-align: center;
     margin-top: 40px;
     padding-top: 20px;
-    border-top: 1px solid #DDDDDD;
-    color: #555555;
+    border-top: 1px solid #555555; /* Darker gray for footer border */
+    color: #CCCCCC; /* Light gray for footer text */
     font-size: 0.9em;
 }
 
@@ -123,15 +121,15 @@ footer nav ul li {
 }
 
 footer nav a {
-    color: #333333;
+    color: #FFFFFF; /* White text for footer links */
     text-decoration: none;
 }
 
 footer nav a:hover {
-    text-decoration: underline;
+    color: #FF91C0; /* Light pink on hover */
 }
 
-
+/* Spacing between sections in the "About" section */
 section .about-section {
     margin-bottom: 40px; /* Add space between the sections */
 }
@@ -145,6 +143,7 @@ section .about-section {
     margin-bottom: 20px; /* Adjust this value as needed */
 }
 
+/* Center images with a class */
 .center-image {
     display: block;
     margin: 0 auto;

@@ -92,10 +92,100 @@
       <img src = "images_for_git/vit5.jpg" alt="CleanUp" width="800" style="display: block; margin: 20px auto;">
       <p>
         With this clean data, we can finally compute how accurate our model is! First, let's initialize 2 dictionaries where each label has the value 0.
-        One of these dictionaries will help us keep track of how many of each type of image we have seen. The other will keep count of incorrect counts and what
-        the model incorrectly predicted.
+        One of these dictionaries will help us keep track of how many of each type of image we have seen. The other will keep count of incorrect guesses and what
+        the model incorrectly predicted. We will also initialize two variables, total and correct, to compute accuracy later on. For each prediction, we will compare what our model predicted with the ground truth. If they are the same, we will add
+        1 to the correct and total. If they are different, we will only add 1 to the total and add the incorrect guess to the incorrect dictionary.
       </p>
       <img src = "images_for_git/vit6.jpg" alt="Prediction" width="800" style="display: block; margin: 20px auto;">
+    <p>
+      For ease of access in the future, we can combine the previous two functions into one.
+    </p>
+    <img src = "images_for_git/vit7.jpg" alt="Prediction" width="800" style="display: block; margin: 20px auto;">
+    <p>
+      Here's the real meat of this project. I don't believe that this model has a built-in fine-tuning function, nor does the Hugging Face transformer's
+      library built-in fine-tuning function support this model. To fine tune this model, we will be writing our own training function. The next step in my
+      plan is to write the softmax and cross entropy loss functions myself, but currently, I am using the built-in functions found in Pytorch. First, we will
+      separate the training set into batches again (the old batch function was for inference).
+    </p>
+      <p>
+        We are using the Adam optimizer, which is a combination between standard gradient descent with momentum and RMSProp. We set the model to run on the GPU
+        again and set the mode to train. The first few steps are the same as the inference from the
+        first function, but we will extract the logits from the images and text separately.
+      </p>
+    <p>
+      From here, we also find the ground truths and put them into a seperate
+      tensor. We calculate the loss between the logits of the image and ground truths, and do the same for the labels using the cross loss entropy function.
+      The total loss of the function is equal to these values added together. We will clear the gradient accumulation from former epochs, use backpropogation
+      to calculate the gradients, and then update the weights. This whole process is repeated for the number of epochs the user decides to train
+      the model on.
+    </p>
+    <img src = "images_for_git/vit8.jpg" alt="Training" width="800" style="display: block; margin: 20px auto;">
+    <p>
+      Let's see if this training function works! First, let's see how well the model runs before training.
+    </p>
+      <img src = "images_for_git/vit9.jpg" alt="First run" width="800" style="display: block; margin: 20px auto;">
+      <img src = "images_for_git/vit10.jpg" alt="First run" width="800" style="display: block; margin: 20px auto;">
+
+      <p>
+        Hey, that's pretty good. Let's train this jit and see what happens.
+      </p>
+      <img src = "images_for_git/vit11.jpg" alt="Train" width="800" style="display: block; margin: 20px auto;">
+      <p>
+        Hey, that's pretty good. Let's train this jit and see what happens.
+      </p>
+      <img src = "images_for_git/vit11.jpg" alt="Train" width="800" style="display: block; margin: 20px auto;">
+      <p>
+        Don't forget to set the model's mode back to evaluation
+      </p>
+      <img src = "images_for_git/vit12.jpg" alt="Eval" width="800" style="display: block; margin: 20px auto;">
+      <p>
+        Hey, that's quite the improvement!
+      </p>
+      <img src = "images_for_git/vit13.jpg" alt="Eval" width="800" style="display: block; margin: 20px auto;">
+      <p>
+        Okay, so what are we really looking at? Before fine-tuning this model, it still performed very well. It had an 88% accuracy, but performed
+        quite poorly when it came to predicting what a dog is, with just 66.66% accuracy. After training the model, it had a 2% improvement in overall
+        accuracy, increasing to 90% overall. We should note that even though the accuracy of predicting dogs shot up to 87.5%, but the worst performing group
+        actually had a better accuracy before training. After fine-tuning, horses were predicted with a 78.57% accuracy, but it was at  84.62% before!
+      </p>
+      <p>
+        To be fair, we only trained this model on 1000 images and for 2 epochs, even though we have 50,000 images at our disposal in the training set. Let's increase
+        how many images we use to train the model, as well as the number of epochs. Let's test its accuracy on more images as well.
+      </p>
+      <img src = "images_for_git/vit14.jpg" alt="Large" width="800" style="display: block; margin: 20px auto;">
+      <p>
+        Before fine-tuning
+      </p>
+      <img src = "images_for_git/vit15.jpg" alt="Large Pretrain" width="800" style="display: block; margin: 20px auto;">
+      <p>
+        Fine-tune
+      </p>
+      <img src = "images_for_git/vit16.jpg" alt="Large Finetune" width="800" style="display: block; margin: 20px auto;">
+      <p>
+        After fine-tuning
+      </p>
+      <img src = "images_for_git/vit17.jpg" alt="Large Posttrain" width="800" style="display: block; margin: 20px auto;">
+      <p>
+        And... after roughly 2 hours of training, what happened? The model performed significantly worse! If I had to guess,
+        I would assume that 5 epochs was enough time for the model to overfit the data provided, even if it was 5000 images.
+        That really is a shame, given that I used 2 different Google accounts to get enough T4 GPU computing credits to even
+        go through this entire process (you can run the large training batch on just one account, I just messed up several times).
+        Is this how it ends? You can only fine-tune this model in small batches?
+      </p>
+      <p>
+        Nah.
+      </p>
+      <img src = "images_for_git/vit18.jpg" alt="Nah" width="800" style="display: block; margin: 20px auto;">
+      <p>
+        If I had a super powerful computer, I would just ramp up the training set to 50,000. But I am a random college student. And I am NOT
+        paying for computing credits. My workaround? Just shuffle the training set before every epoch to ensure that there's more randomness
+        in the input data.
+      </p>
+      <img src = "images_for_git/vit19.jpg" alt="shuffle" width="800" style="display: block; margin: 20px auto;">
+      <p>
+        And voila! We're done! It should work in theory, but I haven't tested it yet. And you need to import random. Thanks for sticking around!
+      </p>
+
     </section>
   </article>
 
