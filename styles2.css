@@ -149,3 +149,36 @@ section .about-section {
     display: block;
     margin: 0 auto;
 }
+
+/* Flower Image Styling */
+.flower-image-section {
+    text-align: right;
+    margin: 20px 0; /* Adjust spacing as needed */
+}
+
+.flower-image {
+    width: 200px; /* Adjust width to fit your layout */
+    height: auto; /* Keeps the image's aspect ratio */
+    border-radius: 8px; /* Optional: rounded corners */
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* Optional: adds a subtle shadow */
+}
+
+/* Flexbox layout for the post container */
+.post-container {
+    display: flex;
+    align-items: center;
+    gap: 20px; /* Space between text and image */
+}
+
+/* Styling for the text content */
+.post-content {
+    flex: 1;
+}
+
+/* Styling for the image */
+.flower-image {
+    width: 140px; /* Adjust the size to fit your layout */
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
