@@ -38,18 +38,18 @@
       </p>
       <p>
         First, open Google Colab and make sure you're connected to the T4 GPU. Google limits your runtime and computing power,
-        so make sure not to waste it. Next, install and import all the necessary libraries
+        so make sure not to waste it. Next, install and import all the necessary libraries.
       </p>
       <img src = "images_for_git/vit1.jpg" alt="Libraries" width="800" style="display: block; margin: 20px auto;">
       <p>
-        Next, load the dataset into Colab using the transformers built in data loader. You can also
+        Next, load the dataset into Colab using the transformers’ built-in data loader. You can also
         manually download the tar file from the internet and extract it. In this cell, we're also
         creating 2 dictionaries which will help us convert from the text labels to their corresponding ids,
-        and vice versa. The dataset is automatically batched into a 50,000 image training set and a 10,000 image test set
+        and vice versa. The dataset is automatically batched into a 50,000-image training set and a 10,000-image test set.
       </p>
       <img src = "images_for_git/vit2.jpg" alt="Libraries" width="800" style="display: block; margin: 20px auto;">
       <p>
-        We will then load in the actual model from hugging face. We are using a visual transformer created
+        We will then load in the actual model from Hugging Face. We are using a visual transformer created
         by OpenAI
       </p>
       <img src = "images_for_git/vit3.jpg" alt="Model" width="800" style="display: block; margin: 20px auto;">
@@ -77,7 +77,7 @@
       <p>
         For example, let's say we want the model to determine if an image is a dog, cat, or bunny (NOT what is happening in our case). Let's say 0 is
         the id for the label "dog", 1 is the id for the label "cat", and 2 is the id for the label "bunny". If we run the process an image of a cat, as well
-        as the labels ["dog", "cat", "bunny"], the model might output: tensor[0.52, 0.89, 0.18]. The position these values are in are directly related to the labels.
+        as the labels ["dog", "cat", "bunny"], the model might output: tensor[0.52, 0.89, 0.18]. The position these values are in is directly related to the labels.
         This means that the model has correctly captured the relation between the image and the label "cat", finding there to be 89% similarity.
       </p>
       <p>
@@ -90,7 +90,7 @@
       <p>
         Although we extracted all the useful information, we now should clean the data up and get it ready to be processed. The data returned from the previous
         function is still stored in individual batches. First, we will initialize an empty list to store the cleaned data.
-        The first for loop just moves us from one batch to the next, and the second for loop actually reads the data in these batches. We will keep order
+        The first for loop just moves us from one batch to the next, and the second for loop actually reads the data in these batches. We will keep the order
         of all the images by counting through them 1 by 1. We then access the maximum probability for the image, as well as its probability of being correct.
         We store this information in a list, and append it to the original list. We go through all the images this way.
       </p>
@@ -109,7 +109,7 @@
     <p>
       Here's the real meat of this project. I don't believe that this model has a built-in fine-tuning function, nor does the Hugging Face transformer's
       library built-in fine-tuning function support this model. To fine tune this model, we will be writing our own training function. The next step in my
-      plan is to write the softmax and cross entropy loss functions myself, but currently, I am using the built-in functions found in Pytorch. First, we will
+      plan is to write the softmax and cross-entropy loss functions myself, but currently, I am using the built-in functions found in Pytorch. First, we will
       separate the training set into batches again (the old batch function was for inference).
     </p>
       <p>
@@ -118,9 +118,9 @@
         first function, but we will extract the logits from the images and text separately.
       </p>
     <p>
-      From here, we also find the ground truths and put them into a seperate
+      From here, we also find the ground truths and put them into a separate
       tensor. We calculate the loss between the logits of the image and ground truths, and do the same for the labels using the cross loss entropy function.
-      The total loss of the function is equal to these values added together. We will clear the gradient accumulation from former epochs, use backpropogation
+      The total loss of the function is equal to these values added together. We will clear the gradient accumulation from former epochs, use backpropagation
       to calculate the gradients, and then update the weights. This whole process is repeated for the number of epochs the user decides to train
       the model on.
     </p>
@@ -144,9 +144,9 @@
       </p>
       <img src = "images_for_git/vit13.jpg" alt="Eval" width="800" style="display: block; margin: 20px auto;">
       <p>
-        Okay, so what are we really looking at? Before fine-tuning this model, it still performed very well. It had an 88% accuracy, but performed
+        Okay, so what are we really looking at? Before fine-tuning this model, it still performed very well. It had an 88% accuracy but performed
         quite poorly when it came to predicting what a dog is, with just 66.66% accuracy. After training the model, it had a 2% improvement in overall
-        accuracy, increasing to 90% overall. We should note that even though the accuracy of predicting dogs shot up to 87.5%, but the worst performing group
+        accuracy, increasing to 90% overall. We should note that even though the accuracy of predicting dogs shot up to 87.5%, but the worst-performing group
         actually had a better accuracy before training. After fine-tuning, horses were predicted with a 78.57% accuracy, but it was at  84.62% before!
       </p>
       <p>
@@ -180,7 +180,7 @@
       <p>
         If I had a super powerful computer, I would just ramp up the training set to 50,000. But I am a random college student. And I am NOT
         paying for computing credits. My workaround? Just shuffle the training set before every epoch to ensure that there's more randomness
-        in the input data.
+        in the training data.
       </p>
       <img src = "images_for_git/vit19.jpg" alt="shuffle" width="800" style="display: block; margin: 20px auto;">
       <p>
