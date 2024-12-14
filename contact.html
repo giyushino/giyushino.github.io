@@ -1,50 +1,61 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Contact - Giyushino's Thought Garden</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles2.css"> <!-- Link to your CSS file -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Using JetBrainsMonoNL Nerd Font</title>
+    <!-- Link to the external CSS file -->
+    <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<style>
 
-<!-- Header Section -->
-<header>
-  <h1><a href="index.html" style="text-decoration: none; color: inherit;">Giyushino's Thought Garden</a></h1>
-    <nav>
-      <ul>
-        <li><a href="index.html">Home</a></li>
-        <li><a href="about.html">About</a></li>
-      </ul>
-    </nav>
-</header>
 
-<!-- Main Content -->
-<main>
-  <section class="contact-section">
-    <h2>Contact Me</h2>
-    <p>
-      You can reach me at
+body::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url('images/gradient.jpg');
+  background-repeat: no-repeat;
+  background-size: 100%; /* Shrinks the image to 50% */
+  opacity: 0.2; /* Decreases opacity to 50% */
+  z-index: -1; /* Ensures the background is behind the content */
+}
+</style>
+
+<pre class = "header">
+ ██████╗ ██████╗ ███╗   ██╗████████╗ █████╗  ██████╗████████╗    ███╗   ███╗███████╗
+██╔════╝██╔═══██╗████╗  ██║╚══██╔══╝██╔══██╗██╔════╝╚══██╔══╝    ████╗ ████║██╔════╝
+██║     ██║   ██║██╔██╗ ██║   ██║   ███████║██║        ██║       ██╔████╔██║█████╗  
+██║     ██║   ██║██║╚██╗██║   ██║   ██╔══██║██║        ██║       ██║╚██╔╝██║██╔══╝  
+╚██████╗╚██████╔╝██║ ╚████║   ██║   ██║  ██║╚██████╗   ██║       ██║ ╚═╝ ██║███████╗
+ ╚═════╝ ╚═════╝ ╚═╝  ╚═══╝   ╚═╝   ╚═╝  ╚═╝ ╚═════╝   ╚═╝       ╚═╝     ╚═╝╚══════╝
+                                                                                 
+</pre>
+<pre>
+</pre>
+<p class = "norm">
+You can reach me at
       <a href="mailto:allanzhang440@example.com" style="display: inline-block;">allanzhang440@gmail.com</a> or
       <a href="mailto:allanzhang@g.ucla.edu" style="display: inline-block;">allanzhang@g.ucla.edu</a>. I'm not sure why you would want to. I guess also
       @allan.zhang_ on Instagram or giyushino on Discord, but if you're reading this, you know me. Probably.
-    </p>
 
+</p>
+    <div class="terminal">
+        <div class="output" id="output">
+        </div>
+        <form action="#">
 
+        <span class="prompt">cd to wherever you want to go!</span>
+            <div class="input-line">
+                <span class="prompt">(base) allanz:~/nvim$</span>
+                <input type="text" id="terminal-input" />
+            </div>
+        </form>
+    </div>
 
-  </section>
-</main>
-
-<!-- Footer Section -->
-<footer>
-  <nav>
-    <ul>
-      <li><a href="index.html">Home</a></li>
-      <li><a href="about.html">About</a></li>
-    </ul>
-  </nav>
-</footer>
-
+    <script src="terminal.js"></script>
 </body>
 </html>

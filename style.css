@@ -1,0 +1,146 @@
+body {
+    font-family: 'JetBrainsMonoNL Nerd Font', monospace;
+    font-size: 16px;
+    line-height: 1.5;
+    background-color: black; /* Set the background to black */
+    color: lightblue; /* Set the text color to light blue */
+}
+
+h1 {
+    font-size: 60px;
+    color: lightblue; /* Ensure h1 text is also light blue */
+    margin-left: 10px;
+    margin-top: 10px;
+    margin-bottom: 5px;
+}
+
+pre {
+    font-family: 'JetBrainsMonoNL Nerd Font', monospace;
+    font-size: 8px;
+    line-height: 1.2; /* Set line height to 0 to remove spacing */
+    margin-left: 15px;
+    margin-top: 30px;
+    margin-bottom: 0px;
+}
+
+.norm {
+font-size: 16px;
+
+margin-left: 15px;
+}
+
+.buffer {
+   margin-top: 15px;
+}
+
+.container {
+  display: flex;
+  height: 50vh; /* Full height of the screen */
+}
+
+.left, .right {
+  flex: 1; /* Both sides take up equal space */
+  padding: 20px;
+}
+
+.left {
+  margin-left: 50px;
+}
+
+.right {
+  margin-left: 200px;
+}
+
+li {
+  list-style: none; /* Removes bullet points in each <li> */
+}
+
+li a {
+  text-decoration: none; /* Removes underline */
+  color: lightgreen; /* Sets text color to light green */
+}
+
+/* Style for the content above the terminal */
+
+.header {
+  font-size: 16px;
+
+}
+
+.content {
+  padding: 20px;
+  background-color: lightgreen;
+  height: 100vh;
+}
+
+h1, p {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.terminal {
+position: fixed;
+bottom: 0;
+left: 0;
+width: 100%;
+background-color: rgba(0, 0, 0, 0); /* Completely transparent */
+color: white;
+padding: 10px;
+box-shadow: 0 0px 0px rgba(0, 0, 0, 0);
+font-size: 14px;
+z-index: 1000;
+font-family: 'JetBrains Mono', monospace;
+}
+
+.output {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  max-height: 200px;  /* Set maximum height to 300px (you can adjust this value) */
+  overflow-y: auto;    /* Enable vertical scrolling when the content exceeds max-height */
+  color: lightgreen;
+  margin-bottom: 10px;  /* Add some space below the output */
+}
+
+.input-line {
+display: flex;
+align-items: center;
+}
+
+.prompt {
+display: inline;
+white-space: nowrap;
+color: lightgreen;
+margin-bottom: 14px;
+font-size: 14px;
+}
+
+input[type="text"] {
+background-color: rgba(0, 0, 0, 0);
+border: none;
+color: lightblue;
+outline: none;
+width: 100%;
+font-size: 14px;
+padding: 5px;
+margin-left: 8px;
+margin-bottom: 14px;
+font-family: 'JetBrains Mono', monospace;
+}
+
+.search-result {
+color: lightgreen;
+margin-top: 20px;
+margin-bottom: 0px;
+}
+
+a[href^="mailto:"] {
+    color: #FA8128; /* Change to your desired color */
+    text-decoration: none; /* Optional: Removes underline */
+}
+
+a[href^="mailto:"]:hover {
+    color: #C70039; /* Change color on hover */
+    text-decoration: underline; /* Optional: Adds underline on hover */
+}
+
+

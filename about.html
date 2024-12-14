@@ -1,73 +1,83 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>About - Giyushino's Thought Garden</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles2.css"> <!-- Link to your CSS file -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Using JetBrainsMonoNL Nerd Font</title>
+    <!-- Link to the external CSS file -->
+    <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<style>
 
-<!-- Header Section -->
-<header>
-  <h1>Giyushino's Thought Garden</h1>
-  <nav>
-    <ul>
-      <li><a href="index.html">Home</a></li>
-      <li><a href="contact.html">Contact</a></li>
-    </ul>
-  </nav>
-</header>
 
-<!-- Main Content -->
-<main>
-  <section class="about-section" style="margin-bottom: 40px;">
-    <h2>About Me</h2>
-    <p>
-      I'm Allan, a frosh attending UCLA. I'm currently studying Applied Mathematics, but I am looking to tack on another major. I'm currently
+body::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url('images/gradient.jpg');
+  background-repeat: no-repeat;
+  background-size: 100% 100%; 
+  opacity: 0.2; /* Decreases opacity to 50% */
+  z-index: -1; /* Ensures the background is behind the content */
+}
+</style>
+
+<pre class = "header">
+ █████╗ ██████╗  ██████╗ ██╗   ██╗████████╗    ███╗   ███╗███████╗
+██╔══██╗██╔══██╗██╔═══██╗██║   ██║╚══██╔══╝    ████╗ ████║██╔════╝
+███████║██████╔╝██║   ██║██║   ██║   ██║       ██╔████╔██║█████╗  
+██╔══██║██╔══██╗██║   ██║██║   ██║   ██║       ██║╚██╔╝██║██╔══╝  
+██║  ██║██████╔╝╚██████╔╝╚██████╔╝   ██║       ██║ ╚═╝ ██║███████╗
+╚═╝  ╚═╝╚═════╝  ╚═════╝  ╚═════╝    ╚═╝       ╚═╝     ╚═╝╚══════╝
+                                                                                      
+</pre>
+<pre>
+</pre>
+<p class = "norm">
+ I'm Allan, a frosh studying applied mathematics, but I am looking to tack on another major. I'm currently
       pretty interested in machine learning, specifically the fields of computer vision and LMMs. However, I know myself
       well enough to know that my interests can change at the drop of a hat. While I'm not exactly sure what I'll be doing in the
       future, I am pretty keen on going to graduate school and conducting research related to machine learning.
-    </p>
-  </section>
+</p>
+<pre>
+</pre>
+<pre class = "norm">							   	          _,-""`""-~`)
+									(`~_,=========\
+									 |---,___.-.__,\                                 
+									 |        o     \ ___  _,,,,_     _.--.          
+									  \      `^`    /`_.-"~      `~-;`     \         
+									   \_      _  .'                 `,     |        
+									     |`-              UCLA         \'__/         
+									    /                      ,_       \  `'-.      
+									   /    .-""~~--.            `"-,   ;_    /      
+									   |              \               \  | `""`       
+									    \__.--'`"-.   /_               |'             
+										      `"`  `~~~---..,     |
+												     \ _.-'`-.           
+												      \       \          
+												       '.     /          
+													 `"~"`
+</pre>
 
 
-  <section class="about-section">
-    <h2>Purpose</h2>
-    <p>
-      I plan on writing about my academic endeavors in an effort to better understand what I'm learning. After all, if you can't explain something simply,
-      you probably don't have a deep enough understanding of the subject. Or you're just shit at explaining because you're a genius (probably something a lot of professors suffer from).</p>
-
-    <p> While I've always known that there's almost an infinite number of things to learn, this fact was truly realized for me when I started college.
-      However, there's one main caveat (probably more) that come with this blessing; With an "infinite" amount of knowledge waiting for us, people may
-      attempt to "learn" as much as possible. However, many go about this by trying to memorize as much as possible, which is probably the worst method
-      to "learn". A fact, theorem, definition crammed into your mind is just one more thing you'll forget. </p>
-
-    <p>
-      I'm guilty of this, especially as educational institutions
-      reward students for memorizing information for exams. However, as I slowly begin to specialize in a field, it's integral that I truly understand everything
-      I learn now. By explaining what I learn, I seek to derive a more fundamental
-      understanding of the topic, which will give me the necessary foundation to explore more complex concepts.
-    </p>
-    <p>
-      I'll also write about life and shit, but I'm no philosopher.
-    </p>
 
 
-  </section>
+    <div class="terminal">
+        <div class="output" id="output">
+        </div>
+        <form action="#">
 
-</main>
+        <span class="prompt">cd to wherever you want to go!</span>
+            <div class="input-line">
+                <span class="prompt">(base) allanz:~/nvim$</span>
+                <input type="text" id="terminal-input" />
+            </div>
+        </form>
+    </div>
 
-
-<footer>
-  <nav>
-    <ul>
-      <li><a href="index.html">Home</a></li>
-      <li><a href="contact.html">Contact</a></li>
-    </ul>
-  </nav>
-</footer>
-
+    <script src="terminal.js"></script>
 </body>
 </html>
