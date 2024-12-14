@@ -7,6 +7,8 @@ const fileMapping = {
   'thoughtgarden': 'thoughtgarden.html',
   "asciiart": "art.html",
   "purpose": "purpose.html",
+"projects" : "projects.html",
+"cv": "resume.pdf",
 };
 
 // Get the input and output elements
