@@ -1,10 +1,10 @@
 const fileMapping = {
   'home': '../index.html',
 "thoughtgarden": "../thoughtgarden.html",
-  "post1": "../post1.html",
-  "post2": "../post2.html",
-  "post3": "../post3.html",
-  "post4": "../post4.html",
+  "post1": "../post/post1.html",
+  "post2": "../post/post2.html",
+  "post3": "../post/post3.html",
+  "post4": "../post/post4.html",
 };
 
 
