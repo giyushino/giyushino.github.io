@@ -64,7 +64,7 @@ userInput.addEventListener('keydown', function(event) {
         // Navigate to the corresponding HTML page (like clicking a link)
         setTimeout(() => {
           window.location.href = fileMapping[directory];  // Directly navigate to the HTML page
-        }, 500); // Optional: delay before redirecting for visual effect
+        }); // Optional: delay before redirecting for visual effect
       } else {
         output.innerHTML += `<div class="search-result">Directory not found: ${directory}</div><br>`;
       }

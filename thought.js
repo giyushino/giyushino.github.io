@@ -9,10 +9,10 @@ const fileMapping = {
   "projects" : "projects.html",
   "cv": "resume.pdf",
 
-  "post1": "../post1.html",
-  "post2": "../post2.html",
-  "post3": "../post3.html",
-  "post4": "../post4.html",
+  "post1": "post/post1.html",
+  "post2": "post/post2.html",
+  "post3": "post/post3.html",
+  "post4": "post/post4.html",
 };
 
 // Focus the terminal input when the page loads
@@ -70,7 +70,7 @@ userInput.addEventListener('keydown', function(event) {
         // Navigate to the corresponding HTML page (like clicking a link)
         setTimeout(() => {
           window.location.href = fileMapping[directory];  // Directly navigate to the HTML page
-        }, 500); // Optional: delay before redirecting for visual effect
+        }); // Optional: delay before redirecting for visual effect
       } else {
         output.innerHTML += `<div class="search-result">Directory not found: ${directory}</div><br>`;
       }
