@@ -61,10 +61,14 @@ li a {
 /* Style for the content above the terminal */
 
 .header {
-  font-size: 32px;
-marin-top: 10px;
-  margin-bottom: 20px;
+  font-size: 16px;
   }
+
+ .title{
+ font-size: 32px;
+ margin-top: 10px;
+  margin-bottom: 20px;
+ }
 
 .content {
   padding: 20px;
