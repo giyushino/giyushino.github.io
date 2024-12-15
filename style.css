@@ -109,6 +109,8 @@ transition: transform 0.3s;
   color: lightgreen;
   margin-bottom: 30px;  /* Add some space below the output */
   scrollbar-color: transparent transparent;
+  max-width: 500px;  /* Limit the width (adjust as needed) */
+  width: 100%;  
 }
 
 .input-line {

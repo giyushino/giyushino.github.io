@@ -1,35 +1,54 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Petunia exserta - Giyushino's Thought Garden</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles2.css"> <!-- Link to your CSS file -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Using JetBrainsMonoNL Nerd Font</title>
+    <!-- Link to the external CSS file -->
+    <link rel="stylesheet" href="../style.css">
 </head>
+<style>
+
+body {
+  position:relative;
+  margin: 0;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url('../images/gradient.jpg');
+  background-repeat: no-repeat;
+  background-size: 100% 100%; 
+  opacity: 0.7; /* Decreases opacity to 50% */
+  z-index: -1; /* Ensures the background is behind the content */
+}
+</style>
+
 <body>
-
-<!-- Header Section -->
-<header>
-  <h1>Petunia exserta</h1>
-  <nav>
-    <ul>
-      <li><a href="index.html">Home</a></li>
-      <li><a href="about.html">About</a></li>
-      <li><a href="contact.html">Contact</a></li>
-    </ul>
-  </nav>
-</header>
-
-<!-- Main Content -->
-<main>
-  <article>
-    <h2>Fine-tuning a ViT model</h2>
-    <p class="post-date">Posted on November 9, 2024</p>
+<pre>
+██████╗ ███████╗████████╗██╗   ██╗███╗   ██╗██╗ █████╗     ███████╗██╗  ██╗███████╗███████╗██████╗ ████████╗ █████╗ 
+██╔══██╗██╔════╝╚══██╔══╝██║   ██║████╗  ██║██║██╔══██╗    ██╔════╝╚██╗██╔╝██╔════╝██╔════╝██╔══██╗╚══██╔══╝██╔══██╗
+██████╔╝█████╗     ██║   ██║   ██║██╔██╗ ██║██║███████║    █████╗   ╚███╔╝ ███████╗█████╗  ██████╔╝   ██║   ███████║
+██╔═══╝ ██╔══╝     ██║   ██║   ██║██║╚██╗██║██║██╔══██║    ██╔══╝   ██╔██╗ ╚════██║██╔══╝  ██╔══██╗   ██║   ██╔══██║
+██║     ███████╗   ██║   ╚██████╔╝██║ ╚████║██║██║  ██║    ███████╗██╔╝ ██╗███████║███████╗██║  ██║   ██║   ██║  ██║
+╚═╝     ╚══════╝   ╚═╝    ╚═════╝ ╚═╝  ╚═══╝╚═╝╚═╝  ╚═╝    ╚══════╝╚═╝  ╚═╝╚══════╝╚══════╝╚═╝  ╚═╝   ╚═╝   ╚═╝  ╚═╝
+                  
+</pre>
+<pre>
+</pre>
+<p class = "header">Fine-tuning a ViT model</p>
+    <p>Posted on November 9, 2024</p>
+    <pre>
+    </pre>
     <p>
       But overfitting is the strongest opponent in history... would you lose?
     </p>
-    <img src = "images_for_git/nah i'd finetune.jpg" alt="Nah" width="800" style="display: block; margin: 20px auto;">
+    <img src = "../images_for_git/nah i'd finetune.jpg" alt="Nah" width="800" style="display: block; margin: 20px auto;">
     <section class="blog-post">
       <p>In this post, I'll be going through the steps I went through to fine-tune OpenAI's clip-vit-large-patch14 vision transformer on the CIFAR-10 dataset.
         In a future post, I would like to detail how visual transformers work, especially the encoder and decoder.
@@ -47,12 +66,12 @@
         creating 2 dictionaries which will help us convert from the text labels to their corresponding ids,
         and vice versa. The dataset is automatically seperated into a 50,000-image training set and a 10,000-image test set.
       </p>
-      <img src = "images_for_git/vit2.jpg" alt="Libraries" width="800" style="display: block; margin: 20px auto;">
+      <img src = "../images_for_git/vit2.jpg" alt="Libraries" width="800" style="display: block; margin: 20px auto;">
       <p>
         We will then load in the actual model from Hugging Face. We are using a visual transformer created
         by OpenAI
       </p>
-      <img src = "images_for_git/vit3.jpg" alt="Model" width="800" style="display: block; margin: 20px auto;">
+      <img src = "../images_for_git/vit3.jpg" alt="Model" width="800" style="display: block; margin: 20px auto;">
       <p>
         Here is the first function we will need to write ourselves. This function will process a set number of images
         and run them through the model. When working with weaker GPUs, even an RTX 4070,
@@ -68,7 +87,7 @@
         these images, which will serve as our current batch. The rest is rather self-explanatory, where this subset
         is processed and ran through the model for our inference.
       </p>
-      <img src = "images_for_git/vit4.jpg" alt="Batching" width="800" style="display: block; margin: 20px auto;">
+      <img src = "../images_for_git/vit4.jpg" alt="Batching" width="800" style="display: block; margin: 20px auto;">
       <p>
         Side Note: Typically, this model compares visual and textual similarities. In other words, given an input image and multiple labels,
         the model determines how similar the label is to what is being displayed in the image. In this case, we input the image from the CIFAR-10 dataset
@@ -94,18 +113,18 @@
         of all the images by counting through them 1 by 1. We then access the maximum probability for the image, as well as its probability of being correct.
         We store this information in a list, and append it to the original list. We go through all the images this way.
       </p>
-      <img src = "images_for_git/vit5.jpg" alt="CleanUp" width="800" style="display: block; margin: 20px auto;">
+      <img src = "../images_for_git/vit5.jpg" alt="CleanUp" width="800" style="display: block; margin: 20px auto;">
       <p>
         With this clean data, we can finally compute how accurate our model is! First, let's initialize 2 dictionaries where each label has the value 0.
         One of these dictionaries will help us keep track of how many of each type of image we have seen. The other will keep count of incorrect guesses and what
         the model incorrectly predicted. We will also initialize two variables, total and correct, to compute accuracy later on. For each prediction, we will compare what our model predicted with the ground truth. If they are the same, we will add
         1 to the correct and total. If they are different, we will only add 1 to the total and add the incorrect guess to the incorrect dictionary.
       </p>
-      <img src = "images_for_git/vit6.jpg" alt="Prediction" width="800" style="display: block; margin: 20px auto;">
+      <img src = "../images_for_git/vit6.jpg" alt="Prediction" width="800" style="display: block; margin: 20px auto;">
     <p>
       For ease of access in the future, we can combine the previous two functions into one.
     </p>
-    <img src = "images_for_git/vit7.jpg" alt="Prediction" width="800" style="display: block; margin: 20px auto;">
+    <img src = "../images_for_git/vit7.jpg" alt="Prediction" width="800" style="display: block; margin: 20px auto;">
     <p>
       Here's the real meat of this project. I don't believe that this model has a built-in fine-tuning function, nor does the Hugging Face transformer's
       library built-in fine-tuning function support this model. To fine tune this model, we will be writing our own training function. The next step in my
@@ -124,25 +143,25 @@
       to calculate the gradients, and then update the weights. This whole process is repeated for the number of epochs the user decides to train
       the model on.
     </p>
-    <img src = "images_for_git/vit8.jpg" alt="Training" width="800" style="display: block; margin: 20px auto;">
+    <img src = "../images_for_git/vit8.jpg" alt="Training" width="800" style="display: block; margin: 20px auto;">
     <p>
       Let's see if this training function works! First, let's see how well the model runs before training.
     </p>
-      <img src = "images_for_git/vit9.jpg" alt="First run" width="800" style="display: block; margin: 20px auto;">
-      <img src = "images_for_git/vit10.jpg" alt="First run" width="800" style="display: block; margin: 20px auto;">
+      <img src = "../images_for_git/vit9.jpg" alt="First run" width="800" style="display: block; margin: 20px auto;">
+      <img src = "../images_for_git/vit10.jpg" alt="First run" width="800" style="display: block; margin: 20px auto;">
       
       <p>
         Hey, that's pretty good. Let's train this jit and see what happens.
       </p>
-      <img src = "images_for_git/vit11.jpg" alt="Train" width="800" style="display: block; margin: 20px auto;">
+      <img src = "../images_for_git/vit11.jpg" alt="Train" width="800" style="display: block; margin: 20px auto;">
       <p>
         Don't forget to set the model's mode back to evaluation
       </p>
-      <img src = "images_for_git/vit12.jpg" alt="Eval" width="800" style="display: block; margin: 20px auto;">
+      <img src = "../images_for_git/vit12.jpg" alt="Eval" width="800" style="display: block; margin: 20px auto;">
       <p>
         Hey, that's quite the improvement!
       </p>
-      <img src = "images_for_git/vit13.jpg" alt="Eval" width="800" style="display: block; margin: 20px auto;">
+      <img src = "../images_for_git/vit13.jpg" alt="Eval" width="800" style="display: block; margin: 20px auto;">
       <p>
         Okay, so what are we really looking at? Before fine-tuning this model, it still performed very well. It had an 88% accuracy but performed
         quite poorly when it came to predicting what a dog is, with just 66.66% accuracy. After training the model, it had a 2% improvement in overall
@@ -153,19 +172,19 @@
         To be fair, we only trained this model on 1000 images and for 2 epochs, even though we have 50,000 images at our disposal in the training set. Let's increase
         how many images we use to train the model, as well as the number of epochs. Let's test its accuracy on more images as well.
       </p>
-      <img src = "images_for_git/vit14.jpg" alt="Large" width="800" style="display: block; margin: 20px auto;">
+      <img src = "../images_for_git/vit14.jpg" alt="Large" width="800" style="display: block; margin: 20px auto;">
       <p>
         Before fine-tuning
       </p>
-      <img src = "images_for_git/vit15.jpg" alt="Large Pretrain" width="800" style="display: block; margin: 20px auto;">
+      <img src = "../images_for_git/vit15.jpg" alt="Large Pretrain" width="800" style="display: block; margin: 20px auto;">
       <p>
         Fine-tune
       </p>
-      <img src = "images_for_git/vit16.jpg" alt="Large Finetune" width="800" style="display: block; margin: 20px auto;">
+      <img src = "../images_for_git/vit16.jpg" alt="Large Finetune" width="800" style="display: block; margin: 20px auto;">
       <p>
         After fine-tuning
       </p>
-      <img src = "images_for_git/vit17.jpg" alt="Large Posttrain" width="800" style="display: block; margin: 20px auto;">
+      <img src = "../images_for_git/vit17.jpg" alt="Large Posttrain" width="800" style="display: block; margin: 20px auto;">
       <p>
         And... after roughly 2 hours of training, what happened? The model performed significantly worse! If I had to guess,
         I would assume that 5 epochs was enough time for the model to overfit the data provided, even if it was 5000 images.
@@ -176,13 +195,13 @@
       <p>
         But overfitting is the strongest opponent in history... would you lose?
       </p>
-      <img src = "images_for_git/nah i'd finetune.jpg" alt="Nah" width="800" style="display: block; margin: 20px auto;">
+      <img src = "../images_for_git/nah i'd finetune.jpg" alt="Nah" width="800" style="display: block; margin: 20px auto;">
       <p>
         If I had a super powerful computer, I would just ramp up the training set to 50,000. But I am a random college student. And I am NOT
         paying for computing credits. My workaround? Just shuffle the training set before every epoch to ensure that there's more randomness
         in the training data.
       </p>
-      <img src = "images_for_git/real_shuffle.jpg" alt="shuffle" width="800" style="display: block; margin: 20px auto;">
+      <img src = "../images_for_git/real_shuffle.jpg" alt="shuffle" width="800" style="display: block; margin: 20px auto;">
       <p>
         And voilà! We're done! It should work in theory, but I haven't tested it yet. And you need to import random. Thanks for sticking around!
       </p>
@@ -191,32 +210,55 @@
         I trained the model on 5000 images for 5 epochs, same as before.
         The pretraining results were relatively similar both times.
       </p>
-      <img src = "images_for_git/vit20.jpg" alt="shuffle" width="800" style="display: block; margin: 20px auto;">
+      <img src = "../images_for_git/vit20.jpg" alt="shuffle" width="800" style="display: block; margin: 20px auto;">
       <p>
         However, the results after training were AMAZING! Epoch 5 ended with a higher loss
         value when we shuffled the dataset compared to when we didn't, but it was able to
         perform much better on unseen data.
       </p>
-      <img src = "images_for_git/vit21.jpg" alt="shuffle" width="800" style="display: block; margin: 20px auto;">
-      <img src = "images_for_git/vit22.jpg" alt="shuffle" width="800" style="display: block; margin: 20px auto;">
+      <img src = "../images_for_git/vit21.jpg" alt="shuffle" width="800" style="display: block; margin: 20px auto;">
+      <img src = "../images_for_git/vit22.jpg" alt="shuffle" width="800" style="display: block; margin: 20px auto;">
       <p>
         So... what's the final takeaway? Just shuffle your training set.
       </p>
-    </section>
-  </article>
 
-</main>
+        <div class="right">
+        <pre>						     		  _,-""`""-~`)
+								(`~_,=========\
+								 |---,___.-.__,\                                 
+								 |        o     \ ___  _,,,,_     _.--.          
+								  \      `^`    /`_.-"~      `~-;`     \         
+								   \_      _  .'                 `,     |        
+								     |`-              UCLA         \'__/         
+								    /                      ,_       \  `'-.      
+								   /    .-""~~--.            `"-,   ;_    /      
+								   |              \               \  | `""`       
+								    \__.--'`"-.   /_               |'             
+									      `"`  `~~~---..,     |
+											     \ _.-'`-.           
+											      \       \          
+											       '.     /          
+												 `"~"`
+</pre>
 
-<!-- Footer Section -->
-<footer>
-  <nav>
-    <ul>
-      <li><a href="index.html">Home</a></li>
-      <li><a href="about.html">About</a></li>
-      <li><a href="contact.html">Contact</a></li>
-    </ul>
-  </nav>
-</footer>
 
+        </div>
+    </div> 
+  <div class="terminal", id = "terminal">
+        <div class="output" id="output">
+        </div>
+        <form action="#">
+
+        <span class="prompt">ls to see, cd to explore, : to toggle</span>
+	<p></p>
+		<div class="input-line">
+                <span class="prompt">(base) allanz:~/nvim$</span>
+                <input type="text" id="terminal-input" />
+            </div>
+        </form>
+    </div>
+
+    
+    <script src="../post_terminal.js"></script>
 </body>
 </html>

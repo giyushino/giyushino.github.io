@@ -74,7 +74,7 @@ userInput.addEventListener('keydown', function(event) {
       output.innerHTML += `<div class="search-result">Available directories: `;
       
       // Join all directory names (keys) with spaces and display on a single line
-      output.innerHTML += Object.keys(fileMapping).join(' ') + `</div><br>`;
+      output.innerHTML += Object.keys(fileMapping).join('   ') + `</div><br>`;
     } else {
       // If the command is not "cd" or "ls", display "Not a command"
       output.innerHTML += `<div class="search-result">Not a command: ${command}</div><br>`;
