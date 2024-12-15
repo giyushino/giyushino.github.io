@@ -1,31 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Petunia exserta - Giyushino's Thought Garden</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles2.css"> <!-- Link to your CSS file -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Using JetBrainsMonoNL Nerd Font</title>
+    <!-- Link to the external CSS file -->
+    <link rel="stylesheet" href="../style.css">
 </head>
+<style>
+
+body {
+  position:relative;
+  margin: 0;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url('../images/gradient.jpg');
+  background-repeat: no-repeat;
+  background-size: 100% 100%; 
+  opacity: 0.7; /* Decreases opacity to 50% */
+  z-index: -1; /* Ensures the background is behind the content */
+}
+</style>
+
 <body>
-
-<!-- Header Section -->
-<header>
-  <h1>Petunia exserta</h1>
-  <nav>
-    <ul>
-      <li><a href="index.html">Home</a></li>
-      <li><a href="about.html">About</a></li>
-      <li><a href="contact.html">Contact</a></li>
-    </ul>
-  </nav>
-</header>
-
-<!-- Main Content -->
-<main>
-  <article>
-    <h2>Fine-tuning a ViT model</h2>
-    <p class="post-date">Posted on November 9, 2024</p>
+<pre>
+██████╗ ███████╗████████╗██╗   ██╗███╗   ██╗██╗ █████╗     ███████╗██╗  ██╗███████╗███████╗██████╗ ████████╗ █████╗ 
+██╔══██╗██╔════╝╚══██╔══╝██║   ██║████╗  ██║██║██╔══██╗    ██╔════╝╚██╗██╔╝██╔════╝██╔════╝██╔══██╗╚══██╔══╝██╔══██╗
+██████╔╝█████╗     ██║   ██║   ██║██╔██╗ ██║██║███████║    █████╗   ╚███╔╝ ███████╗█████╗  ██████╔╝   ██║   ███████║
+██╔═══╝ ██╔══╝     ██║   ██║   ██║██║╚██╗██║██║██╔══██║    ██╔══╝   ██╔██╗ ╚════██║██╔══╝  ██╔══██╗   ██║   ██╔══██║
+██║     ███████╗   ██║   ╚██████╔╝██║ ╚████║██║██║  ██║    ███████╗██╔╝ ██╗███████║███████╗██║  ██║   ██║   ██║  ██║
+╚═╝     ╚══════╝   ╚═╝    ╚═════╝ ╚═╝  ╚═══╝╚═╝╚═╝  ╚═╝    ╚══════╝╚═╝  ╚═╝╚══════╝╚══════╝╚═╝  ╚═╝   ╚═╝   ╚═╝  ╚═╝
+                  
+</pre>
+<pre>
+</pre>
+<p class = "header">Fine-tuning a ViT model</p>
+    <p>Posted on November 9, 2024</p>
+    <pre>
+    </pre>
     <p>
       But overfitting is the strongest opponent in history... would you lose?
     </p>
@@ -202,21 +221,44 @@
       <p>
         So... what's the final takeaway? Just shuffle your training set.
       </p>
-    </section>
-  </article>
 
-</main>
+        <div class="right">
+        <pre>						     		  _,-""`""-~`)
+								(`~_,=========\
+								 |---,___.-.__,\                                 
+								 |        o     \ ___  _,,,,_     _.--.          
+								  \      `^`    /`_.-"~      `~-;`     \         
+								   \_      _  .'                 `,     |        
+								     |`-              UCLA         \'__/         
+								    /                      ,_       \  `'-.      
+								   /    .-""~~--.            `"-,   ;_    /      
+								   |              \               \  | `""`       
+								    \__.--'`"-.   /_               |'             
+									      `"`  `~~~---..,     |
+											     \ _.-'`-.           
+											      \       \          
+											       '.     /          
+												 `"~"`
+</pre>
 
-<!-- Footer Section -->
-<footer>
-  <nav>
-    <ul>
-      <li><a href="index.html">Home</a></li>
-      <li><a href="about.html">About</a></li>
-      <li><a href="contact.html">Contact</a></li>
-    </ul>
-  </nav>
-</footer>
 
+        </div>
+    </div> 
+  <div class="terminal", id = "terminal">
+        <div class="output" id="output">
+        </div>
+        <form action="#">
+
+        <span class="prompt">ls to see, cd to explore, : to toggle</span>
+	<p></p>
+		<div class="input-line">
+                <span class="prompt">(base) allanz:~/nvim$</span>
+                <input type="text" id="terminal-input" />
+            </div>
+        </form>
+    </div>
+
+    
+    <script src="../post_terminal.js"></script>
 </body>
 </html>

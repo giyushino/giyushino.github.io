@@ -1,14 +1,12 @@
-// Define a mapping of directories to HTML pages
 const fileMapping = {
-  'home': 'index.html',
-  'contact': 'contact.html',
-  'about': 'about.html',
-  'thoughtgarden': 'thoughtgarden.html',
-  "asciiart": "art.html",
-  "purpose": "purpose.html",
-  "projects" : "projects.html",
-  "cv": "resume.pdf",
+  'home': '../index.html',
+"thoughtgarden": "../thoughtgarden.html",
+  "post1": "../post1.html",
+  "post2": "../post2.html",
+  "post3": "../post3.html",
+  "post4": "../post4.html",
 };
+
 
 // Focus the terminal input when the page loads
 window.onload = () => {

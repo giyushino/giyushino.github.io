@@ -23,11 +23,8 @@ pre {
     margin-bottom: 0px;
 }
 
-.norm {
-font-size: 16px;
 
-margin-left: 15px;
-}
+
 
 .buffer {
    margin-top: 15px;
@@ -37,6 +34,7 @@ margin-left: 15px;
   display: flex;
   height: 50vh; /* Full height of the screen */
 }
+
 
 .left, .right {
   flex: 1; /* Both sides take up equal space */
@@ -63,9 +61,10 @@ li a {
 /* Style for the content above the terminal */
 
 .header {
-  font-size: 16px;
-
-}
+  font-size: 32px;
+marin-top: 10px;
+  margin-bottom: 20px;
+  }
 
 .content {
   padding: 20px;
@@ -73,7 +72,15 @@ li a {
   height: 100vh;
 }
 
-h1, p {
+p {
+  margin-bottom: 1.5em; /* Adds space below each paragraph */
+
+font-size: 16px;
+margin-left: 15px;
+margin-right: 15px;
+}
+
+h1 {
   margin: 0;
   font-size: 1.5rem;
 }
@@ -90,15 +97,18 @@ box-shadow: 0 0px 0px rgba(0, 0, 0, 0);
 font-size: 14px;
 z-index: 1000;
 font-family: 'JetBrains Mono', monospace;
+display: block;
+transition: transform 0.3s; 
 }
 
 .output {
   white-space: pre-wrap;
   word-wrap: break-word;
-  max-height: 200px;  /* Set maximum height to 300px (you can adjust this value) */
-  overflow-y: auto;    /* Enable vertical scrolling when the content exceeds max-height */
+  max-height: 140px;  /* Set maximum height to 300px (you can adjust this value) */
+  overflow-y: scroll;    /* Enable vertical scrolling when the content exceeds max-height */
   color: lightgreen;
-  margin-bottom: 10px;  /* Add some space below the output */
+  margin-bottom: 30px;  /* Add some space below the output */
+  scrollbar-color: transparent transparent;
 }
 
 .input-line {
@@ -132,6 +142,11 @@ color: lightgreen;
 margin-top: 20px;
 margin-bottom: 0px;
 }
+
+.terminal.hidden {
+  transform: translateY(150px); /* Slide terminal out of view */
+}
+
 
 a[href^="mailto:"] {
     color: #FA8128; /* Change to your desired color */

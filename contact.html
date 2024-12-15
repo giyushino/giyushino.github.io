@@ -20,7 +20,7 @@ body::before {
   background-image: url('images/gradient.jpg');
   background-repeat: no-repeat;
   background-size: 100%; /* Shrinks the image to 50% */
-  opacity: 0.2; /* Decreases opacity to 50% */
+  opacity: 0.7; /* Decreases opacity to 50% */
   z-index: -1; /* Ensures the background is behind the content */
 }
 </style>
@@ -43,19 +43,20 @@ You can reach me at
       @allan.zhang_ on Instagram or giyushino on Discord, but if you're reading this, you know me. Probably.
 
 </p>
-    <div class="terminal">
+  <div class="terminal", id = "terminal">
         <div class="output" id="output">
         </div>
         <form action="#">
 
-        <span class="prompt">cd to wherever you want to go!</span>
-            <div class="input-line">
+        <span class="prompt">ls to see, cd to explore, : to toggle</span>
+	<p></p>
+		<div class="input-line">
                 <span class="prompt">(base) allanz:~/nvim$</span>
                 <input type="text" id="terminal-input" />
             </div>
         </form>
     </div>
-
-    <script src="terminal.js"></script>
+    
+<script src="terminal.js"></script>
 </body>
 </html>
