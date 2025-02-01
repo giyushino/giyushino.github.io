@@ -3,60 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Using JetBrainsMonoNL Nerd Font</title>
-    <!-- Link to the external CSS file -->
+    <title>Owltastic - Work</title>
     <link rel="stylesheet" href="style.css">
 </head>
-<style>
-
-
-body::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-image: url('images/gradient.jpg');
-  background-repeat: no-repeat;
-  background-size: 100%; /* Shrinks the image to 50% */
-  opacity: 0.7; /* Decreases opacity to 50% */
-  z-index: -1; /* Ensures the background is behind the content */
-}
-</style>
-
-<pre class = "header">
- ██████╗ ██████╗ ███╗   ██╗████████╗ █████╗  ██████╗████████╗    ███╗   ███╗███████╗
-██╔════╝██╔═══██╗████╗  ██║╚══██╔══╝██╔══██╗██╔════╝╚══██╔══╝    ████╗ ████║██╔════╝
-██║     ██║   ██║██╔██╗ ██║   ██║   ███████║██║        ██║       ██╔████╔██║█████╗  
-██║     ██║   ██║██║╚██╗██║   ██║   ██╔══██║██║        ██║       ██║╚██╔╝██║██╔══╝  
-╚██████╗╚██████╔╝██║ ╚████║   ██║   ██║  ██║╚██████╗   ██║       ██║ ╚═╝ ██║███████╗
- ╚═════╝ ╚═════╝ ╚═╝  ╚═══╝   ╚═╝   ╚═╝  ╚═╝ ╚═════╝   ╚═╝       ╚═╝     ╚═╝╚══════╝
-                                                                                 
-</pre>
-<pre>
-</pre>
-<p class = "norm">
+<body>
+    <header>
+        <div class="logo">giyushino</div>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="about.html">About</a>
+            <a href="work.html">Work</a>
+            <a href="thoughtgarden.html">Thought Garden</a>
+            <a href="contact.html"class="active">Contact</a>
+            <a href="cv.pdf">CV</a>
+        </nav>
+    </header>
+    <main>
+        <section class="content">
+            <div class="text">
+                <h2>Contact Me</h2>
+                <p >
 You can reach me at
       <a href="mailto:allanzhang440@example.com" style="display: inline-block;">allanzhang440@gmail.com</a> or
       <a href="mailto:allanzhang@g.ucla.edu" style="display: inline-block;">allanzhang@g.ucla.edu</a>. I'm not sure why you would want to. I guess also
       @allan.zhang_ on Instagram or giyushino on Discord, but if you're reading this, you know me. Probably.
-
-</p>
-  <div class="terminal", id = "terminal">
-        <div class="output" id="output">
-        </div>
-        <form action="#">
-
-        <span class="prompt">ls to see, cd to explore, : to toggle</span>
-	<p></p>
-		<div class="input-line">
-                <span class="prompt">(base) allanz:~/nvim$</span>
-                <input type="text" id="terminal-input" />
+                </p>
             </div>
-        </form>
-    </div>
-    
-<script src="terminal.js"></script>
+        </section>
+    </main>
 </body>
 </html>
+

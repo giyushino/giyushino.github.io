@@ -1,167 +1,137 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Mono:wght@100..900&display=swap');
+
+html {
+    background-color: #EBD1A1; /* Golden yellow outside */
+}
+
 body {
-    font-family: 'JetBrainsMonoNL Nerd Font', monospace;
+    font-family: 'Noto Sans Mono', monospace;
+    background: #F8EFDF;
+    color: #3a2d1e;
+    margin: 10px; /* Adds space outside the border */
+    padding: 0;
+    border: 10px solid #EBD1A1; /* Thick yellow border around the page */
+    box-sizing: border-box; /* Ensures padding/border don’t affect overall size */
+}
+
+header {
+    background: #2b2622;
+    color: #2b2622;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+    text-transform: lowercase;
+    font-family: 'Noto Sans Mono', monospace;
+    color: #f5e7d1;
+}
+
+nav a {
+    color: #f5e7d1;
+    text-decoration: none;
+    margin: 0 15px;
     font-size: 16px;
-    line-height: 1.5;
-    background-color: black; /* Set the background to black */
-    color: lightblue; /* Set the text color to light blue */
+    font-family: 'Noto Sans Mono', monospace;
 }
 
-h1 {
-    font-size: 60px;
-    color: lightblue; /* Ensure h1 text is also light blue */
-    margin-left: 10px;
-    margin-top: 10px;
-    margin-bottom: 5px;
+nav a.active {
+    text-decoration: underline;
+    font-style: italic;
 }
 
-pre {
-    font-family: 'JetBrainsMonoNL Nerd Font', monospace;
-    font-size: 8px;
-    line-height: 1.2; /* Set line height to 0 to remove spacing */
-    margin-left: 15px;
-    margin-top: 30px;
-    margin-bottom: 0px;
+main {
+    display: flex;
+    justify-content: center;
+    padding: 50px;
+    border: 1px solid #2B2622;
 }
 
-
-
-
-.buffer {
-   margin-top: 15px;
-}
-
-.container {
-  display: flex;
-  height: 50vh; /* Full height of the screen */
-}
-
-
-.left, .right {
-  flex: 1; /* Both sides take up equal space */
-  padding: 20px;
-}
-
-.left {
-  margin-left: 50px;
-}
-
-.right {
-  margin-left: 200px;
-}
-
-li {
-  list-style: none; /* Removes bullet points in each <li> */
-}
-
-li a {
-  text-decoration: none; /* Removes underline */
-  color: lightgreen; /* Sets text color to light green */
-}
-
-/* Style for the content above the terminal */
-
-.header {
-  font-size: 16px;
-  }
-
- .title{
- font-size: 32px;
- margin-top: 10px;
-  margin-bottom: 20px;
- }
 
 .content {
-  padding: 20px;
-  background-color: lightgreen;
-  height: 100vh;
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    max-width: 900px;
 }
 
-p {
-  margin-bottom: 1.5em; /* Adds space below each paragraph */
-
-font-size: 16px;
-margin-left: 15px;
-margin-right: 15px;
+.content img {
+    width: 300px;
 }
 
-h1 {
-  margin: 0;
-  font-size: 1.5rem;
-}
-
-.terminal {
-position: fixed;
-bottom: 0;
-left: 0;
-width: 100%;
-background-color: rgba(0, 0, 0, 0); /* Completely transparent */
-color: white;
-padding: 10px;
-box-shadow: 0 0px 0px rgba(0, 0, 0, 0);
-font-size: 14px;
-z-index: 1000;
-font-family: 'JetBrains Mono', monospace;
-display: block;
-transition: transform 0.3s; 
-}
-
-.output {
-  white-space: pre-wrap;
-  word-wrap: break-word;
-  max-height: 140px;  /* Set maximum height to 300px (you can adjust this value) */
-  overflow-y: scroll;    /* Enable vertical scrolling when the content exceeds max-height */
-  color: lightgreen;
-  margin-bottom: 30px;  /* Add some space below the output */
-  scrollbar-color: transparent transparent;
-  max-width: 500px;  /* Limit the width (adjust as needed) */
-  width: 100%;  
-}
-
-.input-line {
-display: flex;
-align-items: center;
-}
-
-.prompt {
-display: inline;
-white-space: nowrap;
-color: lightgreen;
-margin-bottom: 14px;
-font-size: 14px;
-}
-
-input[type="text"] {
-background-color: rgba(0, 0, 0, 0);
-border: none;
-color: lightblue;
-outline: none;
-width: 100%;
-font-size: 14px;
-padding: 5px;
-margin-left: 8px;
-margin-bottom: 14px;
-font-family: 'JetBrains Mono', monospace;
-}
-
-.search-result {
-color: lightgreen;
-margin-top: 20px;
-margin-bottom: 0px;
-}
-
-.terminal.hidden {
-  transform: translateY(150px); /* Slide terminal out of view */
+.text h1 {
+    font-size: 48px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    font-family: 'Noto Sans Mono', monospace;
 }
 
 
-a[href^="mailto:"] {
-    color: #FA8128; /* Change to your desired color */
-    text-decoration: none; /* Optional: Removes underline */
+.text h2 {
+    font-size: 36px;
+    font-weight: bold;
+    margin-top: 0; /* Remove top margin */
+    margin-bottom: 20px;
+    font-family: 'Noto Sans Mono', monospace;
+}
+.text p {
+    font-size: 18px;
+    line-height: 1.6;
+    font-family: 'Noto Sans Mono', monospace;
 }
 
-a[href^="mailto:"]:hover {
-    color: #C70039; /* Change color on hover */
-    text-decoration: underline; /* Optional: Adds underline on hover */
+.text a {
+    color: #3a2d1e;
+    text-decoration: underline;
+    font-family: 'Noto Sans Mono', monospace;
 }
 
+.black-section {
+    background-color: #2B2622; /* Black background */
+    color: #f5e7d1; /* Light color for text */
+    padding: 50px 20px; /* Padding for space around the content */
+}
+
+.black-section .black-content {
+    max-width: 900px;
+    padding: 0 20px; /* Add padding for alignment */
+    margin: 0 auto; /* Center the content horizontally */
+    font-family: 'Noto Sans Mono', monospace; /* Matching font family */
+    font-size: 18px; /* Matching font size */
+    line-height: 1.6; /* Matching line height */
+    color: #f5e7d1; /* Light color for text */
+    gap: 40px; /* Adds space between elements */
+}
+
+.black-section .black-content h2 {
+    font-size: 36px;
+    font-weight: bold;
+    margin-top: 0; /* Remove top margin */
+    margin-bottom: 20px;
+    font-family: 'Noto Sans Mono', monospace;
+}
+
+.black-section .black-content p {
+    font-size: 18px;
+    line-height: 1.6;
+    margin-top: 0; /* Optional: Remove top margin */
+    margin-bottom: 20px; /* Optional: Add space below the paragraph */
+}
+
+.black-section .black-content a {
+    color: #f5e7d1;
+    text-decoration: underline;
+}
+
+.black-section .black-content img {
+    float: left; /* Makes the image float to the left, allowing text to wrap around it */
+    max-width: 300px; /* Sets a maximum width for the image */
+    margin-right: 40px; /* Adds space between the image and the text */
+    margin-bottom: 20px; /* Adds space below the image */
+    height: auto; /* Maintains the aspect ratio */
+}
 

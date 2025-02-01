@@ -1,110 +1,58 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Using JetBrainsMonoNL Nerd Font</title>
-    <!-- Link to the external CSS file -->
-    <link rel="stylesheet" href="../style.css">
+    <title>Owltastic - Work</title>
+    <link rel="stylesheet" href="style.css">
 </head>
-<style>
-
-body {
-  position:relative;
-  margin: 0;
-}
-
-body::before {
-  content: '';
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-image: url('../images/gradient.jpg');
-  background-repeat: no-repeat;
-  background-size: 100% 100%; 
-  opacity: 0.7; /* Decreases opacity to 50% */
-  z-index: -1; /* Ensures the background is behind the content */
-}
-</style>
-
-
-
-<pre>
- ██████╗ ██╗██╗   ██╗██╗   ██╗███████╗██╗  ██╗██╗███╗   ██╗ ██████╗     ████████╗██╗  ██╗ ██████╗ ██╗   ██╗ ██████╗ ██╗  ██╗████████╗     ██████╗  █████╗ ██████╗ ██████╗ ███████╗███╗   ██╗
-██╔════╝ ██║╚██╗ ██╔╝██║   ██║██╔════╝██║  ██║██║████╗  ██║██╔═══██╗    ╚══██╔══╝██║  ██║██╔═══██╗██║   ██║██╔════╝ ██║  ██║╚══██╔══╝    ██╔════╝ ██╔══██╗██╔══██╗██╔══██╗██╔════╝████╗  ██║
-██║  ███╗██║ ╚████╔╝ ██║   ██║███████╗███████║██║██╔██╗ ██║██║   ██║       ██║   ███████║██║   ██║██║   ██║██║  ███╗███████║   ██║       ██║  ███╗███████║██████╔╝██║  ██║█████╗  ██╔██╗ ██║
-██║   ██║██║  ╚██╔╝  ██║   ██║╚════██║██╔══██║██║██║╚██╗██║██║   ██║       ██║   ██╔══██║██║   ██║██║   ██║██║   ██║██╔══██║   ██║       ██║   ██║██╔══██║██╔══██╗██║  ██║██╔══╝  ██║╚██╗██║
-╚██████╔╝██║   ██║   ╚██████╔╝███████║██║  ██║██║██║ ╚████║╚██████╔╝       ██║   ██║  ██║╚██████╔╝╚██████╔╝╚██████╔╝██║  ██║   ██║       ╚██████╔╝██║  ██║██║  ██║██████╔╝███████╗██║ ╚████║
- ╚═════╝ ╚═╝   ╚═╝    ╚═════╝ ╚══════╝╚═╝  ╚═╝╚═╝╚═╝  ╚═══╝ ╚═════╝        ╚═╝   ╚═╝  ╚═╝ ╚═════╝  ╚═════╝  ╚═════╝ ╚═╝  ╚═╝   ╚═╝        ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═════╝ ╚══════╝╚═╝  ╚═══╝
-
-</pre>
-
-<p>
-work in progress
-</p>
-
-<div class="container"> 
-        <div class="left">
-            <pre>
-                     .-~~~-
-                .-~~~_._~~~\   
-                /~-~~   ~.  `._ 
-               /    \     \  | ~~-_ 
-       __     |      |     | |  /~\|
-   _-~~  ~~-..|       ______||/__..-~~/
-    ~-.___     \     /~\_________.-~~
-         \~~--._\   |             /
-          ^-_    ~\  \          /^
-             ^~---|~~~~-.___.-~^
-               /~^| | | |^~\
-              //~^`/ /_/ ^~\\
-              /   //~||      \
-                 ~   ||
-          ___      -(||      __ ___ _
-         |\|  \       ||_.-~~ /|\-  \~-._
-         | -\| |      ||/   /  | |\- | |\ \
-          \__-\|______ ||  |    \___\|  \_\|
-    _____ _.-~/|\     \\||  \  |  /       ~-.
-  /'  --/|  / /|  \    \||    \ /          |\~-
- ' ---/| | |   |\  |     ||                 \__|
-| --/| | ;  \ /|  /    -(||
-`./  |  /     \|/        ||)-
-  `~^~^                  ||
-	    </pre>
-        </div>
- <div class="right">
-	 <pre>
-	 </pre>
-            <li><a href="post/post1.html">  Gardenia jasminoides (1)</a></li>
-            <pre>
-	    </pre>
-            <li><a href="post/post2.html">  Petunia exserta (2)</a></li>
-            <pre>
-	    </pre>
-            <li><a href="post/post3.html">  Wisteria sinensis (3)</a></li>
-            <pre>
-	    </pre>
-            <li><a href="post/post4.html">  Tulipa gesneriana (4)</a></li>
-        </div>   
-</div> 
-
-
-
- <div class="terminal", id = "terminal">
-        <div class="output" id="output">
-        </div>
-        <form action="#">
-
-        <span class="prompt">ls to see, cd to explore, : to toggle</span>
-	<p></p>
-		<div class="input-line">
-                <span class="prompt">(base) allanz:~/nvim$</span>
-                <input type="text" id="terminal-input" />
+<body>
+    <header>
+        <div class="logo">giyushino</div>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="about.html">About</a>
+            <a href="work.html">Work</a>
+            <a href="thoughtgarden.html" class="active">Thought Garden</a>
+            <a href="contact.html">Contact</a>
+            <a href="#">CV</a>
+        </nav>
+    </header>
+    <main>
+        <section class="content">
+            <div class="text">
+                <h2>Thought Garden</h2>
+                <p >
+                 Here are my very unprofessional, (sometimes angsty) blog posts. There will probably be some poetry.  
             </div>
-        </form>
-    </div>
-
-    <script src="thought.js"></script>
+        </section>
+    </main>
+    <section class="black-section">
+        <div class="black-content">
+            <h2> <a href="thoughtgarden/post1.html">tulipa gesneriana</a></h2>
+        <p>
+        A short blog explaining my thoughts on why failure exlicits the response it does in us
+        </p> 
+        </div>
+    </section>
+    <main>
+        <section class="content">
+            <div class="text">
+                <h2> <a href = "thoughtgarden/post2.html">petunia exserta</a></h2>
+                <p >
+                A technical post explaining how I finetuned a vision transformer to predict user drawings. Needs to be formatted correctly. 
+                </p>
+            </div>
+        </section>
+    </main>
+    <section class="black-section">
+        <div class="black-content">
+            <h2> <a href="thoughtgarden/post3.html">wisteria sinensis</a></h2>
+        <p>
+        Poetry anthology
+        </p> 
+        </div>
+    </section>
 </body>
 </html>
+

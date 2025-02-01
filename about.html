@@ -3,94 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Using JetBrainsMonoNL Nerd Font</title>
-    <!-- Link to the external CSS file -->
+    <title>Owltastic - Work</title>
     <link rel="stylesheet" href="style.css">
 </head>
-<style>
-
-body {
-  position:relative;
-  margin: 0;
-}
-
-body::before {
-  content: '';
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-image: url('images/gradient.jpg');
-  background-repeat: no-repeat;
-  background-size: 100% 100%; 
-  opacity: 0.7; /* Decreases opacity to 50% */
-  z-index: -1; /* Ensures the background is behind the content */
-}
-</style>
-
 <body>
-<pre class = "header">
- █████╗ ██████╗  ██████╗ ██╗   ██╗████████╗    ███╗   ███╗███████╗
-██╔══██╗██╔══██╗██╔═══██╗██║   ██║╚══██╔══╝    ████╗ ████║██╔════╝
-███████║██████╔╝██║   ██║██║   ██║   ██║       ██╔████╔██║█████╗  
-██╔══██║██╔══██╗██║   ██║██║   ██║   ██║       ██║╚██╔╝██║██╔══╝  
-██║  ██║██████╔╝╚██████╔╝╚██████╔╝   ██║       ██║ ╚═╝ ██║███████╗
-╚═╝  ╚═╝╚═════╝  ╚═════╝  ╚═════╝    ╚═╝       ╚═╝     ╚═╝╚══════╝
-                                                                                      
-</pre>
-<pre>
-</pre>
-<p >
- I'm Allan, a frosh studying applied mathematics, but I am looking to tack on another major. I'm currently
-      pretty interested in machine learning, specifically the fields of computer vision and LMMs. However, I know myself
-      well enough to know that my interests can change at the drop of a hat. While I'm not exactly sure what I'll be doing in the
-      future, I am pretty keen on going to graduate school and conducting research related to machine learning.
-</p>
-<p >
-Currently, I'm working as a research assistant at BigML @ UCLA, where I'm currently helping a graduate student study where and why multimodal models fail at spatial reasoning tasks. It has been an extremely fulfilling experience and I have learned a lot. When I'm not working on research, I enjoy reading and creating my own personal projects. I began to learn to code just a few months ago, and I have been enjoying creating small Python projects. I just finished up creating my own doodle guesser, which you can read more about in the projects section of this site. 
-</p> 
-
-
-
-
-        <div class="right">
-        <pre>						     		  _,-""`""-~`)
-								(`~_,=========\
-								 |---,___.-.__,\                                 
-								 |        o     \ ___  _,,,,_     _.--.          
-								  \      `^`    /`_.-"~      `~-;`     \         
-								   \_      _  .'                 `,     |        
-								     |`-              UCLA         \'__/         
-								    /                      ,_       \  `'-.      
-								   /    .-""~~--.            `"-,   ;_    /      
-								   |              \               \  | `""`       
-								    \__.--'`"-.   /_               |'             
-									      `"`  `~~~---..,     |
-											     \ _.-'`-.           
-											      \       \          
-											       '.     /          
-												 `"~"`
-</pre>
-
-
-        </div>
-    </div> 
-  <div class="terminal", id = "terminal">
-        <div class="output" id="output">
-        </div>
-        <form action="#">
-
-        <span class="prompt">ls to see, cd to explore, : to toggle</span>
-	<p></p>
-		<div class="input-line">
-                <span class="prompt">(base) allanz:~/nvim$</span>
-                <input type="text" id="terminal-input" />
+    <header>
+        <div class="logo">giyushino</div>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="about.html"class="active">About</a>
+            <a href="work.html">Work</a>
+            <a href="thoughtgarden.html">Thought Garden</a>
+            <a href="contact.html">Contact</a>
+            <a href="cv.pdf">CV</a>
+        </nav>
+    </header>
+    <main>
+        <section class="content">
+            <div class="text">
+                <h2>About Me</h2>
+                <p >
+                 I'm Allan, a frosh studying applied mathematics, but I am looking to tack on another major. I'm currently pretty interested in machine learning, specifically the fields of computer vision and LMMs. However, I know myself well enough to know that my interests can change at the drop of a hat. While I'm not exactly sure what I'll be doing in the future, I am pretty keen on going to graduate school and conducting research related to machine learning.
+                </p>
+                <p >
+                Currently, I'm working as a research assistant at BigML @ UCLA, where I'm currently helping a graduate student study where and why multimodal models fail at spatial reasoning tasks. It has been an extremely fulfilling experience and I have learned a lot. When I'm not working on research, I enjoy reading and creating my own personal projects. Since I only started learning to code a few months ago, I've been trying to code as much as possible. While I have mostly been working with Python and machine learning, I hope to expand my skillset to C++ (maybe gamedev?). </p>
+                <p>My current project involves testing different methods of finetuning an LLM to become an optimal math agent. I have been experimenting and studying how datasets, model architecture, compute power, prompting, low rank adaption, and other factors can affect the model's performance.       
+                </p> 
             </div>
-        </form>
-    </div>
-
-    
-    <script src="terminal.js"></script>
+        </section>
+    </main>
+    <section class="black-section">
+        <div class="black-content">
+        <h2>Purpose</h2>
+        <p>
+            What are humans apart from our memories? Strip them away from us and what do we become? With this site, I hope to keep a record of my thought process, works, and life in general. Even though I have only been in college for a few months, I've come to understand how fast paced life can be, and how fleeting moments are. Without any pictures or written records, I find myself wondering how exactly I felt at certain points my life, or what exactly I did. I feel dissapointed by the fact that my truimphs, failures, and thoughts are essentially lost to time due to my negligence.
+        </p> 
+        </div>
+    </section>
 </body>
 </html>
+
