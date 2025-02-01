@@ -51,7 +51,6 @@ main {
     border: 1px solid #2B2622;
 }
 
-
 .content {
     display: flex;
     align-items: center;
@@ -70,7 +69,6 @@ main {
     font-family: 'Noto Sans Mono', monospace;
 }
 
-
 .text h2 {
     font-size: 36px;
     font-weight: bold;
@@ -78,6 +76,7 @@ main {
     margin-bottom: 20px;
     font-family: 'Noto Sans Mono', monospace;
 }
+
 .text p {
     font-size: 18px;
     line-height: 1.6;
@@ -133,5 +132,63 @@ main {
     margin-right: 40px; /* Adds space between the image and the text */
     margin-bottom: 20px; /* Adds space below the image */
     height: auto; /* Maintains the aspect ratio */
+}
+
+/* Media Queries for Mobile */
+@media screen and (max-width: 768px) {
+    body {
+        margin: 0; /* Remove margin for smaller screens */
+    }
+
+    header {
+        flex-direction: column; /* Stack logo and nav vertically */
+        padding: 10px;
+    }
+
+    .logo {
+        font-size: 20px;
+    }
+
+    nav a {
+        margin: 5px 0;
+        font-size: 14px;
+    }
+
+    main {
+        padding: 20px;
+    }
+
+    .content {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 20px;
+    }
+
+    .content img {
+        width: 100%; /* Make images responsive */
+    }
+
+    .black-section .black-content {
+        max-width: 100%; /* Allow the black section content to take full width on mobile */
+        padding: 10px; /* Reduce padding for smaller screens */
+    }
+
+    .black-section .black-content img {
+        max-width: 100%; /* Make the image responsive on mobile */
+        float: none; /* Prevent image from floating */
+        margin: 0 0 20px 0; /* Reset margin */
+    }
+
+    .text h1 {
+        font-size: 30px;
+    }
+
+    .text h2 {
+        font-size: 28px;
+    }
+
+    .text p {
+        font-size: 16px;
+    }
 }
 
