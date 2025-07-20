@@ -1,39 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>giyushino</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>homepage</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://cdn.jsdelivr.net/npm/computer-modern@0.3.4/cmu.css" rel="stylesheet" />
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script id="MathJax-script" async
+    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 <body>
-    <header>
-        <div class="logo">giyushino</div>
-        <nav>
-            <a href="index.html" class="active">Home</a>
-            <a href="about.html">About</a>
-            <a href="work.html">Work</a>
-            <a href="thoughtgarden.html">Thought Garden</a>
-            <a href="contact.html">Contact</a>
-            <a href="cv.pdf">CV</a>
-        </nav>
-    </header>
-    <main>
-        <section class="content">
-            <img src="images/headshot.jpg" alt="me!">
-            <div class="text">
-                <h1>Hi, I'm Allan</h1>
-                <p>
-                    I'm a frosh @ UCLA currently studying applied mathematics. While the main purpose of this site is to showcase my work and keep records of how/why I've done everything I have, I'll be hosting a bunch of unrelated stuff here. 
-                </p>
-            </div>
-        </section>
-    </main>
-    <section class="black-section">
-        <div class="black-content">
-        <h2>I'm smart enough to know that I'm dumb - Richard Feynman </h2>
-        </div>
-    </section>
+  <nav class="menu">
+      <a href="files/about.html" class="menu-item">ABOUT</a>
+      <a href="files/projects.html" class="menu-item">PROJECTS</a>
+      <a href="files/publications.html" class="menu-item">PUBLICATIONS</a>
+      <a href="files/thought.html" class="menu-item">THOUGHT GARDEN</a>
+      <a href="files/nvim.html" class="menu-item">NEOVIM/LINUX</a>
+      <a href="files/cv.pdf" target="_blank" rel="noopener noreferrer" class="menu-item">CV</a>
+  </nav>
+  <div class="container">
+    <h1>Allan Zhang</h1>
+
+    <div class="profile">
+      <img src="images/allan.png" alt="photo of me" class="profile-pic" />
+      <div class="profile-text">
+        <p class=profile-text> Hi! I'm a sophomore studying computational mathematics at <kinda_strong>UCLA</kinda_strong>. I'm currently working as a research assistant at <a class = "color" href="https://baharanm.github.io/bigml/">BigML</a>, helping out PhD candidates Siddharth Joshi and Dang Nguyen. My research primarily focuses on <kinda_strong>data efficiency</kinda_strong>, where I seek to improve training techniques while working with limited amounts of data.  
+        </p>
+         <p class=profile-text> I'm also super into ricing my Hyprland config (I use arch btw) and Neovim, so reach out if you ever have anything to say! I'm also pretty big on writing, check out my <a class = "color" href="files/thought_garden/post2.html">poetry!</a>
+        </p>
+      </div> 
+    </div> 
+    <p class = "email"> allanzhang@ucla.edu</p>
+    <div class="problem">
+    <p class = topic><strong>News:</strong></p>
+        <ul class = "no-bullets">
+            <li> <b class = "date"> July 19, 2025 </b> This site was born! </li>
+        </ul>
+    </div>
+    <div class="problem">
+      <p><strong>My favorite quote:</strong> "To live is the rarest thing in the world. Most people exist, that is all." - Oscar Wilde </p>
+    </div>
+    <div class="problem">
+      <p><strong>A fun math problem:</strong> Make 24 from the numbers 8, 8, 3 and 3 only using elementary operations (\(+ \, - \, \div \, \times \))</p>
+    </div>
+  <p.update>Website last updated 07/19/25</p>
+  </div> 
 </body>
 </html>
-
