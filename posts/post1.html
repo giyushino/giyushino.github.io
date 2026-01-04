@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thinking Budget</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../styles.css">
+    <link id="hljs-theme" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <!-- MathJax for LaTeX support -->
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            }
+        };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo"><a href="post.html" style="text-decoration: none; color: inherit;">BLOG</a></div>
+            <ul class="nav-links">
+                <li><a href="../index.html">ABOUT</a></li>
+            </ul>
+            <button class="theme-toggle" aria-label="Toggle dark mode">
+                <span class="theme-icon"></span>
+            </button>
+        </nav>
+    </header>
+
+    <main>
+        <div class="container blog-post">
+            <article class="about-content">
+                <h1>Enforcing a Thinking Budget During GRPO in verl</h1>
+                <p>December 20, 2025</p>
+                <p>I recently started a new project within my lab, where I was tasked with implementing a thinking budget in GRPO<sup class="sidenote-ref">1</sup><span class="sidenote" data-note-number="1">Group Relative Policy Optimization</span>. In other words, we needed to be able to control the number of thinking tokens a reasoning model was allowed to produce during the rollout phase.</p>
+
+                <p>Since I obviously wasn't going to write a training stack from scratch, I decided to use verl as a jumping off point. Despite being familiar with TRL <sup class="sidenote-ref">2</sup><span class="sidenote" data-note-number="2">Hugging Face's Transformer Reinforcement Learning library</span> and its GRPO implementation, I found it unable to support longer sequence lengths. Since we discussed running experiments with 6K+ tokens, TRL was no longer a valid option without some hacky workarounds. Additionally, most of the papers I've read used verl for their experiments, so I decided it was time to see what the hype was all about.</p>
+
+                <h2>Background</h2>
+                <p>Model families like Qwen3 and Olmo3 have explicit thinking modes, where the LLM will reason and correct itself before outputting its final answer. Typically, this sequence is spanned by special tokens like &lt;think&gt; and &lt;/think&gt;. We'll refer to the ladder as the thinking delimiter from here on out.</p>
+                <p>This thinking phase oftentimes lasts for thousands of tokens, eating up the entire <code>max_tokens</code> limit set by the user. Even though it would be extremely useful to control how long the model can think for, this isn't natively supported by inference or training libraries.</p>
+                <p>Lucky for us, this isn't a difficult fix at all!</p>
+
+                <h2>Implementation</h2>
+                <p>The only part of the code we need to change is the rollout phase, where we will now need to make 2 calls to vLLM instead of just 1. Let's say we have a thinking budget of $n$ tokens and a response budget of $m$ tokens, meaning the longest possible output will be $n+m$ tokens long. Our first call to vLLM will create $n$ tokens for the base prompt. If the thinking delimiter is NOT found in the output ids, then we'll append it and generate $m$ new tokens. However, if the thinking delimiter is in the list if tokens, then we only generate $m - (n - \text{delimeter_pos} + 1)$ tokens. The prompt will be the output tokens from the first call, and <code>delimiter_pos = output_ids.index(delimiter_id)</code>.</p>
+                <p>The original function can be found <a href="https://github.com/volcengine/verl/blob/main/verl/workers/rollout/vllm_rollout/vllm_async_server.py" class="link-underline" target="_blank">here</a> and my implentation <a href="https://github.com/giyushino/grpo-thinking-budget/blob/main/verl/verl/workers/rollout/vllm_rollout/vllm_async_server.py" class="link-underline" target="_blank">here</a>, but for the sake of this blog post, I'll write a simplified version of the code.</p>
+                <pre><code><!--
+  -->def generate(
+    self,
+    prompt_ids: list[int],
+    sampling_params: dict[str, Any],
+    request_id: str,
+    image_data: Optional[list[Any]] = None,
+) -> TokenOutput:
+    """Generate sequence with token-in-token-out."""
+    # TODO(@wuxibin): switch to `/generate` http endpoint once multi-modal support ready.
+    max_tokens = self.config.max_model_len - len(prompt_ids)
+    sampling_params["logprobs"] = 0 if sampling_params.pop("logprobs", False) else None
+    sampling_params.setdefault("repetition_penalty", self.config.get("repetition_penalty", 1.0))
+    sampling_params = SamplingParams(max_tokens=max_tokens, **sampling_params)
+    prompt_ids = _qwen2_5_vl_dedup_image_tokens(prompt_ids, self.model_config.processor)
+    prompt = TokensPrompt(
+        prompt_token_ids=prompt_ids, 
+        multi_modal_data={"image": image_data} if image_data else None
+    )
+
+    # Add lora request
+    lora_request = None
+    if self.model_config.lora_rank > 0:
+        # Make sure we also check that the lora is already loaded in the engine
+        lora_loaded = VLLM_LORA_INT_ID in await self.engine.list_loras()
+        if lora_loaded:
+            lora_request = LoRARequest(
+                lora_name=VLLM_LORA_NAME, lora_int_id=VLLM_LORA_INT_ID, lora_path=VLLM_LORA_PATH
+            )
+
+    generator = self.engine.generate(
+        prompt=prompt, sampling_params=sampling_params, request_id=request_id, lora_request=lora_request
+    )
+
+    # Get final response
+    final_res: Optional[RequestOutput] = None
+    async for output in generator:
+        final_res = output
+    assert final_res is not None
+
+    token_ids = final_res.outputs[0].token_ids
+    log_probs = None
+    if sampling_params.logprobs is not None:
+        log_probs = [logprobs[token_ids[i]].logprob for i, logprobs in enumerate(final_res.outputs[0].logprobs)]
+
+    routed_experts = None
+    if self.config.enable_rollout_routing_replay:
+        routed_experts = final_res.outputs[0].routed_experts
+
+    # Determine stop reason from finish_reason
+    finish_reason = final_res.outputs[0].finish_reason
+    if finish_reason == "abort":
+        stop_reason = "aborted"
+    elif finish_reason in ("stop", "length"):
+        stop_reason = "completed"
+    else:
+        stop_reason = finish_reason  # for more stop reason in the future
+
+    return TokenOutput(
+        token_ids=token_ids, log_probs=log_probs, routed_experts=routed_experts, stop_reason=stop_reason
+        )</code></pre>
+
+                <p>Here's another example with Python:</p>
+
+                <pre><code>import torch
+import torch.nn as nn
+
+class SimpleModel(nn.Module):
+    def __init__(self, input_dim, hidden_dim):
+        super().__init__()
+        self.fc1 = nn.Linear(input_dim, hidden_dim)
+        self.fc2 = nn.Linear(hidden_dim, 1)
+
+    def forward(self, x):
+        x = torch.relu(self.fc1(x))
+        return self.fc2(x)</code></pre>
+
+            </article>
+        </div>
+    </main>
+    <script>
+        const toggle = document.querySelector('.theme-toggle');
+        const icon = toggle.querySelector('.theme-icon');
+        const hljsTheme = document.getElementById('hljs-theme');
+
+        function setTheme(dark) {
+            document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+            icon.textContent = dark ? 'light' : 'dark';
+            hljsTheme.href = dark
+                ? 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css'
+                : 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css';
+            localStorage.setItem('theme', dark ? 'dark' : 'light');
+        }
+
+        const saved = localStorage.getItem('theme');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        setTheme(saved ? saved === 'dark' : prefersDark);
+        hljs.highlightAll();
+
+        toggle.addEventListener('click', () => {
+            const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+            setTheme(!isDark);
+        });
+    </script>
+</body>
+</html>
+
+

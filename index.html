@@ -1,50 +1,86 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>homepage</title>
-  <link rel="stylesheet" href="style.css" />
-  <link href="https://cdn.jsdelivr.net/npm/computer-modern@0.3.4/cmu.css" rel="stylesheet" />
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-  <script id="MathJax-script" async
-    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link id="hljs-theme" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 </head>
 <body>
-  <nav class="menu">
-      <a href="files/about.html" class="menu-item">ABOUT</a>
-      <a href="files/projects.html" class="menu-item">PROJECTS</a>
-      <a href="files/publications.html" class="menu-item">PUBLICATIONS</a>
-      <a href="files/thought.html" class="menu-item">THOUGHT GARDEN</a>
-      <a href="files/nvim.html" class="menu-item">NEOVIM/LINUX</a>
-      <a href="files/cv.pdf" target="_blank" rel="noopener noreferrer" class="menu-item">CV</a>
-  </nav>
-  <div class="container">
-    <h1>Allan Zhang</h1>
+    <header>
+        <nav>
+            <div class="logo"><a href="posts/post.html" style="text-decoration: none; color: inherit;">BLOG</a></div>
+            <ul class="nav-links">
+                <li><a href="index.html">&lt;ABOUT&gt;</a></li>
+            </ul>
+            <button class="theme-toggle" aria-label="Toggle dark mode">
+                <span class="theme-icon"></span>
+            </button>
+        </nav>
+    </header>
 
-    <div class="profile">
-      <img src="images/allan.png" alt="photo of me" class="profile-pic" />
-      <div class="profile-text">
-        <p class=profile-text> Hi! I'm a sophomore studying computational mathematics at <kinda_strong>UCLA</kinda_strong>. I'm currently working as a research assistant at <a class = "color" href="https://baharanm.github.io/bigml/">BigML</a>, helping out PhD candidates Siddharth Joshi and Dang Nguyen. My research primarily focuses on <kinda_strong>data efficiency</kinda_strong>, where I seek to improve training techniques while working with limited amounts of data.  
-        </p>
-         <p class=profile-text> I'm also super into ricing my Hyprland config (I use arch btw) and Neovim, so reach out if you ever have anything to say! I'm also pretty big on writing, check out my <a class = "color" href="files/thought_garden/post2.html">poetry!</a>
-        </p>
-      </div> 
-    </div> 
-    <p class = "email"> allanzhang@ucla.edu</p>
-    <div class="problem">
-    <p class = topic><strong>News:</strong></p>
-        <ul class = "no-bullets">
-            <li> <b class = "date"> July 19, 2025 </b> This site was born! </li>
-        </ul>
-    </div>
-    <div class="problem">
-      <p><strong>My favorite quote:</strong> "To live is the rarest thing in the world. Most people exist, that is all." - Oscar Wilde </p>
-    </div>
-    <div class="problem">
-      <p><strong>A fun math problem:</strong> Make 24 from the numbers 8, 8, 3 and 3 only using elementary operations (\(+ \, - \, \div \, \times \))</p>
-    </div>
-  <p.update>Website last updated 07/19/25</p>
-  </div> 
+    <main>
+        <div class="container">
+            <section class="about-section">
+                <div class="about-content">
+                    <h1>About</h1>
+                    <p>I'm Allan, a sophomore at UCLA studying computational mathematics. I work as an undergraduate researcher at <a href="https://baharanm.github.io/bigml/" class="link-underline" target="_blank">BigML</a>, where I explore data-efficient techniques to improve reinforcement learning methods under Professor Baharan Mirzasoleiman. Starting this January, I'll be joining the multimodal data curation team at <a href="https://www.datologyai.com/" class="link-underline" target="_blank">DatologyAI</a>.</p>
+                    <p> <a href="mailto:allanzhang@ucla.edu" class="link-underline" target="_blank">allanzhang@ucla.edu</a> | <a href="https://github.com/giyushino" class="link-underline" target="_blank">GitHub</a> | <a href="files/cv.pdf" class="link-underline" target="_blank">CV</a> | <a href="https://www.linkedin.com/in/allanzhang-ml/" class="link-underline" target="_blank">LinkedIn</a> | <a href="https://x.com/allanzhangML" class="link-underline" target="_blank">X</a> </p>
+                     
+                    <h2>Interests</h2>
+                    
+                    <ul class="projects-list">
+                        <li>
+                            CUDA, Triton, and all things inference optimization related
+                        </li>
+                        <li>
+                            Diffusion models (VLAs, DLMs, image generation)
+                        </li>
+                        <li>
+                            Linux and Neovim
+                        <li>
+                            Classical literature and poetry
+                        </li>
+                    </ul>
+                    <h2>Site Inspiration</h2>
+                    <p>This site was HEAVILY inspired by <a href="https://siboehm.com/about/" class="link-underline" target="_blank">Simon Boehm</a>.</p>
+                </div>
+                
+                <aside class="profile-image">
+                    <img src="images/allan.png" alt="Profile photo">
+                </aside>
+            </section>
+        </div>
+    </main>
+    <script>
+        const toggle = document.querySelector('.theme-toggle');
+        const icon = toggle.querySelector('.theme-icon');
+        const hljsTheme = document.getElementById('hljs-theme');
+
+        function setTheme(dark) {
+            document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+            icon.textContent = dark ? 'light' : 'dark';
+            hljsTheme.href = dark
+                ? 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css'
+                : 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css';
+            localStorage.setItem('theme', dark ? 'dark' : 'light');
+        }
+
+        const saved = localStorage.getItem('theme');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        setTheme(saved ? saved === 'dark' : prefersDark);
+        hljs.highlightAll();
+
+        toggle.addEventListener('click', () => {
+            const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+            setTheme(!isDark);
+        });
+    </script>
 </body>
 </html>
+

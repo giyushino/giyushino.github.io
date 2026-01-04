@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Example Markdown Post</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../styles.css">
+    <link id="hljs-theme" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            }
+        };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo"><a href="post.html" style="text-decoration: none; color: inherit;">BLOG</a></div>
+            <ul class="nav-links">
+                <li><a href="../index.html">ABOUT</a></li>
+            </ul>
+            <button class="theme-toggle" aria-label="Toggle dark mode">
+                <span class="theme-icon"></span>
+            </button>
+        </nav>
+    </header>
+
+    <main>
+        <div class="container blog-post">
+            <article class="about-content">
+                <h1>Example Markdown Post</h1>
+                <p>December 25, 2024</p>
+                <p>This is an example post showing all the <strong>markdown features</strong> you can use.</p>
+
+<h2>Text Formatting</h2>
+
+<p>You can write in <strong>bold</strong>, <em>italic</em>, or use <code>inline code</code>.</p>
+
+<p>Here's a sidenote<sup class="sidenote-ref">1</sup><span class="sidenote" data-note-number="1">Sidenotes appear in the margin on wide screens</span> in action.</p>
+
+<h2>Links and Images</h2>
+
+<p>Link to <a href="https://google.com" class="link-underline">Google</a> or another page.</p>
+
+<p>Add an image:</p>
+
+<p><img src="../images/blue.png" alt="blue image"></p>
+
+<h2>Code Blocks</h2>
+
+<pre><code>def greet(name):
+    return f"Hello, {name}!"
+
+print(greet("world"))</code></pre>
+
+<h2>Math</h2>
+
+<p>Inline math like $E = mc^2$ or $\sum_{i=1}^n i = \frac{n(n+1)}{2}$.</p>
+
+<p>Display math on its own line:</p>
+
+<p>$$\int_0^\infty e^{-x^2} dx = \frac{\sqrt{\pi}}{2}$$</p>
+
+<h2>Lists</h2>
+
+<ul>
+<li>First item</li>
+<li>Second item</li>
+<li>Third item</li>
+</ul>
+
+<p>That's everything you need to write posts!</p>
+            </article>
+        </div>
+    </main>
+    <script>
+        const toggle = document.querySelector('.theme-toggle');
+        const icon = toggle.querySelector('.theme-icon');
+        const hljsTheme = document.getElementById('hljs-theme');
+
+        function setTheme(dark) {
+            document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+            icon.textContent = dark ? 'light' : 'dark';
+            hljsTheme.href = dark
+                ? 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css'
+                : 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css';
+            localStorage.setItem('theme', dark ? 'dark' : 'light');
+        }
+
+        const saved = localStorage.getItem('theme');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        setTheme(saved ? saved === 'dark' : prefersDark);
+        hljs.highlightAll();
+
+        toggle.addEventListener('click', () => {
+            const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+            setTheme(!isDark);
+        });
+    </script>
+</body>
+</html>

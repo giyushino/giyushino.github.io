@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arch and Neovim</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../styles.css">
+    <link id="hljs-theme" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <!-- MathJax for LaTeX support -->
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            }
+        };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo"><a href="post.html" style="text-decoration: none; color: inherit;">BLOG</a></div>
+            <ul class="nav-links">
+                <li><a href="../index.html">ABOUT</a></li>
+            </ul>
+            <button class="theme-toggle" aria-label="Toggle dark mode">
+                <span class="theme-icon"></span>
+            </button>
+        </nav>
+    </header>
+
+    <main>
+        <div class="container blog-post">
+            <article class="about-content">
+                <h1>All things Arch Linux and Neovim</h1>
+
+                <h2>Introduction</h2>
+
+                <p>You can write your blog post content here. This template includes support for inline LaTeX equations like $E = mc^2$ and display equations:</p>
+
+                <p>$$\int_{-\infty}^{\infty} e^{-x^2} dx = \sqrt{\pi}$$</p>
+
+                <h2>Main Content</h2>
+
+                <p>Add your main content here.<sup class="sidenote-ref">2</sup><span class="sidenote" data-note-number="2">Here's another side note example. These are great for adding references, clarifications, or additional context without interrupting the main flow.</span> You can use inline math like $\alpha + \beta = \gamma$ or more complex expressions such as $\frac{d}{dx}f(x) = \lim_{h \to 0} \frac{f(x+h) - f(x)}{h}$.</p>
+
+                <p>For display equations, use double dollar signs:</p>
+
+                <p>$$\sum_{i=1}^{n} i = \frac{n(n+1)}{2}$$</p>
+
+                <img src="../images/blue.png" alt="temp">
+                <h2>Conclusion</h2>
+
+                <p>Wrap up your thoughts here.</p>
+            </article>
+        </div>
+    </main>
+    <script>
+        const toggle = document.querySelector('.theme-toggle');
+        const icon = toggle.querySelector('.theme-icon');
+        const hljsTheme = document.getElementById('hljs-theme');
+
+        function setTheme(dark) {
+            document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+            icon.textContent = dark ? 'light' : 'dark';
+            hljsTheme.href = dark
+                ? 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css'
+                : 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css';
+            localStorage.setItem('theme', dark ? 'dark' : 'light');
+        }
+
+        const saved = localStorage.getItem('theme');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        setTheme(saved ? saved === 'dark' : prefersDark);
+        hljs.highlightAll();
+
+        toggle.addEventListener('click', () => {
+            const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+            setTheme(!isDark);
+        });
+    </script>
+</body>
+</html>
