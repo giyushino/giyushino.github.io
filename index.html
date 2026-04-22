@@ -1,86 +1,58 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
-    <link id="hljs-theme" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<meta charset="utf-8" />
+<title>ayzml</title>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<link rel="icon" href="favicon.svg" type="image/svg+xml" />
+<script src="theme.js"></script>
+<link rel="stylesheet" href="styles.css" />
 </head>
-<body>
-    <header>
-        <nav>
-            <div class="logo"><a href="posts/post.html" style="text-decoration: none; color: inherit;">BLOG</a></div>
-            <ul class="nav-links">
-                <li><a href="index.html">&lt;ABOUT&gt;</a></li>
-            </ul>
-            <button class="theme-toggle" aria-label="Toggle dark mode">
-                <span class="theme-icon"></span>
-            </button>
-        </nav>
-    </header>
+<body data-screen-label="diffusion">
 
-    <main>
-        <div class="container">
-            <section class="about-section">
-                <div class="about-content">
-                    <h1>About</h1>
-                    <p>I'm Allan, a sophomore at UCLA studying computational mathematics. I work as an undergraduate researcher at <a href="https://baharanm.github.io/bigml/" class="link-underline" target="_blank">BigML</a>, where I explore data-efficient techniques to improve reinforcement learning methods under Professor Baharan Mirzasoleiman. Starting this January, I'll be joining the multimodal data curation team at <a href="https://www.datologyai.com/" class="link-underline" target="_blank">DatologyAI</a>.</p>
-                    <p> <a href="mailto:allanzhang@ucla.edu" class="link-underline" target="_blank">allanzhang@ucla.edu</a> | <a href="https://github.com/giyushino" class="link-underline" target="_blank">GitHub</a> | <a href="files/cv.pdf" class="link-underline" target="_blank">CV</a> | <a href="https://www.linkedin.com/in/allanzhang-ml/" class="link-underline" target="_blank">LinkedIn</a> | <a href="https://x.com/allanzhangML" class="link-underline" target="_blank">X</a> </p>
-                     
-                    <h2>Interests</h2>
-                    
-                    <ul class="projects-list">
-                        <li>
-                            CUDA, Triton, and all things inference optimization related
-                        </li>
-                        <li>
-                            Diffusion models (VLAs, DLMs, image generation)
-                        </li>
-                        <li>
-                            Linux and Neovim
-                        <li>
-                            Classical literature and poetry
-                        </li>
-                    </ul>
-                    <h2>Site Inspiration</h2>
-                    <p>This site was HEAVILY inspired by <a href="https://siboehm.com/about/" class="link-underline" target="_blank">Simon Boehm</a>.</p>
-                </div>
-                
-                <aside class="profile-image">
-                    <img src="images/allan.png" alt="Profile photo">
-                </aside>
-            </section>
-        </div>
-    </main>
-    <script>
-        const toggle = document.querySelector('.theme-toggle');
-        const icon = toggle.querySelector('.theme-icon');
-        const hljsTheme = document.getElementById('hljs-theme');
+<nav class="nav">
+  <span class="brand"><label class="dot"><input type="color" id="hue-input" value="#a4fc6f" /></label><a href="index.html">allan.zhang</a></span>
+  <div class="spacer"></div>
+  <a class="active" href="index.html">home</a>
+  <a href="writing.html">writing</a>
+  <a href="research.html">research</a>
+  <a href="contact.html">contact</a>
+</nav>
 
-        function setTheme(dark) {
-            document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
-            icon.textContent = dark ? 'light' : 'dark';
-            hljsTheme.href = dark
-                ? 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css'
-                : 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css';
-            localStorage.setItem('theme', dark ? 'dark' : 'light');
-        }
+<header class="hero">
+  <canvas id="ascii-canvas"></canvas>
+  <div class="inner">
+    <p class="kicker">ML Researcher · vim enthusiast · </p>
+    <h1>
+        Traversing life's <br/>
+        <span class="mark">loss</span> landscape
+    </h1>
+    <p class="sub">
+    I'm Allan, a sophomore at UCLA studying computational mathematics. I work as an undergraduate researcher at BigML, where I explore data-efficient techniques to improve reinforcement learning methods under Professor Baharan Mirzasoleiman. During Winter '25, I was a research intern at DatologyAI working on multimodal data curation and reasoning VLMs. 
+    </p>
+    <p class="sub">
+        I enjoy thinking about how to make silicon think, reading classical literature, writing poetry, ricing Linux, programming, and talking to friends (probably my favorite activity).
+    </p>
+    <div class="ctas">
+      <a class="primary" href="writing.html">peak at my brain →</a>
+    <!-- <a class="secondary" href="now.html">what i&rsquo;m doing now</a> -->
+    </div>
+    <div class="chips">
+      <span class="chip">LLM pretraining</span>
+      <span class="chip">VLM reasoning</span>
+      <span class="chip">RLVR</span>
+      <span class="chip">data&#8209;centric ML</span>
+      <span class="chip">inference engineering</span>
+    </div>
+  </div>
+</header>
 
-        const saved = localStorage.getItem('theme');
-        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        setTheme(saved ? saved === 'dark' : prefersDark);
-        hljs.highlightAll();
+<footer class="bottom">
+  <span>© 2026 Allan Zhang &nbsp;·&nbsp; los angeles, ca</span>
+</footer>
 
-        toggle.addEventListener('click', () => {
-            const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-            setTheme(!isDark);
-        });
-    </script>
+<script src="ascii-diffusion.js"></script>
+<script src="hue.js"></script>
+
 </body>
 </html>
-
