@@ -215,6 +215,7 @@ p.lead { font-size: 19px; color: var(--fg); max-width: 60ch; margin: 0 0 12px; }
   display: grid; grid-template-columns: 64px 1fr auto; gap: 22px;
   padding: 22px 0; border-top: 1px solid var(--rule);
   align-items: baseline;
+  text-decoration: none; color: inherit;
 }
 .pub:last-child { border-bottom: 1px solid var(--rule); }
 .pub .yr { font-family: var(--mono); font-size: 12px; color: var(--dim); }
