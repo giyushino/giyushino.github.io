@@ -121,7 +121,13 @@
     flex-direction: column;
     justify-content: flex-start;
     gap: 12px;
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
   }
+  .text::-webkit-scrollbar { width: 6px; }
+  .text::-webkit-scrollbar-thumb { background: var(--rule); border-radius: 3px; }
+  .text::-webkit-scrollbar-thumb:hover { background: #ff7aa2; }
   .text .kicker {
     font-family: var(--mono);
     font-size: 11px;
