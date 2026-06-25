@@ -12,7 +12,7 @@
   // const RAMP = ' .,:;+x%#&@█'.split('');
   const COLOR_DIM = '#2a2a2c';
   const COLOR_MID = '#5a5a58';
-  let COLOR_HI  = '#a4fc6f';
+  let COLOR_HI  = '#619ee8';
 
   const FONT_PX = 14;
   // Perf tuning: was 9x15. Larger cells mean fewer glyphs per frame.
@@ -125,12 +125,36 @@
   const SX = CELL_X * DPR, SY = CELL_Y * DPR;
   const RAMPN = RAMP.length;
 
+  // Sine lookup table — the inner loop calls sin() twice per cell, which
+  // dominates the frame cost. A LUT with index masking is several times
+  // faster than native Math.sin and visually identical for this plasma.
+  const SIN_N = 4096;
+  const SIN_MASK = SIN_N - 1;
+  const SIN_SCALE = SIN_N / (Math.PI * 2);
+  const SIN = new Float32Array(SIN_N);
+  for (let i = 0; i < SIN_N; i++) SIN[i] = Math.sin((i / SIN_N) * Math.PI * 2);
+  // (x * SIN_SCALE) | 0 wraps via the mask, so negative args work too.
+  const sin = (x) => SIN[((x * SIN_SCALE) | 0) & SIN_MASK];
+
+  // Frame-rate cap. The plasma moves slowly enough that ~30fps is
+  // indistinguishable from 60fps but costs half as much.
+  const FRAME_MS = 1000 / 30;
+
   let t = 0;
   let last = performance.now();
+  let lastRender = last;
+  let acc = 0;
   function frame(now) {
-    if (!visible) { last = now; requestAnimationFrame(frame); return; }
-    const dt = Math.min(0.05, (now - last) / 1000);
+    if (!visible) { last = now; lastRender = now; requestAnimationFrame(frame); return; }
+    requestAnimationFrame(frame);
+    acc += now - last;
     last = now;
+    if (acc < FRAME_MS) return;
+    acc %= FRAME_MS;
+    // Advance by real time since the last actual render so motion speed is
+    // unchanged by the frame cap.
+    const dt = Math.min(0.05, (now - lastRender) / 1000);
+    lastRender = now;
     t += dt;
 
     mouseX += (targetX - mouseX) * 0.095;
@@ -142,7 +166,7 @@
     const t13 = t * 1.3, t11 = t * 1.1, t32 = t * 3.2;
 
     // s1 depends only on column + time — compute once per column
-    for (let i = 0; i < COLS; i++) s1Col[i] = Math.sin(u14Col[i] + t13);
+    for (let i = 0; i < COLS; i++) s1Col[i] = sin(u14Col[i] + t13);
 
     let nHI = 0, nMID = 0, nDIM = 0;
 
@@ -154,8 +178,8 @@
         const u = uCol[i];
         const dx = u - mx;
         const dc = Math.sqrt(dx * dx + dy * dy);
-        const s2 = Math.sin(v12t11 + cosUCol[i]);
-        const s3 = Math.sin(dc * 26 - t32);
+        const s2 = sin(v12t11 + cosUCol[i]);
+        const s3 = sin(dc * 26 - t32);
         let d = 0.5 + (s1Col[i] + s2 + s3) / 6;
         d += (1 - (dc < 0.3333333 ? dc * 3 : 1)) * 0.35;
         if (d < 0.18) continue;

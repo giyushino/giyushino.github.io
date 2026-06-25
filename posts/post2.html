@@ -7,11 +7,13 @@
 <link rel="icon" href="../favicon.svg" type="image/svg+xml" />
 <script src="../theme.js"></script>
 <link rel="stylesheet" href="../styles.css?v=20260422" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release/build/styles/github-dark.min.css" />
+<script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release/build/highlight.min.js"></script>
 </head>
 <body data-screen-label="post">
 
 <nav class="nav">
-  <span class="brand"><label class="dot"><input type="color" id="hue-input" value="#a4fc6f" /></label><a href="../index.html">allan.zhang</a></span>
+  <span class="brand"><label class="dot"><input type="color" id="hue-input" value="#619ee8" /></label><a href="../index.html">allan.zhang</a></span>
   <div class="spacer"></div>
   <a href="../index.html">home</a>
   <a class="active" href="../writing.html">writing</a>
@@ -22,11 +24,23 @@
 <article class="content post-page">
   <a class="backlink" href="../writing.html">← all writing</a>
   <div class="eyebrow">/ essay</div>
-  <h1>temp</h1>
-  <div class="post-meta">2026·03·18 · 12 min</div>
+  <h1>To Obtain a Token</h1>
+  <div class="post-meta">2026·05·12 · ?? min</div>
     <p>
-        temp
+      If you give an LLM a few words, a GPU, and a few watts,
+      it'll spit out a token. But how exactly does this all work
+      under the hood? To uncover the magic of LLMs, we'll be
+      implementing Qwen3 from scratch to see what's really going on.
     </p>
+    <p>
+    test
+    </p>
+<pre class="codeblock"><code class="language-python">from transformers import AutoTokenizer, AutoModelForCausalLM
+
+MODEL_NAME = "Qwen/Qwen3-4B-Instruct-2507"
+model = AutoModelForCausalLM.from_pretrained(MODEL_NAME)
+tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
+</code></pre>
 </article>
 
 <footer class="bottom">
@@ -34,6 +48,7 @@
 </footer>
 
 <script src="../hue.js"></script>
+<script>hljs.highlightAll();</script>
 
 </body>
 </html>
