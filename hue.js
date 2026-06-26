@@ -19,5 +19,32 @@
       input.value = e.newValue;
       apply(e.newValue);
     }
+    if (e.key === 'theme') applyTheme(e.newValue || 'auto');
   });
+
+  // System / light / dark segmented switch.
+  const root = document.documentElement;
+  const switchEl = document.getElementById('theme-switch');
+  const mql = window.matchMedia('(prefers-color-scheme: dark)');
+  const getMode = () => localStorage.getItem('theme') || 'auto';
+  const applyTheme = (mode) => {
+    const light = mode === 'light' || (mode === 'auto' && !mql.matches);
+    if (light) root.setAttribute('data-theme', 'light');
+    else root.removeAttribute('data-theme');
+    if (switchEl) {
+      switchEl.querySelectorAll('.ts-opt').forEach((b) => {
+        b.classList.toggle('active', b.dataset.themeValue === mode);
+      });
+    }
+  };
+  applyTheme(getMode());
+  if (switchEl) {
+    switchEl.querySelectorAll('.ts-opt').forEach((b) => {
+      b.addEventListener('click', () => {
+        localStorage.setItem('theme', b.dataset.themeValue);
+        applyTheme(b.dataset.themeValue);
+      });
+    });
+  }
+  mql.addEventListener('change', () => { if (getMode() === 'auto') applyTheme('auto'); });
 })();

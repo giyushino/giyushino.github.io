@@ -2,6 +2,7 @@
 
 :root {
   --bg: #0a0a0b;
+  --bg-rgb: 10, 10, 11;  /* --bg as raw channels, for rgba() scrims/overlays */
   --panel: #0f1012;
   --fg: #ededec;
   --dim: #8a8a88;
@@ -11,6 +12,16 @@
   --accent2: #5ee8d4;    /* cyan */
   --mono: "JetBrains Mono", "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
   --sans: "EB Garamond", Georgia, "Times New Roman", serif;
+}
+:root[data-theme="light"] {
+  --bg: #f7f6f3;
+  --bg-rgb: 247, 246, 243;
+  --panel: #ffffff;
+  --fg: #1b1b1a;
+  --dim: #6a6a66;
+  --faint: #cbcac4;
+  --rule: #e4e2db;
+  --accent2: #1aa898;    /* darker cyan, legible on light */
 }
 * { box-sizing: border-box; }
 html, body { margin: 0; background: var(--bg); color: var(--fg); }
@@ -35,7 +46,7 @@ code { font-family: var(--mono); font-size: 0.9em; background: var(--panel); pad
   padding: 18px 32px;
   font-family: var(--mono); font-size: 12.5px;
   backdrop-filter: blur(14px);
-  background: rgba(10,10,11,0.55);
+  background: rgba(var(--bg-rgb), 0.55);
   border-bottom: 1px solid var(--rule);
 }
 .nav .brand { font-weight: 600; letter-spacing: -0.2px; color: var(--fg); display: flex; align-items: center; gap: 10px; border: 0; }
@@ -60,6 +71,29 @@ code { font-family: var(--mono); font-size: 0.9em; background: var(--panel); pad
   color: var(--fg); background: rgba(255,255,255,0.02);
 }
 .nav .cta:hover { background: var(--accent); color: #000; border-color: var(--accent); }
+.nav .theme-switch {
+  display: inline-flex; align-items: center; gap: 2px;
+  padding: 3px;
+  border: 1px solid var(--rule); border-radius: 999px;
+  background: rgba(255,255,255,0.02);
+}
+.nav .theme-switch .ts-opt {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 30px; height: 24px; padding: 0;
+  border: 0; border-radius: 999px;
+  background: transparent; color: var(--dim);
+  cursor: pointer; line-height: 0;
+  transition: color .15s, background .15s;
+}
+.nav .theme-switch .ts-opt svg { width: 15px; height: 15px; display: block; }
+.nav .theme-switch .ts-opt:hover { color: var(--fg); }
+.nav .theme-switch .ts-opt.active {
+  background: rgba(255,255,255,0.10);
+  color: var(--fg);
+}
+:root[data-theme="light"] .nav .theme-switch .ts-opt.active {
+  background: rgba(0,0,0,0.06);
+}
 
 /* ------------ hero ------------ */
 .hero {
@@ -81,7 +115,7 @@ code { font-family: var(--mono); font-size: 0.9em; background: var(--panel); pad
   content: "";
   position: absolute; inset: 0;
   z-index: 1;
-  background: radial-gradient(ellipse 80% 70% at 50% 45%, rgba(10,10,11,0.72) 0%, rgba(10,10,11,0.45) 55%, transparent 100%);
+  background: radial-gradient(ellipse 80% 70% at 50% 45%, rgba(var(--bg-rgb), 0.72) 0%, rgba(var(--bg-rgb), 0.45) 55%, transparent 100%);
   pointer-events: none;
 }
 .hero .inner {
@@ -90,6 +124,11 @@ code { font-family: var(--mono); font-size: 0.9em; background: var(--panel); pad
 }
 .hero h1, .hero .sub, .hero .kicker {
   text-shadow: 0 1px 14px rgba(0,0,0,0.7);
+}
+:root[data-theme="light"] .hero h1,
+:root[data-theme="light"] .hero .sub,
+:root[data-theme="light"] .hero .kicker {
+  text-shadow: none;
 }
 .hero h1 {
   font-family: var(--sans);
@@ -133,13 +172,13 @@ code { font-family: var(--mono); font-size: 0.9em; background: var(--panel); pad
 .hero .chips {
   display: flex; gap: 8px; flex-wrap: wrap;
   margin-top: 56px;
-  font-family: var(--mono); font-size: 11.5px; color: #fff;
+  font-family: var(--mono); font-size: 11.5px; color: var(--fg);
 }
 .hero .chips .chip {
   padding: 4px 10px;
-  border: 1px solid rgba(255,255,255,0.18);
+  border: 1px solid var(--faint);
   border-radius: 999px;
-  background: rgba(10,10,11,0.55);
+  background: rgba(var(--bg-rgb), 0.55);
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
 }
@@ -176,7 +215,7 @@ section.content:last-of-type { border-bottom: 0; }
   position: absolute;
   inset: 0;
   z-index: 1;
-  background: radial-gradient(ellipse 85% 70% at 50% 40%, rgba(10,10,11,0.58) 0%, rgba(10,10,11,0.84) 64%, var(--bg) 100%);
+  background: radial-gradient(ellipse 85% 70% at 50% 40%, rgba(var(--bg-rgb), 0.58) 0%, rgba(var(--bg-rgb), 0.84) 64%, var(--bg) 100%);
   pointer-events: none;
 }
 .eyebrow {
