@@ -1,18 +1,22 @@
 /* ----------------------------------------------------------------------
    ASCII brush trail — a brush of glyphs follows the cursor and the trail
-   fades toward the background over time.
+   fades to nothing over time.
 
-   Far cheaper than the plasma: per frame we paint ONE low-alpha bg rect
-   over the whole canvas (the fade) plus a few glyphs near the cursor.
-   Cost is roughly constant regardless of canvas size — no per-cell loop.
+   We keep a list of recently-dropped glyphs (position, char, base alpha,
+   birth time) and every frame we clear the canvas and redraw the live ones
+   with alpha scaled by their age. A glyph past its lifetime is dropped.
+
+   This avoids fading by repeatedly compositing a translucent rect over the
+   canvas: that approach (toward a bg color OR via destination-out) leaves an
+   8-bit rounding residue — a pixel stuck one notch above zero forever — which
+   shows up as a lingering gray trail. Clear+redraw reaches a true zero.
+   Cost scales with the number of live glyphs, which a short lifetime keeps small.
 ---------------------------------------------------------------------- */
 (() => {
   const canvas = document.getElementById('ascii-canvas');
   if (!canvas) return;
   const ctx = canvas.getContext('2d');
 
-  const BG = '#0a0a0b';               // matches --bg; the trail fades to this
-  const FADE = 'rgba(10,10,11,0.1)'; // same color, low alpha = fade-per-frame
   let COLOR_HI = '#619ee8';           // accent; updated live via setHue
   const RAMP = '·:-=+*#%▒▓█'.split('');
 
@@ -20,13 +24,22 @@
   const FONT = `${FONT_PX}px "JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace`;
   const DPR = Math.min(window.devicePixelRatio || 1, 2);
 
-  const BRUSH_R = 26;   // brush radius in px
-  const STAMP_GAP = 6;  // px between stamps along the movement path
-  const GLYPHS = 5;     // glyphs dropped per stamp
+  const BRUSH_R = 26;     // brush radius in px
+  const STAMP_GAP = 6;    // px between stamps along the movement path
+  const GLYPHS = 5;       // glyphs dropped per stamp
+  // Exponential decay: a glyph keeps ~DECAY of its alpha each ~frame, like the
+  // old translucent-rect fade (crisp bright head, long soft tail). We drop it
+  // once it falls below MIN_A — that's what makes it vanish cleanly instead of
+  // leaving the 8-bit gray residue the canvas-fade left behind.
+  const DECAY = 0.9;
+  const MIN_A = 0.02;
 
   let W = 0, H = 0, visible = true;
   // cursor (target) and eased brush position, both in CSS px
   let tx = 0, ty = 0, mx = 0, my = 0, hasMoved = false;
+
+  // Live glyphs: each is { x, y, ch, a0 (base alpha), born (ms) }.
+  const glyphs = [];
 
   window.addEventListener('message', (e) => {
     if (e.data && e.data.type === 'setHue' && typeof e.data.color === 'string') {
@@ -43,8 +56,7 @@
     ctx.font = FONT;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    ctx.fillStyle = BG;
-    ctx.fillRect(0, 0, W, H);  // start from a clean background
+    ctx.clearRect(0, 0, W, H);  // transparent; page bg shows through
     if (!hasMoved) { tx = mx = W / 2; ty = my = H * 0.4; }
   }
   window.addEventListener('resize', resize);
@@ -66,18 +78,20 @@
   document.addEventListener('visibilitychange', () => { visible = !document.hidden; });
 
   // Drop a cluster of glyphs around (x, y); denser/brighter near the center.
-  function stamp(x, y) {
+  function stamp(x, y, now) {
     for (let k = 0; k < GLYPHS; k++) {
       const a = Math.random() * Math.PI * 2;
       const rr = Math.random() * BRUSH_R;
       const f = 1 - rr / BRUSH_R;                 // 0..1 closeness to center
       const gi = Math.min(RAMP.length - 1, (f * RAMP.length) | 0);
-      ctx.globalAlpha = 0.35 + f * 0.5;
-      ctx.fillText(RAMP[gi], x + Math.cos(a) * rr, y + Math.sin(a) * rr);
+      glyphs.push({
+        x: x + Math.cos(a) * rr, y: y + Math.sin(a) * rr,
+        ch: RAMP[gi], a0: 0.35 + f * 0.5, born: now,
+      });
     }
   }
 
-  // ~30fps cap — plenty for a trail, half the cost of running at 60fps.
+  // ~60fps cap.
   const FRAME_MS = 1000 / 60;
   let last = performance.now(), acc = 0;
 
@@ -88,32 +102,40 @@
     if (acc < FRAME_MS) return;
     acc %= FRAME_MS;
 
-    // Fade the whole canvas toward bg — this is the "colors fade over time".
-    ctx.globalAlpha = 1;
-    ctx.fillStyle = FADE;
-    ctx.fillRect(0, 0, W, H);
-
     // Ease the brush toward the cursor for a bit of weight/lag.
     const px = mx, py = my;
     mx += (tx - mx) * 0.2;
     my += (ty - my) * 0.2;
 
     // Stamp along the path so fast moves stay continuous (no dotted gaps).
-    ctx.fillStyle = COLOR_HI;
     const dx = mx - px, dy = my - py;
     const steps = Math.max(1, (Math.hypot(dx, dy) / STAMP_GAP) | 0);
-    for (let s = 1; s <= steps; s++) stamp(px + dx * (s / steps), py + dy * (s / steps));
+    for (let s = 1; s <= steps; s++) stamp(px + dx * (s / steps), py + dy * (s / steps), now);
 
     // Bright head at the current position so the cursor tip pops.
     const full = RAMP[RAMP.length - 1];
-    ctx.globalAlpha = 1;
-    ctx.fillText(full, mx, my);
+    glyphs.push({ x: mx, y: my, ch: full, a0: 1, born: now });
     for (let k = 0; k < 3; k++) {
       const a = Math.random() * Math.PI * 2;
       const rr = Math.random() * (BRUSH_R * 0.4);
-      ctx.globalAlpha = 0.85;
-      ctx.fillText(full, mx + Math.cos(a) * rr, my + Math.sin(a) * rr);
+      glyphs.push({ x: mx + Math.cos(a) * rr, y: my + Math.sin(a) * rr, ch: full, a0: 0.85, born: now });
     }
+
+    // Redraw the whole trail from scratch each frame. Alpha goes to a true 0,
+    // so faded glyphs vanish completely — no leftover gray.
+    ctx.clearRect(0, 0, W, H);
+    ctx.fillStyle = COLOR_HI;
+    let w = 0;  // write index: compact the array, dropping dead glyphs
+    for (let i = 0; i < glyphs.length; i++) {
+      const g = glyphs[i];
+      // Exponential falloff, frame-rate independent via age-in-frames.
+      const a = g.a0 * Math.pow(DECAY, (now - g.born) / FRAME_MS);
+      if (a < MIN_A) continue;
+      ctx.globalAlpha = a;
+      ctx.fillText(g.ch, g.x, g.y);
+      glyphs[w++] = g;
+    }
+    glyphs.length = w;
     ctx.globalAlpha = 1;
   }
   requestAnimationFrame(frame);
