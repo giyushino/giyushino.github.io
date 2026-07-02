@@ -190,6 +190,7 @@ section.content {
   border-bottom: 1px solid var(--rule);
 }
 section.content:last-of-type { border-bottom: 0; }
+section.content:first-of-type { padding-top: 175px; }
 .writing-shell {
   position: relative;
   min-height: calc(100vh - 96px);
