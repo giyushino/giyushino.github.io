@@ -191,34 +191,6 @@ section.content {
 }
 section.content:last-of-type { border-bottom: 0; }
 section.content:first-of-type { padding-top: 175px; }
-.writing-shell {
-  position: relative;
-  min-height: calc(100vh - 96px);
-  overflow: hidden;
-}
-.writing-hero {
-  position: relative;
-  z-index: 2;
-}
-.page-ascii {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 0;
-  opacity: 0.36;
-  pointer-events: none;
-  mask-image: radial-gradient(ellipse 120% 90% at 50% 40%, #000 45%, transparent 100%);
-  -webkit-mask-image: radial-gradient(ellipse 120% 90% at 50% 40%, #000 45%, transparent 100%);
-}
-.writing-shell::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  background: radial-gradient(ellipse 85% 70% at 50% 40%, rgba(var(--bg-rgb), 0.58) 0%, rgba(var(--bg-rgb), 0.84) 64%, var(--bg) 100%);
-  pointer-events: none;
-}
 .eyebrow {
   font-family: var(--mono); font-size: 11.5px;
   letter-spacing: 0.16em; text-transform: uppercase;
@@ -270,19 +242,8 @@ p.lead { font-size: 19px; color: var(--fg); max-width: 60ch; margin: 0 0 12px; }
 .pub:hover .arrow { color: var(--accent); transform: translateX(4px); }
 .pub:hover .title { color: var(--accent); }
 
-/* --- essays grid --- */
-.posts { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 28px; }
-.post {
-  border: 1px solid var(--rule); border-radius: 10px;
-  padding: 18px 20px;
-  background: var(--panel);
-  display: block; border-bottom: 1px solid var(--rule);
-  transition: border-color .15s, transform .15s;
-}
-.post:hover { border-color: var(--accent); transform: translateY(-2px); color: var(--fg); }
-.post .d { font-family: var(--mono); font-size: 11.5px; color: var(--dim); margin-bottom: 8px; display: flex; justify-content: space-between; }
-.post .t { font-size: 22px; line-height: 1.2; color: var(--fg); font-weight: 500; letter-spacing: -0.2px; }
-.post .blurb { font-size: 16px; line-height: 1.45; color: var(--fg); margin: 10px 0 0; opacity: 0.82; }
+/* --- writing list (mirrors .pubs) --- */
+.writing-pubs .pub { grid-template-columns: 92px 1fr auto; }
 .post-page {
   max-width: 760px;
   margin: 0 auto;
@@ -376,8 +337,9 @@ footer.bottom .stat { color: var(--accent); }
   section.content {
     padding: 132px 20px 72px;
   }
-  .now-grid, .posts { grid-template-columns: 1fr; }
+  .now-grid { grid-template-columns: 1fr; }
   .contact { grid-template-columns: repeat(2, 1fr); }
   .pub { grid-template-columns: 48px 1fr; }
+  .writing-pubs .pub { grid-template-columns: 92px 1fr; }
   .pub .arrow { display: none; }
 }
