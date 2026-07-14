@@ -132,10 +132,10 @@ code { font-family: var(--mono); font-size: 0.9em; background: var(--panel); pad
 }
 .hero h1 {
   font-family: var(--sans);
-  font-size: clamp(30px, 4vw, 44px);
+  font-size: clamp(44px, 7vw, 84px);
   font-weight: 500;
-  letter-spacing: -1.2px;
-  line-height: 1.1;
+  letter-spacing: -2.2px;
+  line-height: 1.02;
   margin: 0 0 24px;
 }
 .hero h1 .mark {
@@ -322,6 +322,10 @@ footer.bottom .stat { color: var(--accent); }
     height: auto;
     min-height: 100svh;
     padding: 132px 20px 52px;
+  }
+  .hero h1 {
+    font-size: clamp(40px, 13vw, 56px);
+    letter-spacing: -1.4px;
   }
   .hero .sub {
     font-size: 17px;
