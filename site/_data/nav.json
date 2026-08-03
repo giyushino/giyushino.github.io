@@ -1,0 +1,7 @@
+[
+  { "title": "home", "path": "/" },
+  { "title": "writing", "path": "/writing/" },
+  { "title": "research", "path": "/research/" },
+  { "title": "contact", "path": "/contact/" },
+  { "title": "cv", "path": "/files/cv.pdf", "external": true }
+]

@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>{% if pageTitle %}{{ pageTitle }}{% else %}{{ site.title }}{% endif %}</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="description" content="{{ description or site.description }}" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <script src="/js/theme.js"></script>
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+  <body {% if screenLabel %}data-screen-label="{{ screenLabel }}"{% endif %}>
+    {% include "nav.njk" %}
+
+    {{ content | safe }}
+
+    {% if heroCanvas %}<script src="/js/ascii-brush.js"></script>{% endif %}
+    <script src="/js/hue.js"></script>
+  </body>
+</html>

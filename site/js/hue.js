@@ -26,14 +26,16 @@
   const root = document.documentElement;
   const switchEl = document.getElementById('theme-switch');
   const mql = window.matchMedia('(prefers-color-scheme: dark)');
-  const getMode = () => localStorage.getItem('theme') || 'auto';
+  const getMode = () => localStorage.getItem('theme') || 'light';
   const applyTheme = (mode) => {
+    // 'auto' stays the stored default, but the switch highlights whichever
+    // mode it resolves to — there is no system option to light up.
     const light = mode === 'light' || (mode === 'auto' && !mql.matches);
     if (light) root.setAttribute('data-theme', 'light');
     else root.removeAttribute('data-theme');
     if (switchEl) {
-      switchEl.querySelectorAll('.ts-opt').forEach((b) => {
-        b.classList.toggle('active', b.dataset.themeValue === mode);
+      switchEl.querySelectorAll('.ts-opt[data-theme-value]').forEach((b) => {
+        b.classList.toggle('active', b.dataset.themeValue === (light ? 'light' : 'dark'));
       });
     }
   };

@@ -1,0 +1,15 @@
+{
+  "name": "giyushino-github-io",
+  "description": "Allan Zhang's personal site",
+  "version": "1.0.0",
+  "author": "Allan Zhang",
+  "license": "MIT",
+  "scripts": {
+    "build": "eleventy",
+    "serve": "eleventy --serve",
+    "start": "npm run serve"
+  },
+  "devDependencies": {
+    "@11ty/eleventy": "^3.0.0"
+  }
+}

@@ -1,0 +1,31 @@
+<nav class="nav">
+  <div class="spacer"></div>
+  {%- for item in nav %}
+  <a
+    href="{{ item.path }}"
+    {% if item.path == navActive %}class="active"{% endif %}
+    {% if item.external %}target="_blank" rel="noopener"{% endif %}
+  >{{ item.title }}</a>
+  {%- endfor %}
+  <div class="theme-switch" id="theme-switch" role="group" aria-label="Color theme">
+    <label class="ts-opt ts-color" aria-label="Accent color" title="Accent color">
+      <span class="dot"></span>
+      <input type="color" id="hue-input" value="#3d7fd0" />
+    </label>
+    <button class="ts-opt" data-theme-value="light" type="button" aria-label="Light theme" title="Light">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="4.5"/><line x1="12" y1="1.5" x2="12" y2="3.5"/>
+        <line x1="12" y1="20.5" x2="12" y2="22.5"/><line x1="3.9" y1="3.9" x2="5.3" y2="5.3"/>
+        <line x1="18.7" y1="18.7" x2="20.1" y2="20.1"/><line x1="1.5" y1="12" x2="3.5" y2="12"/>
+        <line x1="20.5" y1="12" x2="22.5" y2="12"/><line x1="3.9" y1="20.1" x2="5.3" y2="18.7"/>
+        <line x1="18.7" y1="5.3" x2="20.1" y2="3.9"/>
+      </svg>
+    </button>
+    <button class="ts-opt" data-theme-value="dark" type="button" aria-label="Dark theme" title="Dark">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        <path d="M18 3.5v3M16.5 5h3"/>
+      </svg>
+    </button>
+  </div>
+</nav>

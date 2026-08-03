@@ -17,11 +17,11 @@
   if (!canvas) return;
   const ctx = canvas.getContext('2d');
 
-  let COLOR_HI = '#619ee8';           // accent; updated live via setHue
+  let COLOR_HI = '#3d7fd0';           // accent; updated live via setHue
   const RAMP = '·:-=+*#%▒▓█'.split('');
 
   const FONT_PX = 14;
-  const FONT = `${FONT_PX}px "JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace`;
+  const FONT = `${FONT_PX}px ui-monospace, "SF Mono", "IBM Plex Mono", monospace`;
   const DPR = Math.min(window.devicePixelRatio || 1, 2);
 
   const BRUSH_R = 26;     // brush radius in px

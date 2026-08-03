@@ -1,0 +1,25 @@
+---
+layout: base.njk
+pageTitle: ayzml research
+permalink: /research/
+navActive: /research/
+screenLabel: research
+---
+
+<section class="content" id="research">
+  <h2 class="big list-head">Papers &amp; preprints</h2>
+
+  {% for pub in publications | sortByYear %}
+    <div class="entry">
+      <h3 class="entry__title">
+        {%- if pub.url %}<a href="{{ pub.url }}" target="_blank" rel="noopener">{{ pub.title }}</a>{% else %}{{ pub.title }}{% endif -%}
+      </h3>
+      <p class="entry__authors">{{ pub.authors | highlightAuthor(site.author) | safe }}</p>
+      <p class="entry__meta">
+        <span class="venue">{{ pub.venue }}</span>{% if pub.note %}<span class="entry__note">{{ pub.note }}</span>{% endif %}
+      </p>
+    </div>
+  {% else %}
+    <p class="entry__blurb">Nothing here yet.</p>
+  {% endfor %}
+</section>

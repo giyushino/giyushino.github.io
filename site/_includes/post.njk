@@ -1,0 +1,14 @@
+---
+layout: base.njk
+navActive: /writing/
+screenLabel: post
+---
+
+<article class="content post-page">
+  <a class="backlink" href="/writing/">&larr; all writing</a>
+  <h1>{{ title }}{% if draft %} <span class="draft-badge">draft</span>{% endif %}</h1>
+  <div class="post-meta">
+    {{ date | longDate }}{% if readingTime %} &middot; {{ readingTime }}{% endif %}{% if updated %}<span class="entry__updated">updated {{ updated | longDate }}</span>{% endif %}
+  </div>
+  {{ content | safe }}
+</article>

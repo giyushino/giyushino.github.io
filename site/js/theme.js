@@ -4,6 +4,7 @@
   if (h) document.documentElement.style.setProperty('--accent', h);
   var t = localStorage.getItem('theme');           // 'auto' | 'light' | 'dark'
   var sysDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-  var light = t === 'light' || ((!t || t === 'auto') && !sysDark);
+  // Light is the default; 'auto' only applies for visitors who set it previously.
+  var light = t === 'light' || !t || (t === 'auto' && !sysDark);
   if (light) document.documentElement.setAttribute('data-theme', 'light');
 })();

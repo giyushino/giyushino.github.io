@@ -8,9 +8,9 @@
   --dim: #8a8a88;
   --faint: #3a3a3b;
   --rule: #1a1b1d;
-  --accent: #619ee8;     /* blue */
+  --accent: #3d7fd0;     /* blue */
   --accent2: #5ee8d4;    /* cyan */
-  --mono: "JetBrains Mono", "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --mono: ui-monospace, "SF Mono", "IBM Plex Mono", Menlo, Consolas, monospace;
   --sans: "EB Garamond", Georgia, "Times New Roman", serif;
 }
 :root[data-theme="light"] {
@@ -27,7 +27,7 @@
 html, body { margin: 0; background: var(--bg); color: var(--fg); }
 body {
   font-family: var(--sans);
-  font-size: 17px; line-height: 1.6;
+  font-size: 20px; line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
 }
@@ -35,8 +35,10 @@ a { color: var(--fg); text-decoration: none; border-bottom: 1px solid var(--fain
 a:hover { color: var(--accent); border-bottom-color: var(--accent); }
 p { color: var(--fg); }
 code { font-family: var(--mono); font-size: 0.9em; background: var(--panel); padding: 1px 6px; border-radius: 4px; border: 1px solid var(--rule); }
-.codeblock { font-family: var(--mono); font-size: 13.5px; line-height: 1.55; background: var(--panel); color: var(--fg); border: 1px solid var(--rule); border-left: 2px solid var(--accent); border-radius: 6px; padding: 14px 16px; overflow-x: auto; margin: 1.2em 0; }
-.codeblock code { background: none; border: 0; padding: 0; font-size: inherit; }
+/* Markdown fenced blocks come out as a bare <pre>, hand-written ones use
+ * .codeblock — both get the same treatment. */
+.codeblock, .post-page pre { font-family: var(--mono); font-size: 15px; line-height: 1.55; background: var(--panel); color: var(--fg); border: 1px solid var(--rule); border-left: 2px solid var(--accent); border-radius: 6px; padding: 14px 16px; overflow-x: auto; margin: 1.2em 0; }
+.codeblock code, .post-page pre code { background: none; border: 0; padding: 0; font-size: inherit; }
 ::selection { background: var(--accent); color: #000; }
 
 /* ------------ nav ------------ */
@@ -44,23 +46,10 @@ code { font-family: var(--mono); font-size: 0.9em; background: var(--panel); pad
   position: fixed; top: 0; left: 0; right: 0; z-index: 50;
   display: flex; align-items: center; gap: 28px;
   padding: 18px 32px;
-  font-family: var(--sans); font-size: 16px;
+  font-family: var(--sans); font-size: 18px;
   backdrop-filter: blur(14px);
   background: rgba(var(--bg-rgb), 0.55);
   border-bottom: 1px solid var(--rule);
-}
-.nav .brand { font-family: var(--mono); font-size: 12.5px; font-weight: 600; letter-spacing: -0.2px; color: var(--fg); display: flex; align-items: center; gap: 10px; border: 0; }
-.nav .brand a { color: var(--fg); border: 0; }
-.nav .brand a:hover { color: var(--accent); }
-.nav .brand .dot {
-  position: relative; overflow: hidden;
-  width: 10px; height: 10px; border-radius: 50%;
-  background: var(--accent); box-shadow: 0 0 12px var(--accent);
-  cursor: pointer; flex-shrink: 0;
-}
-.nav .brand .dot input[type="color"] {
-  opacity: 0; position: absolute; inset: 0; width: 100%; height: 100%;
-  cursor: pointer; border: 0; padding: 0;
 }
 .nav .spacer { flex: 1; }
 .nav a { color: var(--dim); border: 0; }
@@ -93,6 +82,15 @@ code { font-family: var(--mono); font-size: 0.9em; background: var(--panel); pad
 }
 :root[data-theme="light"] .nav .theme-switch .ts-opt.active {
   background: rgba(0,0,0,0.06);
+}
+.nav .theme-switch .ts-color { position: relative; overflow: hidden; }
+.nav .theme-switch .ts-color .dot {
+  width: 11px; height: 11px; border-radius: 50%;
+  background: var(--accent); box-shadow: 0 0 10px var(--accent);
+}
+.nav .theme-switch .ts-color input[type="color"] {
+  opacity: 0; position: absolute; inset: 0; width: 100%; height: 100%;
+  cursor: pointer; border: 0; padding: 0;
 }
 
 /* ------------ hero ------------ */
@@ -144,7 +142,7 @@ code { font-family: var(--mono); font-size: 0.9em; background: var(--panel); pad
   font-style: normal;
 }
 .hero p.kicker {
-  font-family: var(--mono); font-size: 12.5px;
+  font-family: var(--mono); font-size: 14px;
   letter-spacing: 0.14em; text-transform: uppercase;
   color: var(--accent); margin: 0 0 20px;
   display: inline-flex; align-items: center; gap: 10px;
@@ -153,35 +151,16 @@ code { font-family: var(--mono); font-size: 0.9em; background: var(--panel); pad
   content: ""; width: 24px; height: 1px; background: var(--accent);
 }
 .hero .sub {
-  max-width: 640px; color: var(--fg); font-size: 19px; line-height: 1.6; margin: 0 0 32px;
+  max-width: 700px; color: var(--fg); font-size: 22px; line-height: 1.6; margin: 0 0 32px;
 }
-.hero .ctas { display: flex; gap: 12px; flex-wrap: wrap; }
-.hero .ctas a {
-  padding: 11px 20px; border-radius: 999px;
-  font-family: var(--mono); font-size: 12.5px;
-  border: 1px solid var(--rule);
-  background: rgba(255,255,255,0.02);
-  color: var(--fg);
+/* A plain accent link rather than a pill button. */
+.hero .ctas { margin: 0; }
+.hero .ctas a.cta {
+  border: 0;
+  color: var(--accent);
+  font-size: 21px;
 }
-.hero .ctas a.primary { background: var(--accent); color: #000; border-color: var(--accent); font-weight: 600; }
-.hero .ctas a.primary:hover { background: #000; color: var(--accent); border-color: var(--accent); }
-.hero .ctas a.secondary { background: #000; color: var(--accent); border-color: var(--accent); font-weight: 600; }
-.hero .ctas a.secondary:hover { background: var(--accent); color: #000; border-color: var(--accent); }
-.hero .ctas a:not(.primary):not(.secondary):hover { border-color: var(--fg); color: var(--fg); }
-
-.hero .chips {
-  display: flex; gap: 8px; flex-wrap: wrap;
-  margin-top: 56px;
-  font-family: var(--mono); font-size: 11.5px; color: var(--fg);
-}
-.hero .chips .chip {
-  padding: 4px 10px;
-  border: 1px solid var(--faint);
-  border-radius: 999px;
-  background: rgba(var(--bg-rgb), 0.55);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-}
+.hero .ctas a.cta:hover { border-bottom: 1px solid var(--accent); }
 
 /* ------------ sections ------------ */
 section.content {
@@ -191,18 +170,13 @@ section.content {
 }
 section.content:last-of-type { border-bottom: 0; }
 section.content:first-of-type { padding-top: 175px; }
-.eyebrow {
-  font-family: var(--mono); font-size: 11.5px;
-  letter-spacing: 0.16em; text-transform: uppercase;
-  color: var(--accent); margin: 0 0 14px;
-}
 h2.big {
   font-family: var(--sans); font-weight: 500;
-  font-size: clamp(30px, 4vw, 44px); letter-spacing: -1.2px; line-height: 1.1;
+  font-size: clamp(34px, 4.6vw, 52px); letter-spacing: -1.2px; line-height: 1.1;
   margin: 0 0 18px; color: var(--fg);
 }
 h2.big .light { color: var(--dim); }
-p.lead { font-size: 19px; color: var(--fg); max-width: 60ch; margin: 0 0 12px; }
+p.lead { font-size: 22px; color: var(--fg); max-width: 60ch; margin: 0 0 12px; }
 
 /* --- now card --- */
 .now-grid {
@@ -213,8 +187,8 @@ p.lead { font-size: 19px; color: var(--fg); max-width: 60ch; margin: 0 0 12px; }
   background: linear-gradient(180deg, color-mix(in srgb, var(--accent) 4%, transparent), transparent);
   position: relative;
 }
-.now-card .k { font-family: var(--mono); font-size: 11px; color: var(--accent); letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 8px; }
-.now-card .v { font-size: 17px; color: var(--fg); line-height: 1.55; }
+.now-card .k { font-family: var(--mono); font-size: 12.5px; color: var(--accent); letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 8px; }
+.now-card .v { font-size: 20px; color: var(--fg); line-height: 1.55; }
 .now-card .v em { color: var(--accent2); font-style: normal; }
 .now-card::after {
   content: ""; position: absolute; top: 14px; right: 14px;
@@ -224,26 +198,43 @@ p.lead { font-size: 19px; color: var(--fg); max-width: 60ch; margin: 0 0 12px; }
 }
 @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
 
-/* --- publications --- */
-.pubs { margin-top: 28px; }
-.pub {
-  display: grid; grid-template-columns: 64px 1fr auto; gap: 22px;
-  padding: 22px 0; border-top: 1px solid var(--rule);
-  align-items: baseline;
-  text-decoration: none; color: inherit;
+/* --- writing + research lists ---
+ * One shared layout for both pages: a centered page heading, then entries that
+ * stack title / meta / blurb. No year column and no arrow — the gap between
+ * entries does the separating, so the three lines read as one block. */
+/* Beats h2.big's own margin, so both list pages open with the same gap. */
+h2.big.list-head { text-align: center; margin-bottom: 64px; }
+.entry { margin-bottom: 44px; }
+.entry:last-child { margin-bottom: 0; }
+.entry p { margin: 0; }
+.entry__title {
+  font-size: 34px; font-weight: 500; line-height: 1.25;
+  letter-spacing: -0.6px; margin: 0 0 6px;
 }
-.pub:last-child { border-bottom: 1px solid var(--rule); }
-.pub .yr { font-family: var(--mono); font-size: 12px; color: var(--dim); }
-.pub .title { font-size: 19px; font-weight: 500; color: var(--fg); margin: 0 0 6px; line-height: 1.35; letter-spacing: -0.3px; }
-.pub .meta { font-family: var(--mono); font-size: 13.5px; color: var(--dim); }
-.pub .meta .venue { color: var(--accent); }
-.pub .arrow { color: var(--dim); font-family: var(--mono); font-size: 14px; transition: transform .15s, color .15s; }
-.pub:hover { background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--accent) 4%, transparent), transparent); cursor: pointer; }
-.pub:hover .arrow { color: var(--accent); transform: translateX(4px); }
-.pub:hover .title { color: var(--accent); }
+.entry__title a { border: 0; color: var(--fg); }
+.entry__title a:hover { color: var(--accent); }
+.entry__authors { font-size: 18px; line-height: 1.4; margin-bottom: 4px; }
+.entry__authors strong { font-weight: 600; }
+.entry__meta {
+  font-size: 18px; color: var(--dim);
+  line-height: 1.4;
+}
+.entry__meta .venue { color: var(--accent); }
+/* Small caps label for "Under review", "Oral", and the like. */
+.entry__note,
+.entry__updated {
+  font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase;
+}
+.entry__note::before,
+.entry__updated::before { content: "\00b7"; margin: 0 8px; }
+.entry__blurb { font-size: 20px; line-height: 1.5; margin-top: 6px; }
+.draft-badge {
+  border: 1px solid var(--accent); border-radius: 3px;
+  color: var(--accent);
+  font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase;
+  padding: 2px 6px; vertical-align: middle;
+}
 
-/* --- writing list (mirrors .pubs) --- */
-.writing-pubs .pub { grid-template-columns: 92px 1fr auto; }
 .post-page {
   max-width: 760px;
   margin: 0 auto;
@@ -258,14 +249,18 @@ p.lead { font-size: 19px; color: var(--fg); max-width: 60ch; margin: 0 0 12px; }
   margin: 0 0 12px;
 }
 .post-page p {
-  font-size: 20px;
+  font-size: 23px;
   line-height: 1.65;
   margin: 22px 0 0;
 }
-.post-meta,
+/* The byline reads as part of the post, not as chrome — full-strength text
+ * colour and a size closer to the body copy. */
+.post-meta {
+  font-size: 19px;
+  color: var(--fg);
+}
 .backlink {
-  font-family: var(--mono);
-  font-size: 12px;
+  font-size: 17px;
   color: var(--dim);
 }
 .backlink {
@@ -277,40 +272,13 @@ p.lead { font-size: 19px; color: var(--fg); max-width: 60ch; margin: 0 0 12px; }
   color: var(--accent);
 }
 
-/* --- contact row --- */
-.contact {
-  display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;
-  margin-top: 28px;
-}
-.contact a {
-  border: 1px solid var(--rule); border-radius: 10px;
-  padding: 18px 18px; background: var(--panel);
-  display: flex; flex-direction: column; gap: 6px;
-  font-family: var(--mono); font-size: 13px;
-  color: var(--fg);
-  transition: border-color .15s, background .15s;
-}
-.contact a:hover { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 5%, transparent); }
-.contact a .k { font-size: 11px; color: var(--dim); letter-spacing: 0.14em; text-transform: uppercase; }
-.contact a .v { font-size: 15.5px; color: var(--fg); }
 
-
-/* footer */
-footer.bottom {
-  padding: 40px 32px; border-top: 1px solid var(--rule);
-  font-family: var(--mono); font-size: 11.5px; color: var(--dim);
-  display: flex; justify-content: space-between; max-width: 940px; margin: 0 auto;
-}
-footer.bottom .stat { color: var(--accent); }
 
 @media (max-width: 720px) {
   .nav {
     flex-wrap: wrap;
     gap: 10px 16px;
     padding: 14px 18px;
-  }
-  .nav .brand {
-    flex: 1 1 100%;
   }
   .nav .spacer {
     display: none;
@@ -331,15 +299,9 @@ footer.bottom .stat { color: var(--accent); }
     font-size: 17px;
     line-height: 1.52;
   }
-  .hero .chips {
-    margin-top: 36px;
-  }
   section.content {
     padding: 132px 20px 72px;
   }
   .now-grid { grid-template-columns: 1fr; }
-  .contact { grid-template-columns: repeat(2, 1fr); }
-  .pub { grid-template-columns: 48px 1fr; }
-  .writing-pubs .pub { grid-template-columns: 92px 1fr; }
-  .pub .arrow { display: none; }
+  .entry__title { font-size: 27px; }
 }
