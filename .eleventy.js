@@ -7,6 +7,10 @@ module.exports = function (eleventyConfig) {
     'site/CNAME': 'CNAME',
   })
 
+  // The ASCII scene background renders on every page. Global data loses to
+  // front matter, so any page can opt out with `asciiScene: false`.
+  eleventyConfig.addGlobalData('asciiScene', true)
+
   // A post with `draft: true` in its frontmatter is dropped from the build —
   // no page, and nothing in the writing index. On the dev server it still
   // renders, so drafts are previewable locally but never ship.

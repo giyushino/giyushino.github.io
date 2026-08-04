@@ -10,11 +10,16 @@
     <link rel="stylesheet" href="/css/styles.css" />
   </head>
   <body {% if screenLabel %}data-screen-label="{{ screenLabel }}"{% endif %}>
+    {% if asciiScene %}<canvas id="ascii-bg" aria-hidden="true"></canvas>{% endif %}
     {% include "nav.njk" %}
 
     {{ content | safe }}
 
     {% if heroCanvas %}<script src="/js/ascii-brush.js"></script>{% endif %}
+    {% if asciiScene %}
+    <script src="/js/ascii-scene.js" defer></script>
+    <script src="/js/ascii-bg.js" defer></script>
+    {% endif %}
     <script src="/js/hue.js"></script>
   </body>
 </html>
