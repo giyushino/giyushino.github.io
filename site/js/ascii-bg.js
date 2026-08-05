@@ -101,7 +101,14 @@
   // how much that takes depends on the scene, since each export sits at its
   // own overall brightness.
   const WATER = 0;                     // luminance cutoff, 0-255
-  const RAMP_DARK = [[5, 14, 58], [42, 116, 240], [175, 228, 255]];
+  const GAMMA = 0.55;                  // lower = more cells pushed up the ramp
+  // Sampled off the ASCIInator reference render, which stays in the pure blue
+  // family the whole way up — hue 240 down to 209, never crossing into cyan.
+  // The green channel is what gives that away: the old mid stop ran g=120 at
+  // hue 217 and read as washed-out sky. Four stops rather than three so the
+  // darkest cells can hold a real saturated blue instead of collapsing to
+  // black, while the background field below them still goes dark.
+  const RAMP_DARK = [[4, 4, 34], [2, 2, 110], [40, 76, 224], [117, 186, 251]];
   // On paper the ramp runs the other way: near-paper for the darkest water,
   // deep ink blue for the brightest animals, so it reads on cream.
   const RAMP_LIGHT = [[228, 236, 248], [70, 130, 225], [6, 26, 110]];
@@ -114,12 +121,17 @@
     const lum = lums ? lums[i]
       : 0.2126 * rgb[o] + 0.7152 * rgb[o + 1] + 0.0722 * rgb[o + 2];
     if (lum < WATER) return null;
-    // Gentle gamma: enough to reach the ramp's vivid middle, not so much that
-    // the water lifts off the background.
-    const t = Math.pow(Math.min(1, (lum - WATER) / (215 - WATER)), 0.75);
+    // This scene is bottom-heavy — most cells sit near black, so a gentle curve
+    // parks them all on the darkest stop and the colour never arrives. Pulling
+    // the gamma down lifts that mass into the ramp's vivid middle, which is
+    // what actually makes the blue read as rich rather than the stops.
+    const t = Math.pow(Math.min(1, (lum - WATER) / (215 - WATER)), GAMMA);
     const ramp = light ? RAMP_LIGHT : RAMP_DARK;
-    const seg = t < 0.5 ? 0 : 1;
-    const f = t < 0.5 ? t * 2 : (t - 0.5) * 2;
+    // Walk whichever ramp we were given: stops are evenly spaced across t, so
+    // the two ramps can carry different numbers of them.
+    const span = t * (ramp.length - 1);
+    const seg = Math.min(ramp.length - 2, Math.floor(span));
+    const f = span - seg;
     const a = ramp[seg], b = ramp[seg + 1];
     return [
       a[0] + (b[0] - a[0]) * f,
