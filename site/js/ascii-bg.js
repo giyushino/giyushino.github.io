@@ -33,8 +33,13 @@
   // 'cover' sizes cells to fill the viewport and crops whatever overflows;
   // 'contain' shrinks them until the whole scene is on screen, which on a
   // viewport wider than the scene leaves page background down both sides.
-  const FIT = 'cover';
+  const FIT = 'contain';
   const SCALE = 1;                       // 1 = fill the viewport, lower = smaller glyphs
+  // Where the scene sits in whatever room is left over: 0.5 centres it, 1 pins
+  // it right. Biased right so it clears the hero copy, which is left-aligned in
+  // a centred 940px column. It's a share of the slack rather than a pixel
+  // offset, so it fades to nothing on narrow viewports that have none to give.
+  const ALIGN_X = 0.8;
   const GLYPH = 1;                       // glyph size within its cell; < 1 airs the texture out
   const STACK = 'ui-monospace, "SF Mono", "IBM Plex Mono", Menlo, Consolas, monospace';
 
@@ -95,7 +100,7 @@
   // the dimmest cells and leave the brightest shapes floating on the page;
   // how much that takes depends on the scene, since each export sits at its
   // own overall brightness.
-  const WATER = 0;                       // luminance cutoff, 0-255
+  const WATER = 0;                     // luminance cutoff, 0-255
   const RAMP_DARK = [[5, 14, 58], [42, 116, 240], [175, 228, 255]];
   // On paper the ramp runs the other way: near-paper for the darkest water,
   // deep ink blue for the brightest animals, so it reads on cream.
@@ -205,7 +210,7 @@
     halfH = near(cellH / 2);
     // With origin and cell both on whole device pixels, every glyph centre
     // (origin + c * cell + half) lands on one too, with no per-cell rounding.
-    originX = near((W - cols * cellW) / 2);
+    originX = near((W - cols * cellW) * ALIGN_X);
     originY = near((H - rows * cellH) / 2);
     fontPx = Math.max(1, Math.round(cellW / ADVANCE * GLYPH * dpr)) / dpr;
 
