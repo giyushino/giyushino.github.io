@@ -30,6 +30,10 @@
   // stretching.
   const ADVANCE = 0.6;
   const ASPECT = 1.188 / ADVANCE;        // cell height / cell width
+  // 'cover' sizes cells to fill the viewport and crops whatever overflows;
+  // 'contain' shrinks them until the whole scene is on screen, which on a
+  // viewport wider than the scene leaves page background down both sides.
+  const FIT = 'cover';
   const SCALE = 1;                       // 1 = fill the viewport, lower = smaller glyphs
   const GLYPH = 1;                       // glyph size within its cell; < 1 airs the texture out
   const STACK = 'ui-monospace, "SF Mono", "IBM Plex Mono", Menlo, Consolas, monospace';
@@ -70,6 +74,9 @@
 
   let accent = [61, 127, 208];
   let W = 0, H = 0, cellW = 0, cellH = 0, originX = 0, originY = 0;
+  // Half a cell, snapped: glyphs are centred, so this is what keeps their
+  // centres on whole device pixels instead of half-pixel boundaries.
+  let halfW = 0, halfH = 0, fontPx = 0;
   let tx = -1e4, ty = -1e4, mx = -1e4, my = -1e4;
   let visible = true, hasCursor = false, painted = false;
   let lastSpawn = 0, lastSpawnX = 0, lastSpawnY = 0;
@@ -85,7 +92,9 @@
 
   // Every cell is drawn — the water renders as a deep navy glyph field rather
   // than being dropped, so the grid is continuous. Raise WATER above 0 to cut
-  // the dimmest cells and leave the jellyfish floating on the page instead.
+  // the dimmest cells and leave the brightest shapes floating on the page;
+  // how much that takes depends on the scene, since each export sits at its
+  // own overall brightness.
   const WATER = 0;                       // luminance cutoff, 0-255
   const RAMP_DARK = [[5, 14, 58], [42, 116, 240], [175, 228, 255]];
   // On paper the ramp runs the other way: near-paper for the darkest water,
@@ -121,9 +130,12 @@
     const light = isLight();
     if (light && DARK_ONLY) return;
     const alpha = light ? 0.7 : 0.85;
+    // Clear the whole backing store, not W x H through the transform: those
+    // differ by a fraction of a pixel and would leave a stale edge sliver.
+    bctx.setTransform(1, 0, 0, 1, 0, 0);
+    bctx.clearRect(0, 0, base.width, base.height);
     bctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    bctx.clearRect(0, 0, W, H);
-    bctx.font = `${cellW / ADVANCE * GLYPH}px ${STACK}`;
+    bctx.font = `${fontPx}px ${STACK}`;
     bctx.textAlign = 'center';
     bctx.textBaseline = 'middle';
     bctx.globalAlpha = alpha;
@@ -139,10 +151,20 @@
         const col = cellColor(i, light);
         if (!col) continue;
         bctx.fillStyle = `rgb(${col[0] | 0},${col[1] | 0},${col[2] | 0})`;
-        bctx.fillText(chars[i], originX + (c + 0.5) * cellW, originY + (r + 0.5) * cellH);
+        bctx.fillText(chars[i], originX + c * cellW + halfW, originY + r * cellH + halfH);
       }
     }
     bctx.globalAlpha = 1;
+  }
+
+  // Copy the base canvas back at exactly 1:1. Drawing it through the dpr
+  // transform instead would target W * dpr device px while the backing store
+  // is a whole number of them — when those disagree by a fraction the whole
+  // scene gets resampled, softening every glyph at once.
+  function blit() {
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.drawImage(base, 0, 0);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   }
 
   function resize() {
@@ -150,28 +172,50 @@
     W = window.innerWidth;
     H = window.innerHeight;
     for (const el of [canvas, base]) {
-      el.width = Math.floor(W * dpr);
-      el.height = Math.floor(H * dpr);
+      el.width = Math.round(W * dpr);
+      el.height = Math.round(H * dpr);
     }
     canvas.style.width = base.style.width = W + 'px';
     canvas.style.height = base.style.height = H + 'px';
 
-    // Cover: the cell size that just fills the viewport, cropping the overflow.
-    // SCALE shrinks it from there — smaller glyphs, more of the scene in view.
-    // Below 1 the grid may no longer span the viewport; it stays centred and
-    // the page background shows at the edges.
-    cellW = Math.max(W / cols, H / (rows * ASPECT)) * SCALE;
-    cellH = cellW * ASPECT;
-    originX = (W - cols * cellW) / 2;
-    originY = (H - rows * cellH) / 2;
+    // Everything below is snapped to whole device pixels. Canvas text gets no
+    // hinting, so a fractional cell size lands every column on a different
+    // subpixel phase and the rasteriser smears each glyph a different way —
+    // which reads as blur rather than as the sharp grid it should be.
+    const up = (v) => Math.ceil(v * dpr) / dpr;     // round up to a whole device px
+    const down = (v) => Math.floor(v * dpr) / dpr;  // round down
+    const near = (v) => Math.round(v * dpr) / dpr;  // round to nearest
+
+    // The cell size that just fills the viewport (cover) or just fits inside it
+    // (contain). SCALE shrinks it from there — smaller glyphs, more of the
+    // scene in view. Whenever the grid doesn't span the viewport it stays
+    // centred and the page background shows at the edges.
+    //
+    // The snap rounds whichever way preserves the intent: up so cover has no
+    // seam at the edge, down so contain doesn't push the last row off screen.
+    const contain = FIT === 'contain';
+    const raw = (contain ? Math.min : Math.max)(W / cols, H / (rows * ASPECT));
+    cellW = (contain ? down : up)(raw * SCALE);
+    // Keep the cell's own proportions: rounding height independently is what
+    // would squash the scene, so snap to nearest and only step down if that
+    // overshoots the viewport.
+    cellH = near(cellW * ASPECT);
+    if (contain && rows * cellH > H) cellH = down(cellW * ASPECT);
+    halfW = near(cellW / 2);
+    halfH = near(cellH / 2);
+    // With origin and cell both on whole device pixels, every glyph centre
+    // (origin + c * cell + half) lands on one too, with no per-cell rounding.
+    originX = near((W - cols * cellW) / 2);
+    originY = near((H - rows * cellH) / 2);
+    fontPx = Math.max(1, Math.round(cellW / ADVANCE * GLYPH * dpr)) / dpr;
 
     paintBase();
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    ctx.font = `${cellW / ADVANCE * GLYPH}px ${STACK}`;
+    ctx.font = `${fontPx}px ${STACK}`;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.clearRect(0, 0, W, H);
-    ctx.drawImage(base, 0, 0, W, H);
+    blit();
     painted = true;              // one frame to repaint the glow after a resize
   }
 
@@ -236,12 +280,12 @@
     let drew = false;
 
     for (let r = r0; r < r1; r++) {
-      const y = originY + (r + 0.5) * cellH;
+      const y = originY + r * cellH + halfH;
       for (let c = c0; c < c1; c++) {
         const i = r * cols + c;
         const col = cellColor(i, light);
         if (!col) continue;
-        const x = originX + (c + 0.5) * cellW;
+        const x = originX + c * cellW + halfW;
         const v = lightAt(x, y, now);
         if (v < 0.02) continue;
         const lr = col[0] * boost + accent[0] * TINT;
@@ -288,7 +332,7 @@
     painted = active;
 
     ctx.clearRect(0, 0, W, H);
-    ctx.drawImage(base, 0, 0, W, H);
+    blit();
     paintLight(now);
   }
 
