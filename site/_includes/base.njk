@@ -6,10 +6,38 @@
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <meta name="description" content="{{ description or site.description }}" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    {# A CSS background isn't discovered until the stylesheet has been parsed
+       and the rule matched, which for a full-viewport scene is late. The hint
+       starts the fetch during HTML parse instead. #}
+    {% if svgBg %}<link rel="preload" as="image" href="/img/{{ svgBg }}.svg" type="image/svg+xml" />{% endif %}
     <script src="/js/theme.js"></script>
     <link rel="stylesheet" href="/css/styles.css" />
   </head>
   <body {% if screenLabel %}data-screen-label="{{ screenLabel }}"{% endif %}>
+    {% if svgBg %}
+    <div id="svg-bg" aria-hidden="true" style="--svg-bg:url('/img/{{ svgBg }}.svg')"></div>
+    {# Thousands of glyphs take a beat to rasterise however fast they arrive,
+       and snapping in reads as a glitch. Fade instead. The class is added
+       here rather than baked into the CSS so that with JS off the scene is
+       simply visible from the start instead of stuck at opacity 0. #}
+    <script>
+      (function () {
+        var el = document.getElementById('svg-bg');
+        var img = new Image();
+        // Already in flight from the preload above, so this resolves off the
+        // cache rather than costing a second request.
+        img.src = '/img/{{ svgBg }}.svg';
+        // A cache hit completes synchronously. Fading then would be a fade
+        // from nothing to nothing — and worse, it would hand the view
+        // transition a first frame with the scene still at zero, so the
+        // background would appear to arrive after the page had already
+        // swapped. Only the genuinely-uncached first visit fades.
+        if (img.complete) return;
+        el.classList.add('loading');
+        img.onload = img.onerror = function () { el.classList.remove('loading'); };
+      })();
+    </script>
+    {% endif %}
     {% if asciiScene %}<canvas id="ascii-bg" aria-hidden="true"></canvas>{% endif %}
     {% include "nav.njk" %}
 

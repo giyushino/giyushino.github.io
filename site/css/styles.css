@@ -24,6 +24,18 @@
   --accent: #3584e4;     /* stronger blue for cream */
   --accent2: #1aa898;    /* darker cyan, legible on light */
 }
+/* Hold the outgoing page on screen until the incoming one is ready to paint,
+ * so navigating doesn't flash the bare background while the scene rasterises.
+ * The browser does the waiting; there's no router involved. Anything that
+ * doesn't support it just navigates the old way. */
+@view-transition { navigation: auto; }
+::view-transition-old(root),
+::view-transition-new(root) { animation-duration: 0.25s; }
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) { animation: none; }
+}
+
 * { box-sizing: border-box; }
 /* Only <html> carries the page background. A background on <body> would paint
  * above any z-index:-1 element (block backgrounds come after negative stacking
@@ -45,6 +57,55 @@ code { font-family: var(--mono); font-size: 0.9em; background: var(--panel); pad
 .codeblock, .post-page pre { font-family: var(--mono); font-size: 15px; line-height: 1.55; background: var(--panel); color: var(--fg); border: 1px solid var(--rule); border-left: 2px solid var(--accent); border-radius: 6px; padding: 14px 16px; overflow-x: auto; margin: 1.2em 0; }
 .codeblock code, .post-page pre code { background: none; border: 0; padding: 0; font-size: inherit; }
 ::selection { background: var(--accent); color: #000; }
+
+/* A static SVG scene, sitting one layer below the canvas so the two can be
+ * stacked or used on their own. Same fixed full-viewport slot.
+ *
+ * The SVG url comes in as --svg-bg from the template, so it can sit at the
+ * bottom of a background stack: scrim over global dim over art. Doing it with
+ * layers rather than `opacity` keeps the scrim at full strength — an opacity
+ * on the element would fade the scrim along with the art it's protecting.
+ *
+ * The three knobs worth touching are up top. --svg-dim is how far the art is
+ * knocked back (0 = untouched, 1 = invisible); --svg-scrim is the extra
+ * darkening over the left-hand column where the hero copy sits; --svg-size is
+ * anything background-size takes, so `contain` fits the whole scene on screen
+ * and a percentage shrinks it further. */
+#svg-bg {
+  --svg-dim: 0.34;
+  --svg-scrim: 0.62;
+  --svg-size: contain;
+  /* Share of the leftover horizontal room the art sits at: 50% centres it,
+   * 100% pins it flush right. Biased right so it clears the hero copy, which
+   * is left-aligned in a centred column. */
+  --svg-x: 88%;
+
+  position: fixed; inset: 0; z-index: -2;
+  pointer-events: none;
+  background-image:
+    /* hero copy is left-aligned, so the scrim is heaviest on the left */
+    linear-gradient(100deg,
+      rgba(var(--bg-rgb), var(--svg-scrim)) 0%,
+      rgba(var(--bg-rgb), calc(var(--svg-scrim) * 0.62)) 34%,
+      rgba(var(--bg-rgb), 0) 70%),
+    /* knocks the whole export back so body copy stays readable over it */
+    linear-gradient(rgba(var(--bg-rgb), var(--svg-dim)),
+                    rgba(var(--bg-rgb), var(--svg-dim))),
+    var(--svg-bg);
+  /* the scrims stay pinned to the viewport; only the art moves */
+  background-position: center, center, var(--svg-x) center;
+  /* only the art scales — the two scrim layers always cover the viewport */
+  background-size: cover, cover, var(--svg-size);
+  background-repeat: no-repeat;
+  transition: opacity 0.7s ease;
+}
+/* Set by the inline script until the art has decoded — see base.njk. Fading
+ * the whole element is fine here because it's transient: at rest it's back to
+ * opacity 1 and the scrim layers are at full strength again. */
+#svg-bg.loading { opacity: 0; }
+@media (prefers-reduced-motion: reduce) {
+  #svg-bg { transition: none; }
+}
 
 /* The ASCII scene sits behind everything and never takes the pointer — the
  * glow follows the cursor wherever it is on the page, links included. */

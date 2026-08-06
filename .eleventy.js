@@ -3,13 +3,20 @@ module.exports = function (eleventyConfig) {
     'site/css': 'css',
     'site/js': 'js',
     'site/files': 'files',
+    'site/img': 'img',
     'site/favicon.svg': 'favicon.svg',
     'site/CNAME': 'CNAME',
   })
 
-  // The ASCII scene background renders on every page. Global data loses to
-  // front matter, so any page can opt out with `asciiScene: false`.
-  eleventyConfig.addGlobalData('asciiScene', true)
+  // The static SVG scene renders on every page. Global data loses to front
+  // matter, so any page can opt out with `svgBg: false` or name another file
+  // in site/img/ with `svgBg: bg-001`.
+  eleventyConfig.addGlobalData('svgBg', 'bg-003')
+
+  // The animated canvas scene is the same slot, and stacking the two ASCII
+  // pieces just muddies both — so it's off by default now, opt in per page
+  // with `asciiScene: true`.
+  eleventyConfig.addGlobalData('asciiScene', false)
 
   // A post with `draft: true` in its frontmatter is dropped from the build —
   // no page, and nothing in the writing index. On the dev server it still

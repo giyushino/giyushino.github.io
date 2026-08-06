@@ -6,6 +6,7 @@ node_modules/
 # site actually ships, so these stay local.
 asciinator_*.html
 asciinator_*.png
+asciinator_*.svg
 .cache/
 *.log
 .DS_Store
