@@ -1,4 +1,10 @@
+const syntaxHighlight = require('@11ty/eleventy-plugin-syntaxhighlight')
+
 module.exports = function (eleventyConfig) {
+  // Fenced blocks get tokenised by Prism at build time — no client-side JS,
+  // and the token colours live in styles.css alongside everything else.
+  eleventyConfig.addPlugin(syntaxHighlight)
+
   eleventyConfig.addPassthroughCopy({
     'site/css': 'css',
     'site/js': 'js',

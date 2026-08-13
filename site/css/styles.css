@@ -54,8 +54,49 @@ p { color: var(--fg); }
 code { font-family: var(--mono); font-size: 0.9em; background: var(--panel); padding: 1px 6px; border-radius: 4px; border: 1px solid var(--rule); }
 /* Markdown fenced blocks come out as a bare <pre>, hand-written ones use
  * .codeblock — both get the same treatment. */
-.codeblock, .post-page pre { font-family: var(--mono); font-size: 15px; line-height: 1.55; background: var(--panel); color: var(--fg); border: 1px solid var(--rule); border-left: 2px solid var(--accent); border-radius: 6px; padding: 14px 16px; overflow-x: auto; margin: 1.2em 0; }
+.codeblock, .post-page pre { font-family: var(--mono); font-size: 15px; line-height: 1.55; background: var(--code-bg); color: var(--code-fg); border: 1px solid var(--rule); border-radius: 6px; padding: 14px 16px; overflow-x: auto; margin: 1.2em 0; }
 .codeblock code, .post-page pre code { background: none; border: 0; padding: 0; font-size: inherit; }
+
+/* Prism tokens, on Iceberg (cocopon). Iceberg is a low-contrast scheme tuned
+ * against its own backgrounds, so the code block carries --code-bg rather than
+ * --panel — on #fff or #0f1012 the palette loses its footing. The light
+ * variant isn't a lightened dark one; it's Iceberg's own second palette. */
+:root {
+  --code-bg: #161821;
+  --code-fg: #c6c8d1;
+  --ice-gray: #6b7089;
+  --ice-punct: #818596;
+  --ice-red: #e27878;
+  --ice-orange: #e2a478;
+  --ice-green: #b4be82;
+  --ice-cyan: #89b8c2;
+  --ice-blue: #84a0c6;
+  --ice-purple: #a093c7;
+}
+:root[data-theme="light"] {
+  --code-bg: #e8e9ec;
+  --code-fg: #33374c;
+  --ice-gray: #8389a3;
+  --ice-punct: #7f849c;
+  --ice-red: #cc517a;
+  --ice-orange: #c57339;
+  --ice-green: #668e3d;
+  --ice-cyan: #3f83a6;
+  --ice-blue: #2d539e;
+  --ice-purple: #7759b4;
+}
+
+.token.comment, .token.prolog, .token.doctype, .token.cdata { color: var(--ice-gray); font-style: italic; }
+.token.punctuation { color: var(--ice-punct); }
+.token.operator, .token.entity, .token.url { color: var(--ice-cyan); }
+.token.string, .token.char, .token.attr-value, .token.regex { color: var(--ice-green); }
+.token.keyword, .token.control, .token.important, .token.atrule { color: var(--ice-purple); }
+.token.boolean, .token.number, .token.constant, .token.symbol { color: var(--ice-orange); }
+.token.function, .token.class-name, .token.builtin, .token.tag, .token.selector { color: var(--ice-blue); }
+.token.attr-name, .token.property, .token.variable, .token.parameter { color: var(--ice-cyan); }
+.token.deleted { color: var(--ice-red); }
+.token.inserted { color: var(--ice-green); }
+.token.namespace { opacity: 0.7; }
 ::selection { background: var(--accent); color: #000; }
 
 /* A static SVG scene, sitting one layer below the canvas so the two can be
