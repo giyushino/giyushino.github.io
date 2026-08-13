@@ -19,6 +19,10 @@ module.exports = function (eleventyConfig) {
   // in site/img/ with `svgBg: bg-001`.
   eleventyConfig.addGlobalData('svgBg', 'bg-003')
 
+  // The dark export goes muddy on cream, so light mode gets its own art.
+  // Same opt-outs: `svgBgLight: false` falls back to whatever `svgBg` is.
+  eleventyConfig.addGlobalData('svgBgLight', 'bg-004')
+
   // The animated canvas scene is the same slot, and stacking the two ASCII
   // pieces just muddies both — so it's off by default now, opt in per page
   // with `asciiScene: true`.

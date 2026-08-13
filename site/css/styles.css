@@ -116,6 +116,9 @@ code { font-family: var(--mono); font-size: 0.9em; background: var(--panel); pad
   --svg-dim: 0.34;
   --svg-scrim: 0.62;
   --svg-size: contain;
+  /* Which of the two urls from the template is painted. Dark is the default
+   * mode, so --svg-bg is it unless the light override below fires. */
+  --svg-art: var(--svg-bg);
   /* Share of the leftover horizontal room the art sits at: 50% centres it,
    * 100% pins it flush right. Biased right so it clears the hero copy, which
    * is left-aligned in a centred column. */
@@ -132,7 +135,7 @@ code { font-family: var(--mono); font-size: 0.9em; background: var(--panel); pad
     /* knocks the whole export back so body copy stays readable over it */
     linear-gradient(rgba(var(--bg-rgb), var(--svg-dim)),
                     rgba(var(--bg-rgb), var(--svg-dim))),
-    var(--svg-bg);
+    var(--svg-art);
   /* the scrims stay pinned to the viewport; only the art moves */
   background-position: center, center, var(--svg-x) center;
   /* only the art scales — the two scrim layers always cover the viewport */
@@ -140,6 +143,23 @@ code { font-family: var(--mono); font-size: 0.9em; background: var(--panel); pad
   background-repeat: no-repeat;
   transition: opacity 0.7s ease;
 }
+/* Light mode has its own export — the dark one goes muddy over cream. The
+ * scrim layers are built from --bg-rgb, so they follow the theme on their own
+ * and only the art itself needs swapping.
+ *
+ * The capybara is a landscape export where the jellyfish is near-square, so
+ * `contain` — which fits to whichever axis runs out first, here the height —
+ * leaves it half again as wide and reading much larger. Sizing off the height
+ * instead holds it to the same footprint the jellyfish has at any viewport
+ * shape, and it sits nearly flush right so it clears the hero copy. */
+:root[data-theme="light"] #svg-bg {
+  --svg-art: var(--svg-bg-light);
+  /* 50 rather than the 58 this started at: the export was cropped down to the
+   * animal, so the same number would have painted it larger. */
+  --svg-size: auto 50vh;
+  --svg-x: 96%;
+}
+
 /* Set by the inline script until the art has decoded — see base.njk. Fading
  * the whole element is fine here because it's transient: at rest it's back to
  * opacity 1 and the scrim layers are at full strength again. */
