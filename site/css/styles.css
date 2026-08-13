@@ -141,6 +141,11 @@ code { font-family: var(--mono); font-size: 0.9em; background: var(--panel); pad
   /* only the art scales — the two scrim layers always cover the viewport */
   background-size: cover, cover, var(--svg-size);
   background-repeat: no-repeat;
+  /* Resting opacity, as a variable so a page can dial the scene back without
+   * setting `opacity` itself — the load-in fade below owns that property and
+   * would lose to any rule with a page selector in front of it. */
+  --svg-opacity: 1;
+  opacity: var(--svg-opacity);
   transition: opacity 0.7s ease;
 }
 /* Light mode has its own export — the dark one goes muddy over cream. The
@@ -183,6 +188,15 @@ body[data-screen-label="post"] #ascii-bg {
   filter: blur(7px);
   opacity: 0.5;
   transform: scale(1.05);
+}
+/* Same reasoning for the static scene, gentler numbers: it's already knocked
+ * back by --svg-dim, so it doesn't need the canvas's 0.5 on top. The scale
+ * covers the soft edge blur leaves behind — it samples past the element, so
+ * an unscaled blur feathers the art away at the viewport edges. */
+body[data-screen-label="post"] #svg-bg {
+  filter: blur(4px);
+  --svg-opacity: 0.72;
+  transform: scale(1.04);
 }
 
 /* ------------ nav ------------ */
