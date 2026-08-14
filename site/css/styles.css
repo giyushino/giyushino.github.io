@@ -115,7 +115,11 @@ code { font-family: var(--mono); font-size: 0.9em; background: var(--panel); pad
 #svg-bg {
   --svg-dim: 0.34;
   --svg-scrim: 0.62;
-  --svg-size: contain;
+  /* Was a bare `contain`, which fills whichever axis runs out first edge to
+   * edge. Same behaviour held to 80% of that, so the jellyfish reads as an
+   * element in the page rather than the whole backdrop — and it still tracks
+   * both axes, so it shrinks when the window narrows. */
+  --svg-size: auto min(72vh, 72vw);
   /* Which of the two urls from the template is painted. Dark is the default
    * mode, so --svg-bg is it unless the light override below fires. */
   --svg-art: var(--svg-bg);
@@ -123,6 +127,9 @@ code { font-family: var(--mono); font-size: 0.9em; background: var(--panel); pad
    * 100% pins it flush right. Biased right so it clears the hero copy, which
    * is left-aligned in a centred column. */
   --svg-x: 88%;
+  /* Same idea on the vertical: share of the leftover room, so 50% centres it.
+   * Biased up so the art sits higher in the frame than dead centre. */
+  --svg-y: 42%;
 
   position: fixed; inset: 0; z-index: -2;
   pointer-events: none;
@@ -137,7 +144,7 @@ code { font-family: var(--mono); font-size: 0.9em; background: var(--panel); pad
                     rgba(var(--bg-rgb), var(--svg-dim))),
     var(--svg-art);
   /* the scrims stay pinned to the viewport; only the art moves */
-  background-position: center, center, var(--svg-x) center;
+  background-position: center, center, var(--svg-x) var(--svg-y);
   /* only the art scales — the two scrim layers always cover the viewport */
   background-size: cover, cover, var(--svg-size);
   background-repeat: no-repeat;
@@ -168,6 +175,8 @@ code { font-family: var(--mono); font-size: 0.9em; background: var(--panel); pad
    * animal, so the same number would have painted it larger. */
   --svg-size: auto min(50vh, 60vw);
   --svg-x: 96%;
+  /* Back to centred — the lift above is for the jellyfish. */
+  --svg-y: 50%;
 }
 
 /* Set by the inline script until the art has decoded — see base.njk. Fading
