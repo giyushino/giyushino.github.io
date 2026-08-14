@@ -21,7 +21,7 @@
   --dim: #6a6a66;
   --faint: #cbcac4;
   --rule: #e4e2db;
-  --accent: #3584e4;     /* stronger blue for cream */
+  --accent: #E66100;     /* orange, warm against the cream */
   --accent2: #1aa898;    /* darker cyan, legible on light */
 }
 /* Hold the outgoing page on screen until the incoming one is ready to paint,
@@ -159,9 +159,14 @@ code { font-family: var(--mono); font-size: 0.9em; background: var(--panel); pad
  * shape, and it sits nearly flush right so it clears the hero copy. */
 :root[data-theme="light"] #svg-bg {
   --svg-art: var(--svg-bg-light);
-  /* 50 rather than the 58 this started at: the export was cropped down to the
+  /* Height-driven, so a plain 50vh would ignore the window's width entirely and
+   * let the landscape export run off both edges on a narrow viewport. The min()
+   * keeps 50vh on ordinary windows and hands control to the width once that
+   * gets tight, which is the axis `contain` would have picked anyway.
+   *
+   * 50 rather than the 58 this started at: the export was cropped down to the
    * animal, so the same number would have painted it larger. */
-  --svg-size: auto 50vh;
+  --svg-size: auto min(50vh, 60vw);
   --svg-x: 96%;
 }
 
