@@ -76,4 +76,10 @@
     });
   }
   mql.addEventListener('change', () => { if (getMode() === 'auto') applyTheme('auto'); });
+
+  // Back/forward out of the bfcache restores the DOM exactly as it was left,
+  // scripts included — so a mode picked on the page you navigated to would be
+  // undone by the stale data-theme on the page you came back to. Re-read the
+  // saved mode on every restore.
+  window.addEventListener('pageshow', (e) => { if (e.persisted) applyTheme(getMode()); });
 })();
