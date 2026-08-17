@@ -57,8 +57,15 @@ module.exports = function (eleventyConfig) {
     authors.split(name).join(`<strong>${name}</strong>`)
   )
 
+  // in_prog/ is picked up too — everything in there is marked draft by its
+  // directory data file, so those posts list and read exactly like a finished
+  // one on the dev server and are dropped wholesale from the built site.
+  // Sorted by date rather than reversing the glob, which walks the
+  // subdirectory separately and would otherwise interleave by path.
   eleventyConfig.addCollection('posts', collection =>
-    collection.getFilteredByGlob('site/posts/*.md').reverse()
+    collection
+      .getFilteredByGlob('site/posts/**/*.md')
+      .sort((a, b) => b.date - a.date)
   )
 
   return {
