@@ -51,10 +51,13 @@ body {
 a { color: var(--fg); text-decoration: none; border-bottom: 1px solid var(--faint); transition: border-color .15s, color .15s; }
 a:hover { color: var(--accent); border-bottom-color: var(--accent); }
 p { color: var(--fg); }
-code { font-family: var(--mono); font-size: 0.9em; background: var(--panel); padding: 1px 6px; border-radius: 4px; border: 1px solid var(--rule); }
+/* EB Garamond has a small x-height and the mono stack a large one, so at equal
+ * size the code sits well above the surrounding letters. 0.76em is what brings
+ * the two x-heights level — it reads smaller as a number than it looks. */
+code { font-family: var(--mono); font-size: 0.76em; background: var(--panel); padding: 1px 5px; border-radius: 4px; border: 1px solid var(--rule); }
 /* Markdown fenced blocks come out as a bare <pre>, hand-written ones use
  * .codeblock — both get the same treatment. */
-.codeblock, .post-page pre { font-family: var(--mono); font-size: 15px; line-height: 1.55; background: var(--code-bg); color: var(--code-fg); border: 1px solid var(--rule); border-radius: 6px; padding: 14px 16px; overflow-x: auto; margin: 1.2em 0; }
+.codeblock, .post-page pre { font-family: var(--mono); font-size: 13.5px; line-height: 1.55; background: var(--code-bg); color: var(--code-fg); border: 1px solid var(--rule); border-radius: 6px; padding: 10px 12px; overflow-x: auto; margin: 1.2em 0; }
 .codeblock code, .post-page pre code { background: none; border: 0; padding: 0; font-size: inherit; }
 
 /* Prism tokens, on Iceberg (cocopon). Iceberg is a low-contrast scheme tuned
@@ -407,7 +410,7 @@ h2.big.list-head { text-align: center; margin-bottom: 64px; }
 }
 
 .post-page {
-  max-width: 760px;
+  max-width: 840px;
   margin: 0 auto;
   padding: 96px 32px;
   text-align: left;
@@ -424,6 +427,16 @@ h2.big.list-head { text-align: center; margin-bottom: 64px; }
   line-height: 1.65;
   margin: 22px 0 0;
 }
+/* Markdown headings within a post. The browser default is symmetric margins,
+ * which leaves a heading floating midway between the section it closes and the
+ * one it opens. Weight the space above instead, and pull what follows up
+ * underneath — body elements carry their spacing as a top margin, so the gap
+ * under a heading belongs to the paragraph, not the heading. */
+.post-page h2, .post-page h3, .post-page h4 { margin: 40px 0 0; }
+.post-page :is(h2, h3, h4) + p,
+.post-page :is(h2, h3, h4) + ul,
+.post-page :is(h2, h3, h4) + ol,
+.post-page :is(h2, h3, h4) + pre { margin-top: 8px; }
 /* The byline reads as part of the post, not as chrome — full-strength text
  * colour and a size closer to the body copy. */
 .post-meta {
