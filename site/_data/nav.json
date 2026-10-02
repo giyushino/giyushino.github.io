@@ -1,7 +1,38 @@
-[
-  { "title": "home", "path": "/" },
-  { "title": "writing", "path": "/writing/" },
-  { "title": "research", "path": "/research/" },
-  { "title": "contact", "path": "/contact/" },
-  { "title": "cv", "path": "/files/cv.pdf", "external": true }
-]
+{
+  "pages": [
+    {
+      "title": "About",
+      "path": "/about/"
+    },
+    {
+      "title": "Writing",
+      "path": "/writing/"
+    },
+    {
+      "title": "Research",
+      "path": "/research/"
+    },
+    {
+      "title": "Contact",
+      "path": "/contact/"
+    }
+  ],
+  "elsewhere": [
+    {
+      "title": "CV",
+      "url": "/files/cv.pdf"
+    },
+    {
+      "title": "GitHub",
+      "url": "https://github.com/giyushino"
+    },
+    {
+      "title": "Scholar",
+      "url": "https://scholar.google.com/citations?hl=en&user=rqpsdzoAAAAJ"
+    },
+    {
+      "title": "Twitter",
+      "url": "https://x.com/allanzhangML"
+    }
+  ]
+}

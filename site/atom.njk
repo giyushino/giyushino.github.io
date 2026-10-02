@@ -1,0 +1,28 @@
+---
+permalink: /atom.xml
+eleventyExcludeFromCollections: true
+---
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>{{ site.title }}</title>
+  <subtitle>{{ site.description }}</subtitle>
+  <link href="{{ site.url }}/atom.xml" rel="self" />
+  <link href="{{ site.url }}/" />
+  <id>{{ site.url }}/</id>
+  <author><name>{{ site.author }}</name></author>
+  {%- set newest = collections.posts | first %}
+  <updated>{{ (newest.data.updated or newest.date) | rfc3339 if newest else "1970-01-01T00:00:00Z" }}</updated>
+  {%- for post in collections.posts %}
+  {%- if not post.data.draft %}
+  <entry>
+    <title>{{ post.data.title }}</title>
+    <link href="{{ site.url }}{{ post.url }}" />
+    <id>{{ site.url }}{{ post.url }}</id>
+    <published>{{ post.date | rfc3339 }}</published>
+    <updated>{{ (post.data.updated or post.date) | rfc3339 }}</updated>
+    {%- if post.data.blurb %}<summary>{{ post.data.blurb }}</summary>{% endif %}
+    <content type="html">{{ post.content | escape }}</content>
+  </entry>
+  {%- endif %}
+  {%- endfor %}
+</feed>

@@ -1,0 +1,13 @@
+---
+layout: base.njk
+---
+{#- One narrow column: pill menu, then the page. -#}
+<div class="content" id="top">
+  <div class="narrow">
+    <nav class="navigation" aria-label="Site">
+      {% include "menu.njk" %}
+    </nav>
+
+    {{ content | safe }}
+  </div>
+</div>

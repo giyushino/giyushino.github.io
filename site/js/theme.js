@@ -1,14 +1,25 @@
-// Runs synchronously in <head> — applies saved accent and mode before first paint.
-(function () {
-  var t = localStorage.getItem('theme');           // 'auto' | 'light' | 'dark'
-  var sysDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-  // Dark is the default — the ASCII scene is a dark-mode piece. 'auto' only
-  // applies for visitors who set it back when the switch offered it.
-  var light = t === 'light' || (t === 'auto' && !sysDark);
-  if (light) document.documentElement.setAttribute('data-theme', 'light');
-  // The accent is saved per theme, so the mode has to be resolved first. With
-  // nothing saved we leave --accent alone and the stylesheet default applies.
-  var h = localStorage.getItem(light ? 'hue-light' : 'hue-dark')
-    || localStorage.getItem('hue');               // pre-split key
-  if (h) document.documentElement.style.setProperty('--accent', h);
-})();
+// Light/dark toggle in the menu. Until it's pressed the site follows the system setting;
+// a press picks the opposite of what's showing and remembers it.
+(() => {
+  const root = document.documentElement
+  const systemDark = window.matchMedia('(prefers-color-scheme: dark)')
+  const current = () => root.dataset.theme || (systemDark.matches ? 'dark' : 'light')
+
+  function label() {
+    const next = current() === 'dark' ? 'light' : 'dark'
+    for (const b of document.querySelectorAll('.theme-toggle')) {
+      b.setAttribute('aria-label', `Switch to ${next} theme`)
+      b.title = `Switch to ${next} theme`
+    }
+  }
+
+  document.addEventListener('click', e => {
+    if (!e.target.closest('.theme-toggle')) return
+    const next = current() === 'dark' ? 'light' : 'dark'
+    root.dataset.theme = next
+    try { localStorage.setItem('theme', next) } catch (err) {}
+    label()
+  })
+  systemDark.addEventListener?.('change', label)
+  label()
+})()

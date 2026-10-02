@@ -1,80 +1,68 @@
 const syntaxHighlight = require('@11ty/eleventy-plugin-syntaxhighlight')
+const katex = require('@vscode/markdown-it-katex').default
 
 module.exports = function (eleventyConfig) {
-  // Fenced blocks get tokenised by Prism at build time — no client-side JS,
-  // and the token colours live in styles.css alongside everything else.
+  // Code is tokenised by Prism and math typeset by KaTeX at build time, so pages
+  // ship plain HTML + CSS with no runtime for either.
   eleventyConfig.addPlugin(syntaxHighlight)
+  // Curly quotes and proper dashes, like Zola's smart_punctuation on slightknack.dev.
+  eleventyConfig.amendLibrary('md', md =>
+    md.set({ typographer: true }).use(katex, { throwOnError: false, enableFencedBlocks: true })
+  )
 
   eleventyConfig.addPassthroughCopy({
     'site/css': 'css',
     'site/js': 'js',
-    'site/files': 'files',
     'site/img': 'img',
+    'site/files': 'files',
     'site/favicon.svg': 'favicon.svg',
-    'site/CNAME': 'CNAME',
+    'site/CNAME': 'CNAME',  // custom domain (allanyz.com) for GitHub Pages
+    'node_modules/katex/dist/katex.min.css': 'css/katex/katex.min.css',
+    'node_modules/katex/dist/fonts/*.woff2': 'css/katex/fonts',
   })
 
-  // The static SVG scene renders on every page. Global data loses to front
-  // matter, so any page can opt out with `svgBg: false` or name another file
-  // in site/img/ with `svgBg: bg-001`.
-  eleventyConfig.addGlobalData('svgBg', 'bg-003')
-
-  // The dark export goes muddy on cream, so light mode gets its own art.
-  // Same opt-outs: `svgBgLight: false` falls back to whatever `svgBg` is.
-  eleventyConfig.addGlobalData('svgBgLight', 'bg-004')
-
-  // The animated canvas scene is the same slot, and stacking the two ASCII
-  // pieces just muddies both — so it's off by default now, opt in per page
-  // with `asciiScene: true`.
-  eleventyConfig.addGlobalData('asciiScene', false)
-
-  // A post with `draft: true` in its frontmatter is dropped from the build —
-  // no page, and nothing in the writing index. On the dev server it still
-  // renders, so drafts are previewable locally but never ship.
+  // `draft: true` (and everything in posts/in_prog/) renders on the dev server
+  // but is dropped from `npm run build`. `npm run serve:prod` (HIDE_DRAFTS=1) hides
+  // them on a live-reloading server too, so you can see exactly what will ship.
   eleventyConfig.addPreprocessor('drafts', '*', data => {
-    if (data.draft && process.env.ELEVENTY_RUN_MODE === 'build') {
-      return false
-    }
+    const hide = process.env.ELEVENTY_RUN_MODE === 'build' || process.env.HIDE_DRAFTS === '1'
+    if (data.draft && hide) return false
   })
 
-  // March 18, 2026
+  // Posts, newest first.
+  eleventyConfig.addCollection('posts', collection =>
+    collection.getFilteredByGlob('site/posts/**/*.md').sort((a, b) => b.date - a.date)
+  )
+
+  // September 8, 2026
   eleventyConfig.addFilter('longDate', date =>
     new Date(date).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-      timeZone: 'UTC',
+      year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC',
     })
   )
+  // 2026-09-08
+  eleventyConfig.addFilter('isoDate', date => new Date(date).toISOString().slice(0, 10))
+  // RFC 3339 for the feed
+  eleventyConfig.addFilter('rfc3339', date => new Date(date).toISOString())
 
-  // Newest first, so publications.json can stay in whatever order you add to it.
-  eleventyConfig.addFilter('sortByYear', items =>
-    [...items].sort((a, b) => b.year - a.year)
-  )
+  // Minutes to read, from the rendered HTML (about 220 words a minute).
+  eleventyConfig.addFilter('readingMinutes', html => {
+    const words = String(html || '').replace(/<[^>]+>/g, ' ').split(/\s+/).filter(Boolean).length
+    return Math.max(1, Math.round(words / 220))
+  })
+  eleventyConfig.addFilter('plural', (n, word) => `${n} ${word}${n === 1 ? '' : 's'}`)
 
-  // Bold your own name in an author list.
+  eleventyConfig.addFilter('sortByYear', items => [...items].sort((a, b) => b.year - a.year))
   eleventyConfig.addFilter('highlightAuthor', (authors, name) =>
     authors.split(name).join(`<strong>${name}</strong>`)
   )
 
-  // in_prog/ is picked up too — everything in there is marked draft by its
-  // directory data file, so those posts list and read exactly like a finished
-  // one on the dev server and are dropped wholesale from the built site.
-  // Sorted by date rather than reversing the glob, which walks the
-  // subdirectory separately and would otherwise interleave by path.
-  eleventyConfig.addCollection('posts', collection =>
-    collection
-      .getFilteredByGlob('site/posts/**/*.md')
-      .sort((a, b) => b.date - a.date)
-  )
+  // A margin note: {% aside %}a thought on the side{% endaside %}
+  // Sits in the right margin on wide screens and folds inline in parentheses on narrow ones.
+  eleventyConfig.addPairedShortcode('aside', content => `<span class="aside">${content.trim()}</span>`)
 
   return {
-    dir: {
-      input: 'site',
-      includes: '_includes',
-      data: '_data',
-      output: '_site',
-    },
+    dir: { input: 'site', includes: '_includes', data: '_data', output: '_site' },
     markdownTemplateEngine: 'njk',
     htmlTemplateEngine: 'njk',
   }

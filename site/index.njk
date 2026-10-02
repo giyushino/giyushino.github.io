@@ -1,38 +1,32 @@
 ---
 layout: base.njk
-pageTitle: ayzml
 permalink: /
-navActive: /
-screenLabel: diffusion
-# The brush trail chases the cursor over the static scene. The background
-# itself is now the SVG, set globally in .eleventy.js.
-heroCanvas: false
+isHome: true
+title: Home
+layers:
+  - { file: 0_water, speed: 0.08, settle: 3.5 }
+  - { file: 1_far, speed: 0.3, settle: 3 }
+  - { file: 2_sharks, speed: 0.5, settle: 2.5 }
+  - { file: 3_near, speed: 0.75, settle: 2 }
+  - { file: 4_walkway, speed: 1, settle: 1.5 }
 ---
-
-<header class="hero">
-  <canvas id="ascii-canvas"></canvas>
-  <div class="inner">
-    <p class="kicker">ML Researcher &middot; vim enthusiast</p>
-    <h1>
-      Traversing life&rsquo;s <br />
-      <span class="mark">loss</span> landscape
-    </h1>
-    <p class="sub">
-      I'm Allan, a junior at UCLA studying computational mathematics. I
-      work as an undergraduate researcher at BigML, where I explore all things
-      data under Professor Baharan Mirzasoleiman. During Winter '25, I was
-      a research intern at DatologyAI working on multimodal data curation and
-      reasoning VLMs.
-    </p>
-    <p class="sub">
-      I enjoy working on my distributed training stack, thinking about how to
-      make silicon think, reading classical literature, writing poetry, coding
-      in Neovim, ricing Linux, and talking to friends (probably my favorite activity).
-      Feel free to reach out about anything, especially if it's ML related! 
-    </p>
-      
-    <p class="ctas">
-      <a class="cta" href="/writing/">peek at my brain</a>
-    </p>
+<div class="scene" role="img" aria-label="A girl walks along an aquarium railing while whale sharks, a ray and schools of fish glide through the blue tank beside her.">
+  {%- for layer in layers %}
+  <div class="layer" data-speed="{{ layer.speed }}" style="--settle: {{ layer.settle }}s">
+    <img class="placeholder" src="/img/aquarium/{{ layer.file }}-placeholder.webp" alt="" />
+    <img class="main" src="/img/aquarium/{{ layer.file }}.webp" alt="" />
   </div>
+  {%- endfor %}
+</div>
+
+<nav class="home-nav" aria-label="Site">
+  <div class="narrow-unpadded">
+    {% include "menu.njk" %}
+  </div>
+</nav>
+
+<header class="home-name">
+  <h1 class="title">{{ site.author }}</h1>
 </header>
+
+<script src="/js/home.js"></script>

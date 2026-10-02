@@ -1,4 +1,5 @@
 _site/
+_site-prod/
 node_modules/
 
 # ASCIInator exports and source images: ~8MB of originals that only the

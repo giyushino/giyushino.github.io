@@ -7,11 +7,12 @@ blurb: An in depth look into distributed training
 ---
 After putting this project off for months, I finally opened Neovim and 
 started writing my own distributed training stack, [Torchure](https://github.com/giyushino/torchure).
-Despite the name, *most* of the development process wasn't torture, and I'd love to share
+Despite the name, *most* of the development process wasn't torturous, and I'd love to share
 my experience and hopefully teach you something about distributed training along the way.
 
 ## The Basics
-Training a classification model is generally pretty simple. We need to
+For most PyTorch tutorials you'll see, they usually train a model on one GPU. The flow is usually always the same, where we: 
+
 1. Initialize our model (and dataloader + optimizer)
 2. Iterate through the dataloader
 3. Pass the batch through the model to obtain the logits
@@ -50,4 +51,8 @@ for epoch in range(epochs):
         loss.backward()
         optimizer.step()
 ```
+
+$$
+f(x) = 0
+$$
 

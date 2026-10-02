@@ -1,491 +1,367 @@
-@import url('https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500;600;700&display=swap');
+/*
+ * Design adapted from slightknack.dev by Isaac Clayton
+ * (https://github.com/slightknack/slightknack.dev), MIT License, Copyright (c) 2021 Isaac Clayton.
+ * See THIRD_PARTY_NOTICES.md for the full license text.
+ */
 
+/* ---- tokens ------------------------------------------------------------------- */
+/* Palette sampled from the aquarium painting on the home page:
+   light mode is the pale white of the fish and light shafts with deep-water ink,
+   dark mode is the walkway's navy lit by mid-water cyan. */
 :root {
-  --bg: #0a0a0b;
-  --bg-rgb: 10, 10, 11;  /* --bg as raw channels, for rgba() scrims/overlays */
-  --panel: #0f1012;
-  --fg: #ededec;
-  --dim: #8a8a88;
-  --faint: #3a3a3b;
-  --rule: #1a1b1d;
-  --accent: #98c0f0;     /* pale blue */
-  --accent2: #5ee8d4;    /* cyan */
-  --mono: ui-monospace, "SF Mono", "IBM Plex Mono", Menlo, Consolas, monospace;
-  --sans: "EB Garamond", Georgia, "Times New Roman", serif;
-}
-:root[data-theme="light"] {
-  --bg: #f7f6f3;
-  --bg-rgb: 247, 246, 243;
-  --panel: #ffffff;
-  --fg: #1b1b1a;
-  --dim: #6a6a66;
-  --faint: #cbcac4;
-  --rule: #e4e2db;
-  --accent: #E66100;     /* orange, warm against the cream */
-  --accent2: #1aa898;    /* darker cyan, legible on light */
-}
-/* Hold the outgoing page on screen until the incoming one is ready to paint,
- * so navigating doesn't flash the bare background while the scene rasterises.
- * The browser does the waiting; there's no router involved. Anything that
- * doesn't support it just navigates the old way. */
-@view-transition { navigation: auto; }
-::view-transition-old(root),
-::view-transition-new(root) { animation-duration: 0.25s; }
-@media (prefers-reduced-motion: reduce) {
-  ::view-transition-old(root),
-  ::view-transition-new(root) { animation: none; }
+  --fill-bg: #eef7f8;          /* white fish / light shaft, cooled down */
+  --fill-text: #061229;        /* the tank's deepest navy */
+  --fill-accent: #0d64a8;      /* deep tank blue */
+  --fill-soft: #d3e9ef;        /* shaft-tinted panel */
+  --fill-current: #0d64a8;     /* current page in the menu */
+  --fill-current-text: #eef7f8;
+  --fill-code: #030b1f;        /* walkway abyss */
+
+  --font-base: 15pt;                      /* headings scale from this */
+  --font-heading: 20pt;
+  --font-body: "EB Garamond", "Iowan Old Style", Georgia, serif;
+  --font-title: var(--font-body);
+  --font-mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+  --font-narrow: var(--font-body);          /* meta lines, margin notes */
+  --font-button: "Patrick Hand", "Comic Neue", "Segoe Print", sans-serif;   /* menu tabs, pills */
+
+  --body-size: calc(var(--font-base) * 1.15);   /* Garamond runs small on its em */
+  --line-height-body: 1.7;
+  --line-height-narrow: 1.4;
+  --line-height-heading: 1.1;
+
+  --column: 650px;
+  color-scheme: light;
 }
 
-* { box-sizing: border-box; }
-/* Only <html> carries the page background. A background on <body> would paint
- * above any z-index:-1 element (block backgrounds come after negative stacking
- * contexts in paint order) and hide the ASCII scene. */
-html { background: var(--bg); }
-html, body { margin: 0; color: var(--fg); }
+/* Dark follows the system unless the visitor picked light with the menu toggle;
+   picking dark wins either way. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --fill-text: #e2f3f5;      /* pale highlight */
+    --fill-bg: #050d24;        /* walkway navy */
+    --fill-accent: #59dffc;    /* mid-water cyan */
+    --fill-soft: #0e2244;      /* tank navy, lifted */
+    --fill-current: #59dffc;
+    --fill-current-text: #050d24;
+    --fill-code: #020818;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --fill-text: #e2f3f5;      /* pale highlight */
+  --fill-bg: #050d24;        /* walkway navy */
+  --fill-accent: #59dffc;    /* mid-water cyan */
+  --fill-soft: #0e2244;      /* tank navy, lifted */
+  --fill-current: #59dffc;
+  --fill-current-text: #050d24;
+  --fill-code: #020818;
+  color-scheme: dark;
+}
+
+/* ---- reset -------------------------------------------------------------------- */
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body, h1, h2, h3, h4, h5, h6, p, ul, ol, dl, dd, figure, blockquote, pre { margin: 0; }
+
+/* ---- base --------------------------------------------------------------------- */
+::selection { background: var(--fill-accent); color: var(--fill-bg); }
+
 body {
-  font-family: var(--sans);
-  font-size: 20px; line-height: 1.6;
-  -webkit-font-smoothing: antialiased;
+  background-color: var(--fill-bg);
+  color: var(--fill-text);
+  font-family: var(--font-body);
+  font-size: var(--body-size);
+  line-height: var(--line-height-body);
   overflow-x: hidden;
-}
-a { color: var(--fg); text-decoration: none; border-bottom: 1px solid var(--faint); transition: border-color .15s, color .15s; }
-a:hover { color: var(--accent); border-bottom-color: var(--accent); }
-p { color: var(--fg); }
-/* EB Garamond has a small x-height and the mono stack a large one, so at equal
- * size the code sits well above the surrounding letters. 0.76em is what brings
- * the two x-heights level — it reads smaller as a number than it looks. */
-code { font-family: var(--mono); font-size: 0.76em; background: var(--panel); padding: 1px 5px; border-radius: 4px; border: 1px solid var(--rule); }
-/* Markdown fenced blocks come out as a bare <pre>, hand-written ones use
- * .codeblock — both get the same treatment. */
-.codeblock, .post-page pre { font-family: var(--mono); font-size: 13.5px; line-height: 1.55; background: var(--code-bg); color: var(--code-fg); border: 1px solid var(--rule); border-radius: 6px; padding: 10px 12px; overflow-x: auto; margin: 1.2em 0; }
-.codeblock code, .post-page pre code { background: none; border: 0; padding: 0; font-size: inherit; }
-
-/* Prism tokens, on Iceberg (cocopon). Iceberg is a low-contrast scheme tuned
- * against its own backgrounds, so the code block carries --code-bg rather than
- * --panel — on #fff or #0f1012 the palette loses its footing. The light
- * variant isn't a lightened dark one; it's Iceberg's own second palette. */
-:root {
-  --code-bg: #161821;
-  --code-fg: #c6c8d1;
-  --ice-gray: #6b7089;
-  --ice-punct: #818596;
-  --ice-red: #e27878;
-  --ice-orange: #e2a478;
-  --ice-green: #b4be82;
-  --ice-cyan: #89b8c2;
-  --ice-blue: #84a0c6;
-  --ice-purple: #a093c7;
-}
-:root[data-theme="light"] {
-  --code-bg: #e8e9ec;
-  --code-fg: #33374c;
-  --ice-gray: #8389a3;
-  --ice-punct: #7f849c;
-  --ice-red: #cc517a;
-  --ice-orange: #c57339;
-  --ice-green: #668e3d;
-  --ice-cyan: #3f83a6;
-  --ice-blue: #2d539e;
-  --ice-purple: #7759b4;
+  -webkit-font-smoothing: antialiased;
 }
 
-.token.comment, .token.prolog, .token.doctype, .token.cdata { color: var(--ice-gray); font-style: italic; }
-.token.punctuation { color: var(--ice-punct); }
-.token.operator, .token.entity, .token.url { color: var(--ice-cyan); }
-.token.string, .token.char, .token.attr-value, .token.regex { color: var(--ice-green); }
-.token.keyword, .token.control, .token.important, .token.atrule { color: var(--ice-purple); }
-.token.boolean, .token.number, .token.constant, .token.symbol { color: var(--ice-orange); }
-.token.function, .token.class-name, .token.builtin, .token.tag, .token.selector { color: var(--ice-blue); }
-.token.attr-name, .token.property, .token.variable, .token.parameter { color: var(--ice-cyan); }
-.token.deleted { color: var(--ice-red); }
-.token.inserted { color: var(--ice-green); }
-.token.namespace { opacity: 0.7; }
-::selection { background: var(--accent); color: #000; }
+p { margin-top: 20pt; margin-bottom: 20pt; text-wrap: pretty; }
 
-/* A static SVG scene, sitting one layer below the canvas so the two can be
- * stacked or used on their own. Same fixed full-viewport slot.
- *
- * The SVG url comes in as --svg-bg from the template, so it can sit at the
- * bottom of a background stack: scrim over global dim over art. Doing it with
- * layers rather than `opacity` keeps the scrim at full strength — an opacity
- * on the element would fade the scrim along with the art it's protecting.
- *
- * The three knobs worth touching are up top. --svg-dim is how far the art is
- * knocked back (0 = untouched, 1 = invisible); --svg-scrim is the extra
- * darkening over the left-hand column where the hero copy sits; --svg-size is
- * anything background-size takes, so `contain` fits the whole scene on screen
- * and a percentage shrinks it further. */
-#svg-bg {
-  --svg-dim: 0.34;
-  --svg-scrim: 0.62;
-  /* Was a bare `contain`, which fills whichever axis runs out first edge to
-   * edge. Same behaviour held to 80% of that, so the jellyfish reads as an
-   * element in the page rather than the whole backdrop — and it still tracks
-   * both axes, so it shrinks when the window narrows. */
-  --svg-size: auto min(72vh, 72vw);
-  /* Which of the two urls from the template is painted. Dark is the default
-   * mode, so --svg-bg is it unless the light override below fires. */
-  --svg-art: var(--svg-bg);
-  /* Share of the leftover horizontal room the art sits at: 50% centres it,
-   * 100% pins it flush right. Biased right so it clears the hero copy, which
-   * is left-aligned in a centred column. */
-  --svg-x: 88%;
-  /* Same idea on the vertical: share of the leftover room, so 50% centres it.
-   * Biased up so the art sits higher in the frame than dead centre. */
-  --svg-y: 42%;
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-title);
+  font-weight: 500;
+  line-height: var(--line-height-heading);
+  letter-spacing: -0.01em;
+  hyphens: auto;
+  text-wrap: balance;
+  margin-top: 40pt;
+  margin-bottom: 20pt;
+}
+h1 a, h2 a, h3 a, h4 a, h5 a, h6 a { line-height: 1.5; }
 
-  position: fixed; inset: 0; z-index: -2;
-  pointer-events: none;
-  background-image:
-    /* hero copy is left-aligned, so the scrim is heaviest on the left */
-    linear-gradient(100deg,
-      rgba(var(--bg-rgb), var(--svg-scrim)) 0%,
-      rgba(var(--bg-rgb), calc(var(--svg-scrim) * 0.62)) 34%,
-      rgba(var(--bg-rgb), 0) 70%),
-    /* knocks the whole export back so body copy stays readable over it */
-    linear-gradient(rgba(var(--bg-rgb), var(--svg-dim)),
-                    rgba(var(--bg-rgb), var(--svg-dim))),
-    var(--svg-art);
-  /* the scrims stay pinned to the viewport; only the art moves */
-  background-position: center, center, var(--svg-x) var(--svg-y);
-  /* only the art scales — the two scrim layers always cover the viewport */
-  background-size: cover, cover, var(--svg-size);
+.title { font-size: calc(var(--font-base) + var(--font-heading)); margin-top: 0; }
+h1 { font-size: calc(var(--font-base) + var(--font-heading) / 2); }
+h2 { font-size: calc(var(--font-base) + var(--font-heading) / 3); }
+h3 { font-size: calc(var(--font-base) + var(--font-heading) / 4); }
+h4 { font-size: calc(var(--font-base) + var(--font-heading) / 5); }
+h5 { font-size: calc(var(--font-base) + var(--font-heading) / 6); }
+h6 { font-size: calc(var(--font-base) + var(--font-heading) / 7); }
+
+/* links: an accent underline that floods the word on hover */
+a {
+  color: inherit;
+  text-decoration: none;
+  border-bottom: 2px solid var(--fill-accent);
+  background-image: linear-gradient(var(--fill-accent), var(--fill-accent));
   background-repeat: no-repeat;
-  /* Resting opacity, as a variable so a page can dial the scene back without
-   * setting `opacity` itself — the load-in fade below owns that property and
-   * would lose to any rule with a page selector in front of it. */
-  --svg-opacity: 1;
-  opacity: var(--svg-opacity);
-  transition: opacity 0.7s ease;
+  background-size: 100% 0;
+  background-position: 0 100%;
+  transition: background-size 100ms ease, color 100ms ease;
 }
-/* Light mode has its own export — the dark one goes muddy over cream. The
- * scrim layers are built from --bg-rgb, so they follow the theme on their own
- * and only the art itself needs swapping.
- *
- * The capybara is a landscape export where the jellyfish is near-square, so
- * `contain` — which fits to whichever axis runs out first, here the height —
- * leaves it half again as wide and reading much larger. Sizing off the height
- * instead holds it to the same footprint the jellyfish has at any viewport
- * shape, and it sits nearly flush right so it clears the hero copy. */
-:root[data-theme="light"] #svg-bg {
-  --svg-art: var(--svg-bg-light);
-  /* Height-driven, so a plain 50vh would ignore the window's width entirely and
-   * let the landscape export run off both edges on a narrow viewport. The min()
-   * keeps 50vh on ordinary windows and hands control to the width once that
-   * gets tight, which is the axis `contain` would have picked anyway.
-   *
-   * 50 rather than the 58 this started at: the export was cropped down to the
-   * animal, so the same number would have painted it larger. */
-  --svg-size: auto min(50vh, 60vw);
-  --svg-x: 96%;
-  /* Back to centred — the lift above is for the jellyfish. */
-  --svg-y: 50%;
+a:hover, a:active, a:focus-visible { background-size: 100% 100%; color: var(--fill-bg); }
+a:focus-visible { outline: 2px solid var(--fill-accent); outline-offset: 2px; }
+a.plain, a.plain:hover { background: none; border: none; }
+
+em, i { font-style: italic; }
+strong, b { font-weight: bolder; }
+del, s { opacity: 0.7; }
+
+blockquote {
+  margin: 20pt 0;
+  padding-left: 20pt;
+  border-left: 2px dashed var(--fill-text);
 }
 
-/* Set by the inline script until the art has decoded — see base.njk. Fading
- * the whole element is fine here because it's transient: at rest it's back to
- * opacity 1 and the scrim layers are at full strength again. */
-#svg-bg.loading { opacity: 0; }
+ol, ul { padding-left: 40pt; }
+ul { list-style: disc outside none; }
+ol { list-style: decimal outside none; }
+li { margin-top: 10pt; margin-bottom: 10pt; }
+
+hr { margin: 20pt 0; border: 0; border-top: 2px dashed var(--fill-text); }
+
+img, video {
+  display: block;
+  margin: 30pt auto;
+  max-width: 100%;
+  height: auto;
+  border-radius: 2px;
+}
+
+/* ---- code --------------------------------------------------------------------- */
+code {
+  font-family: var(--font-mono);
+  font-size: 0.82em;
+  background-color: var(--fill-soft);
+  padding: 2px 3px;
+  border-radius: 2px;
+  overflow-wrap: anywhere;
+  hyphens: none;
+}
+pre {
+  font-family: var(--font-mono);
+  font-size: 0.82em;
+  line-height: 1.6;
+  margin: 20pt 0;
+  padding: 20pt;
+  overflow-x: auto;
+  border-radius: 2px;
+  background: var(--fill-code);
+  color: #dcecf2;
+}
+pre code { font-size: 1em; background: none; padding: 0; white-space: pre; overflow-wrap: normal; }
+
+/* Prism tokens (dark abyss block in both themes; cool sea tones from the painting) */
+.token.comment, .token.prolog, .token.doctype, .token.cdata { color: #6489a8; font-style: italic; }
+.token.punctuation { color: #9fb8c8; }
+.token.property, .token.tag, .token.boolean, .token.number, .token.constant, .token.symbol { color: #9ecbff; }
+.token.selector, .token.attr-name, .token.string, .token.char, .token.builtin, .token.inserted { color: #b4f0e2; }
+.token.operator, .token.entity, .token.url { color: #c8dce6; }
+.token.atrule, .token.attr-value, .token.keyword { color: #59dffc; }
+.token.function, .token.class-name { color: #f2fbff; font-weight: 600; }
+.token.regex, .token.important, .token.variable { color: #bcd2ff; }
+
+/* ---- tables ------------------------------------------------------------------- */
+table { display: block; overflow-x: auto; margin: 20pt 0; border-collapse: collapse; }
+thead { white-space: nowrap; background-color: var(--fill-soft); }
+tr:nth-child(even) { background-color: var(--fill-soft); }
+td, th { padding: 1pt 20pt; text-align: start; border-right: 2px solid var(--fill-soft); }
+tr:nth-child(even) td, thead th { border-right-color: var(--fill-bg); }
+tr th:last-child, tr td:last-child { border-right: none; }
+th { font-family: var(--font-narrow); font-weight: normal; letter-spacing: 0.05em; vertical-align: bottom; }
+
+/* ---- math --------------------------------------------------------------------- */
+.katex { font-size: 1em; }
+.katex-display { overflow-x: auto; overflow-y: hidden; padding: 4pt 0; }
+
+/* ---- layout ------------------------------------------------------------------- */
+.narrow, .narrow-unpadded {
+  min-width: 0;
+  max-width: var(--column);
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 20pt;
+}
+.narrow { padding-bottom: 60pt; }  /* normal breathing room after the last line */
+
+/* margin notes push the column left to make room on wide screens */
+@media (min-width: 901px) {
+  .narrow:has(.aside) { margin-right: max(calc((100% - var(--column) - 40pt) / 2), 250px); }
+}
+.aside {
+  position: relative;
+  float: right;
+  clear: right;
+  width: calc(250px - 20pt);
+  margin: 0 -250px 10pt 20pt;
+  margin-top: calc((var(--line-height-body) - var(--line-height-narrow)) / 2 * 1em);
+  font-family: var(--font-narrow);
+  line-height: var(--line-height-narrow);
+  opacity: 0.7;
+}
+.aside::before { content: "»"; position: absolute; left: -20pt; width: 20pt; text-align: center; }
+
+/* ---- navigation --------------------------------------------------------------- */
+.menu {
+  position: relative;
+  z-index: 10;
+  margin: 0;
+  padding: 20pt 0;
+  list-style: none;
+  text-wrap: balance;
+  line-height: 1.9;
+  font-size: calc(14pt * 1.15);           /* tabs stay their size when the text scale changes */
+}
+.pill { display: inline-block; margin: 0; padding: 0; white-space: nowrap; }
+.pill a, .pill > span {
+  background-color: var(--fill-soft);
+  border: none;
+  padding: 2px 10pt;
+  border-radius: 2px;
+}
+.pill a:hover, .pill a:focus-visible { background-color: var(--fill-accent); }
+.pill-square a { padding-left: 6pt; padding-right: 6pt; }
+/* buttons keep the handwritten face; everything else is Garamond */
+.pill a, .pill > span, .pill .tag, .theme-toggle { font-family: var(--font-button); }
+/* Menu pills and the theme button share one box model (explicit line height + padding,
+   top-aligned) so every browser draws them the same height. Inline backgrounds would
+   follow each browser's own font metrics instead. */
+.menu .pill a, .menu .theme-toggle {
+  display: inline-block;
+  line-height: 1.35;
+  vertical-align: top;
+}
+.pill a[aria-current="page"] { background-color: var(--fill-current); color: var(--fill-current-text); }
+
+.theme-toggle {
+  font-size: inherit;
+  font-family: var(--font-button);
+  color: var(--fill-accent);
+  background-color: var(--fill-soft);
+  border: none;
+  border-radius: 2px;
+  padding: 2px 8pt;
+  cursor: pointer;
+}
+.theme-toggle svg { width: 1.05em; height: 1.05em; vertical-align: -0.17em; }
+.theme-toggle:hover, .theme-toggle:focus-visible { background-color: var(--fill-accent); color: var(--fill-bg); }
+.theme-toggle:focus-visible { outline: 2px solid var(--fill-accent); outline-offset: 2px; }
+html:not(.js) .theme-toggle { display: none; }
+/* light shows the moon (go dark); dark shows the sun (go light) */
+.theme-toggle .icon-sun { display: none; }
+:root[data-theme="dark"] .theme-toggle .icon-sun { display: inline; }
+:root[data-theme="dark"] .theme-toggle .icon-moon { display: none; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .theme-toggle .icon-sun { display: inline; }
+  :root:not([data-theme="light"]) .theme-toggle .icon-moon { display: none; }
+}
+.pill-active > span { background-color: var(--fill-accent); color: var(--fill-bg); }
+.pill-active .tag { color: var(--fill-bg); }
+h1 .pill, h2 .pill { font-size: var(--body-size); letter-spacing: 0; vertical-align: middle; }
+
+.tag { color: var(--fill-accent); font-family: var(--font-narrow); letter-spacing: 0.01em; }
+a.tag { border-bottom: none; }
+.pill a.tag:hover, .pill a.tag:focus-visible { color: var(--fill-bg); }
+
+/* breathing room between the menu and the page title */
+.navigation { display: block; margin-bottom: 24pt; }
+
+/* ---- content pieces ----------------------------------------------------------- */
+.meta { margin-top: 0; }
+.title + .meta { margin-top: -10pt; }
+
+
+
+.epigraph { font-style: italic; opacity: 0.7; text-align: right; }
+.epigraph cite { font-style: normal; font-family: var(--font-narrow); }
+
+.now { margin: 20pt 0; }
+.now dt { margin-top: 20pt; }
+.now dd { margin: 0; }
+
+
+/* ---- writing + research lists ---------------------------------------------------
+   Laid out like the earlier giyushino.github.io: unboxed entries stacking
+   title / meta / blurb, the gap between entries doing the separating. */
+.list-page { --list-dim: color-mix(in srgb, var(--fill-text) 58%, var(--fill-bg)); }
+.list-page .list-head {
+  font-size: calc(var(--font-base) + var(--font-heading));
+  margin: 0 0 40px;
+}
+.list-page .entry { margin-bottom: 40px; }
+.list-page .entry:last-child { margin-bottom: 0; }
+.list-page .entry p { margin: 0; }
+.list-page .entry__title {
+  font-size: calc(var(--font-base) + var(--font-heading) / 3);
+  line-height: 1.25;
+  margin: 0 0 6px;
+}
+.list-page .entry__title a {
+  border: 0;
+  background: none;
+  color: var(--fill-text);
+  line-height: inherit;
+  transition: color 0.15s;
+}
+.list-page .entry__title a:hover, .list-page .entry__title a:focus-visible { color: var(--fill-accent); }
+.list-page .entry__authors { line-height: 1.45; margin-bottom: 4px; }
+.list-page .entry__authors strong { font-weight: 700; }
+.list-page .entry__meta { font-family: var(--font-narrow); line-height: 1.4; color: var(--list-dim); }
+.list-page .entry__meta .venue { color: var(--fill-accent); }
+.list-page .entry__note, .list-page .entry__updated { font-size: 0.85em; letter-spacing: 0.08em; text-transform: uppercase; }
+.list-page .entry__note::before, .list-page .entry__updated::before { content: "\00b7"; margin: 0 8px; }
+.list-page .entry__blurb { margin-top: 4px; }
+.list-page .draft-badge {
+  font-family: var(--font-narrow);
+  font-size: 0.55em;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--fill-accent);
+  border: 1px solid var(--fill-accent);
+  border-radius: 3px;
+  padding: 1px 6px;
+  margin-left: 10px;
+  vertical-align: middle;
+  position: relative;
+  top: -3px;
+}
+/* ---- 404 ---------------------------------------------------------------------- */
+.lost {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 20pt;
+  text-align: center;
+}
+.lost-code { font-size: calc(var(--font-base) + 9vw); margin: 0; }
+
+/* ---- narrow screens ----------------------------------------------------------- */
+@media (max-width: 900px) {
+  .menu { text-align: center; }
+  .navigation { text-align: center; }
+  .aside {
+    float: none;
+    display: inline;
+    width: auto;
+    margin: 0;
+    font-family: var(--font-body);
+    line-height: var(--line-height-body);
+  }
+  .aside::before { content: " ("; position: static; width: auto; }
+  .aside::after { content: ")"; }
+}
+
 @media (prefers-reduced-motion: reduce) {
-  #svg-bg { transition: none; }
-}
-
-/* The ASCII scene sits behind everything and never takes the pointer — the
- * glow follows the cursor wherever it is on the page, links included. */
-#ascii-bg {
-  position: fixed; inset: 0; z-index: -1;
-  width: 100vw; height: 100vh;
-  pointer-events: none;
-}
-/* Individual posts are long-form reading, so the scene goes soft: the blur
- * kills the glyph detail the eye keeps trying to resolve while keeping the
- * colour and depth. Scaled up a touch because blur samples past the canvas
- * edge and would otherwise fade the borders. */
-body[data-screen-label="post"] #ascii-bg {
-  filter: blur(7px);
-  opacity: 0.5;
-  transform: scale(1.05);
-}
-/* Same reasoning for the static scene, gentler numbers: it's already knocked
- * back by --svg-dim, so it doesn't need the canvas's 0.5 on top. The scale
- * covers the soft edge blur leaves behind — it samples past the element, so
- * an unscaled blur feathers the art away at the viewport edges. */
-body[data-screen-label="post"] #svg-bg {
-  filter: blur(4px);
-  --svg-opacity: 0.72;
-  transform: scale(1.04);
-}
-
-/* ------------ nav ------------ */
-.nav {
-  position: fixed; top: 0; left: 0; right: 0; z-index: 50;
-  display: flex; align-items: center; gap: 28px;
-  padding: 18px 32px;
-  font-family: var(--sans); font-size: 18px;
-  backdrop-filter: blur(14px);
-  background: rgba(var(--bg-rgb), 0.55);
-  border-bottom: 1px solid var(--rule);
-}
-.nav .spacer { flex: 1; }
-.nav a { color: var(--dim); border: 0; }
-.nav a:hover { color: var(--fg); }
-.nav a.active { color: var(--fg); }
-.nav .cta {
-  padding: 7px 14px; border: 1px solid var(--rule); border-radius: 999px;
-  color: var(--fg); background: rgba(255,255,255,0.02);
-}
-.nav .cta:hover { background: var(--accent); color: #000; border-color: var(--accent); }
-.nav .theme-switch {
-  display: inline-flex; align-items: center; gap: 2px;
-  padding: 3px;
-  border: 1px solid var(--rule); border-radius: 999px;
-  background: rgba(255,255,255,0.02);
-}
-.nav .theme-switch .ts-opt {
-  display: inline-flex; align-items: center; justify-content: center;
-  width: 30px; height: 24px; padding: 0;
-  border: 0; border-radius: 999px;
-  background: transparent; color: var(--dim);
-  cursor: pointer; line-height: 0;
-  transition: color .15s, background .15s;
-}
-.nav .theme-switch .ts-opt svg { width: 15px; height: 15px; display: block; }
-.nav .theme-switch .ts-opt:hover { color: var(--fg); }
-.nav .theme-switch .ts-opt.active {
-  background: rgba(255,255,255,0.10);
-  color: var(--fg);
-}
-:root[data-theme="light"] .nav .theme-switch .ts-opt.active {
-  background: rgba(0,0,0,0.06);
-}
-.nav .theme-switch .ts-color { position: relative; overflow: hidden; }
-.nav .theme-switch .ts-color .dot {
-  width: 11px; height: 11px; border-radius: 50%;
-  background: var(--accent); box-shadow: 0 0 10px var(--accent);
-}
-.nav .theme-switch .ts-color input[type="color"] {
-  opacity: 0; position: absolute; inset: 0; width: 100%; height: 100%;
-  cursor: pointer; border: 0; padding: 0;
-}
-
-/* ------------ hero ------------ */
-.hero {
-  position: relative;
-  min-height: 90vh;
-  padding: 140px 32px 90px;
-  overflow: hidden;
-}
-.hero canvas {
-  position: absolute; inset: 0; width: 100%; height: 100%;
-  z-index: 0;
-  /* subtle vignette via mask */
-  mask-image: radial-gradient(ellipse 120% 90% at 50% 40%, #000 50%, transparent 100%);
-  -webkit-mask-image: radial-gradient(ellipse 120% 90% at 50% 40%, #000 50%, transparent 100%);
-}
-/* The hero used to paint a scrim of --bg over itself to keep text readable on
- * top of the brush-trail canvas. The ASCII scene is fixed *behind* the page, so
- * that scrim covered the scene for the whole first screen — hence no scrim now.
- * Readability comes from .hero h1/.sub's text-shadow instead. */
-.hero .inner {
-  position: relative; z-index: 2;
-  max-width: 940px; margin: 0 auto;
-}
-.hero h1, .hero .sub, .hero .kicker {
-  text-shadow: 0 1px 14px rgba(0,0,0,0.7);
-}
-:root[data-theme="light"] .hero h1,
-:root[data-theme="light"] .hero .sub,
-:root[data-theme="light"] .hero .kicker {
-  text-shadow: none;
-}
-.hero h1 {
-  font-family: var(--sans);
-  font-size: clamp(44px, 7vw, 84px);
-  font-weight: 500;
-  letter-spacing: -2.2px;
-  line-height: 1.02;
-  margin: 0 0 24px;
-}
-.hero h1 .mark {
-  display: inline-block;
-  color: var(--accent);
-  font-style: normal;
-}
-.hero p.kicker {
-  font-family: var(--mono); font-size: 14px;
-  letter-spacing: 0.14em; text-transform: uppercase;
-  color: var(--accent); margin: 0 0 20px;
-  display: inline-flex; align-items: center; gap: 10px;
-}
-.hero p.kicker::before {
-  content: ""; width: 24px; height: 1px; background: var(--accent);
-}
-.hero .sub {
-  max-width: 700px; color: var(--fg); font-size: 22px; line-height: 1.6; margin: 0 0 32px;
-}
-/* A plain accent link rather than a pill button. */
-.hero .ctas { margin: 0; }
-.hero .ctas a.cta {
-  border: 0;
-  color: var(--accent);
-  font-size: 21px;
-}
-.hero .ctas a.cta:hover { border-bottom: 1px solid var(--accent); }
-
-/* ------------ sections ------------ */
-section.content {
-  max-width: 940px; margin: 0 auto;
-  padding: 96px 32px;
-  border-bottom: 1px solid var(--rule);
-}
-section.content:last-of-type { border-bottom: 0; }
-section.content:first-of-type { padding-top: 175px; }
-h2.big {
-  font-family: var(--sans); font-weight: 500;
-  font-size: clamp(34px, 4.6vw, 52px); letter-spacing: -1.2px; line-height: 1.1;
-  margin: 0 0 18px; color: var(--fg);
-}
-h2.big .light { color: var(--dim); }
-p.lead { font-size: 22px; color: var(--fg); max-width: 60ch; margin: 0 0 12px; }
-
-/* --- now card --- */
-.now-grid {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 28px;
-}
-.now-card {
-  border: 1px solid var(--rule); border-radius: 10px; padding: 20px 22px;
-  background: linear-gradient(180deg, color-mix(in srgb, var(--accent) 4%, transparent), transparent);
-  position: relative;
-}
-.now-card .k { font-family: var(--mono); font-size: 12.5px; color: var(--accent); letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 8px; }
-.now-card .v { font-size: 20px; color: var(--fg); line-height: 1.55; }
-.now-card .v em { color: var(--accent2); font-style: normal; }
-.now-card::after {
-  content: ""; position: absolute; top: 14px; right: 14px;
-  width: 6px; height: 6px; border-radius: 50%; background: var(--accent);
-  box-shadow: 0 0 10px var(--accent);
-  animation: pulse 2.2s ease-in-out infinite;
-}
-@keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
-
-/* --- writing + research lists ---
- * One shared layout for both pages: a centered page heading, then entries that
- * stack title / meta / blurb. No year column and no arrow — the gap between
- * entries does the separating, so the three lines read as one block. */
-/* Beats h2.big's own margin, so both list pages open with the same gap. */
-h2.big.list-head { text-align: center; margin-bottom: 64px; }
-.entry { margin-bottom: 44px; }
-.entry:last-child { margin-bottom: 0; }
-.entry p { margin: 0; }
-.entry__title {
-  font-size: 34px; font-weight: 500; line-height: 1.25;
-  letter-spacing: -0.6px; margin: 0 0 6px;
-}
-.entry__title a { border: 0; color: var(--fg); }
-.entry__title a:hover { color: var(--accent); }
-.entry__authors { font-size: 18px; line-height: 1.4; margin-bottom: 4px; }
-.entry__authors strong { font-weight: 600; }
-.entry__meta {
-  font-size: 18px; color: var(--dim);
-  line-height: 1.4;
-}
-.entry__meta .venue { color: var(--accent); }
-/* Small caps label for "Under review", "Oral", and the like. */
-.entry__note,
-.entry__updated {
-  font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase;
-}
-.entry__note::before,
-.entry__updated::before { content: "\00b7"; margin: 0 8px; }
-.entry__blurb { font-size: 20px; line-height: 1.5; margin-top: 6px; }
-.draft-badge {
-  border: 1px solid var(--accent); border-radius: 3px;
-  color: var(--accent);
-  font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase;
-  padding: 2px 6px; vertical-align: middle;
-  margin-left: 8px;
-  /* `middle` centres the badge on the x-height, which next to a big title
-     reads as sitting low. Nudge it toward the cap line. */
-  position: relative; top: -4px;
-}
-
-.post-page {
-  max-width: 840px;
-  margin: 0 auto;
-  padding: 96px 32px;
-  text-align: left;
-}
-.post-page h1 {
-  font-size: clamp(38px, 6vw, 64px);
-  font-weight: 500;
-  letter-spacing: -1.2px;
-  line-height: 1.05;
-  margin: 0 0 12px;
-}
-.post-page p {
-  font-size: 23px;
-  line-height: 1.65;
-  margin: 22px 0 0;
-}
-/* Markdown headings within a post. The browser default is symmetric margins,
- * which leaves a heading floating midway between the section it closes and the
- * one it opens. Weight the space above instead, and pull what follows up
- * underneath — body elements carry their spacing as a top margin, so the gap
- * under a heading belongs to the paragraph, not the heading. */
-.post-page h2, .post-page h3, .post-page h4 { margin: 40px 0 0; }
-.post-page :is(h2, h3, h4) + p,
-.post-page :is(h2, h3, h4) + ul,
-.post-page :is(h2, h3, h4) + ol,
-.post-page :is(h2, h3, h4) + pre { margin-top: 8px; }
-/* The byline reads as part of the post, not as chrome — full-strength text
- * colour and a size closer to the body copy. */
-.post-meta {
-  font-size: 19px;
-  color: var(--fg);
-}
-.backlink {
-  font-size: 17px;
-  color: var(--dim);
-}
-.backlink {
-  display: inline-block;
-  margin-bottom: 32px;
-  border: 0;
-}
-.backlink:hover {
-  color: var(--accent);
-}
-
-
-
-@media (max-width: 720px) {
-  .nav {
-    flex-wrap: wrap;
-    gap: 10px 16px;
-    padding: 14px 18px;
-  }
-  .nav .spacer {
-    display: none;
-  }
-  .nav a {
-    flex: 0 0 auto;
-  }
-  .hero {
-    height: auto;
-    min-height: 100svh;
-    padding: 132px 20px 52px;
-  }
-  .hero h1 {
-    font-size: clamp(40px, 13vw, 56px);
-    letter-spacing: -1.4px;
-  }
-  .hero .sub {
-    font-size: 17px;
-    line-height: 1.52;
-  }
-  section.content {
-    padding: 132px 20px 72px;
-  }
-  .now-grid { grid-template-columns: 1fr; }
-  .entry__title { font-size: 27px; }
+  a { transition: none; }
 }
