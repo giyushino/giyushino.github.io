@@ -22,17 +22,25 @@ body.home { position: fixed; inset: 0; background: #050d24; touch-action: none; 
   user-select: none;
 }
 
-/* Blurry stand-ins until the full art arrives; nearer layers settle sooner. */
-.scene { --tone: brightness(1); }
-.layer .main { filter: var(--tone); }
-.layer .placeholder { filter: blur(20px) var(--tone); transform: scale(1.04); transition: opacity 0.5s ease-out; }
-.js .layer .main {
+/* Loading: a soft picture of the water shows at once, then the whole aquarium
+   fades in together once every layer is decoded, so nothing pops in piecemeal.
+   No CSS filters anywhere in the scene: phones (iOS Safari especially) give up on
+   filtered full-screen layers and paint them as blank sheets. The stand-in is
+   blurred at build time instead. */
+.js .layer .main { opacity: 0; transition: opacity 0.8s ease; }
+.js .scene.ready .layer .main { opacity: 1; }
+.layer .placeholder { transition: opacity 0.4s ease 0.8s; }
+.js .scene.ready .layer .placeholder { opacity: 0; }
+
+/* Dark mode dims the art with a 10% black veil (same as brightness(0.9), minus the filter). */
+.scene::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: #000;
   opacity: 0;
-  filter: blur(20px) var(--tone);
-  transition: opacity 1.5s ease-in, filter var(--settle, 2.5s) ease-out;
+  pointer-events: none;
 }
-.js .layer.loaded .main { opacity: 1; filter: blur(0) var(--tone); }
-.js .layer.loaded .placeholder { opacity: 0; transition-delay: 1.5s; }
 
 .home-nav { position: relative; z-index: 10; }
 
@@ -54,9 +62,9 @@ body.home { position: fixed; inset: 0; background: #050d24; touch-action: none; 
 }
 
 @media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) .scene { --tone: brightness(0.9); }
+  :root:not([data-theme="light"]) .scene::after { opacity: 0.1; }
 }
-:root[data-theme="dark"] .scene { --tone: brightness(0.9); }
+:root[data-theme="dark"] .scene::after { opacity: 0.1; }
 
 @media (prefers-reduced-motion: reduce) {
   .js .layer .main, .layer .placeholder { transition: none; }

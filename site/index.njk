@@ -4,16 +4,18 @@ permalink: /
 isHome: true
 title: Home
 layers:
-  - { file: 0_water, speed: 0.08, settle: 3.5 }
-  - { file: 1_far, speed: 0.3, settle: 3 }
-  - { file: 2_sharks, speed: 0.5, settle: 2.5 }
-  - { file: 3_near, speed: 0.75, settle: 2 }
-  - { file: 4_walkway, speed: 1, settle: 1.5 }
+  - { file: 0_water, speed: 0.08 }
+  - { file: 1_far, speed: 0.3 }
+  - { file: 2_sharks, speed: 0.5 }
+  - { file: 3_near, speed: 0.75 }
+  - { file: 4_walkway, speed: 1 }
 ---
 <div class="scene" role="img" aria-label="A girl walks along an aquarium railing while whale sharks, a ray and schools of fish glide through the blue tank beside her.">
   {%- for layer in layers %}
-  <div class="layer" data-speed="{{ layer.speed }}" style="--settle: {{ layer.settle }}s">
+  <div class="layer" data-speed="{{ layer.speed }}">
+    {%- if loop.first %}
     <img class="placeholder" src="/img/aquarium/{{ layer.file }}-placeholder.webp" alt="" />
+    {%- endif %}
     <img class="main" src="/img/aquarium/{{ layer.file }}.webp" alt="" />
   </div>
   {%- endfor %}

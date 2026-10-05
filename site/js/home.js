@@ -49,13 +49,22 @@
     if (!reduce.matches) requestAnimationFrame(frame)
   }
 
-  // Blurry placeholders until each layer's full image arrives; nearer layers settle first.
-  for (const { el } of layers) {
+  // Fade the whole scene in at once when every layer has downloaded (or after 6 s,
+  // showing whatever has arrived), so layers never pop in one by one. Decoding gets
+  // at most 0.4 s on top: decode() can stall, e.g. while the tab is in the background.
+  const scene = document.querySelector('.scene')
+  const ready = () => scene.classList.add('ready')
+  const wait = ms => new Promise(res => setTimeout(res, ms))
+  const loaded = img => img.complete && img.naturalWidth ? Promise.resolve() : new Promise(res => {
+    img.addEventListener('load', res, { once: true })
+    img.addEventListener('error', res, { once: true })
+  })
+  const decodedSoon = img => Promise.race([(img.decode ? img.decode() : Promise.resolve()).catch(() => {}), wait(400)])
+  Promise.all(layers.map(({ el }) => {
     const img = el.querySelector('.main')
-    const done = () => el.classList.add('loaded')
-    if (img.complete && img.naturalWidth) done()
-    else img.addEventListener('load', done, { once: true })
-  }
+    return loaded(img).then(() => decodedSoon(img))
+  })).then(ready)
+  setTimeout(ready, 6000)
 
   window.addEventListener('resize', layout)
   layout()
