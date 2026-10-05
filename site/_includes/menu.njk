@@ -5,7 +5,7 @@
   <li class="pill"><a class="tag" href="{{ item.path }}"{% if here %} aria-current="page"{% endif %}>{% if here %}<strong>{{ item.title }}</strong>{% else %}{{ item.title }}{% endif %}</a></li>
   {%- endfor %}
   {%- for item in nav.elsewhere %}
-  {#- everything marked ↬ (CV included) opens in a new tab -#}
+  {# everything marked ↬ (CV included) opens in a new tab #}
   <li class="pill"><a class="tag" href="{{ item.url }}" target="_blank" rel="noopener">{{ item.title }} ↬</a></li>
   {%- endfor %}
   <li class="pill">
