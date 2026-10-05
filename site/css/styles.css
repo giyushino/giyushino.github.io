@@ -19,13 +19,14 @@
 
   --font-base: 15pt;                      /* headings scale from this */
   --font-heading: 20pt;
-  --font-body: "EB Garamond", "Iowan Old Style", Georgia, serif;
-  --font-title: var(--font-body);
-  --font-mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
-  --font-narrow: var(--font-body);          /* meta lines, margin notes */
-  --font-button: "Patrick Hand", "Comic Neue", "Segoe Print", sans-serif;   /* menu tabs, pills */
+  --font-body: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --font-title: "DM Serif Display", Georgia, serif;
+  --font-mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+  --font-hand: "Patrick Hand", "Comic Neue", "Segoe Print", sans-serif;
+  --font-button: var(--font-body);          /* menu tabs, theme toggle */
+  --font-narrow: var(--font-hand);          /* dates, venues, margin notes: handwritten */
 
-  --body-size: calc(var(--font-base) * 1.15);   /* Garamond runs small on its em */
+  --body-size: 1.15rem;
   --line-height-body: 1.7;
   --line-height-narrow: 1.4;
   --line-height-heading: 1.1;
@@ -81,9 +82,9 @@ p { margin-top: 20pt; margin-bottom: 20pt; text-wrap: pretty; }
 
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-title);
-  font-weight: 500;
+  font-weight: 400;                 /* DM Serif Display has a single weight */
   line-height: var(--line-height-heading);
-  letter-spacing: -0.01em;
+  letter-spacing: 0;
   hyphens: auto;
   text-wrap: balance;
   margin-top: 40pt;
@@ -221,7 +222,7 @@ th { font-family: var(--font-narrow); font-weight: normal; letter-spacing: 0.05e
   list-style: none;
   text-wrap: balance;
   line-height: 1.9;
-  font-size: calc(14pt * 1.15);           /* tabs stay their size when the text scale changes */
+  font-size: 1.02rem;                     /* tab text, sized for Bricolage */
 }
 .pill { display: inline-block; margin: 0; padding: 0; white-space: nowrap; }
 .pill a, .pill > span {
@@ -232,7 +233,7 @@ th { font-family: var(--font-narrow); font-weight: normal; letter-spacing: 0.05e
 }
 .pill a:hover, .pill a:focus-visible { background-color: var(--fill-accent); }
 .pill-square a { padding-left: 6pt; padding-right: 6pt; }
-/* buttons keep the handwritten face; everything else is Garamond */
+/* menu tabs and the theme toggle use the button face */
 .pill a, .pill > span, .pill .tag, .theme-toggle { font-family: var(--font-button); }
 /* Menu pills and the theme button share one box model (explicit line height + padding,
    top-aligned) so every browser draws them the same height. Inline backgrounds would
@@ -296,7 +297,8 @@ a.tag { border-bottom: none; }
    title / meta / blurb, the gap between entries doing the separating. */
 .list-page { --list-dim: color-mix(in srgb, var(--fill-text) 58%, var(--fill-bg)); }
 .list-page .list-head {
-  font-size: calc(var(--font-base) + var(--font-heading));
+  font-size: clamp(2.1rem, 4.2vw, 2.7rem);   /* same as post and About titles */
+  line-height: 1.12;
   margin: 0 0 40px;
 }
 .list-page .entry { margin-bottom: 40px; }
@@ -336,6 +338,158 @@ a.tag { border-bottom: none; }
   position: relative;
   top: -3px;
 }
+/* ---- blog (writing index + posts) ----------------------------------------------
+   Format inspired by jzhao.xyz (Jacky Zhao, MIT; see THIRD_PARTY_NOTICES.md):
+   DM Serif Display titles, Bricolage Grotesque prose, a handwritten date line,
+   #tag chips, a hanging quote mark and a "* * *" section break. Scoped to
+   body.blog so the rest of the site keeps its own type. */
+body.blog {
+  --blog-body: var(--font-body);
+  --blog-head: var(--font-title);
+  --blog-code: var(--font-mono);
+  --blog-dim: color-mix(in srgb, var(--fill-text) 55%, var(--fill-bg));
+  --blog-link-hover: color-mix(in srgb, var(--fill-accent) 72%, white);
+}
+body.blog .post, body.blog .post-index { font-family: var(--blog-body); font-size: 1.15rem; line-height: 1.7; }
+
+body.blog .post-title {
+  font-family: var(--blog-head);
+  font-weight: 400;
+  font-size: clamp(2.1rem, 4.2vw, 2.7rem);
+  line-height: 1.12;
+  letter-spacing: 0;
+  margin: 0 0 0.4rem;
+}
+body.blog .post-meta { font-family: var(--font-hand); color: var(--blog-dim); font-size: 1.05rem; margin: 0 0 0.7rem; }
+body.blog .post-tags { margin: 0 0 1.8rem; }
+/* italic DM Serif subtitle under a title (About) */
+body.blog .post-lede {
+  font-family: var(--blog-head);
+  font-style: italic;
+  font-size: 1.55rem;
+  line-height: 1.3;
+  color: var(--blog-dim);
+  margin: 0 0 1.8rem;
+}
+
+body.blog .chip {
+  display: inline-block;
+  font-family: var(--blog-body);
+  font-size: 0.82rem;
+  font-weight: 500;
+  line-height: 1.6;
+  color: var(--fill-accent);
+  background: color-mix(in srgb, var(--fill-accent) 13%, transparent);
+  padding: 0 0.45rem;
+  border-radius: 5px;
+  margin-right: 0.35rem;
+  white-space: nowrap;
+}
+body.blog .chip-draft { color: var(--blog-dim); background: color-mix(in srgb, var(--fill-text) 9%, transparent); }
+
+/* prose */
+body.blog .post-body > :first-child { margin-top: 0; }
+body.blog .post-body p { margin: 0 0 1.1em; }
+body.blog .post-body :is(h2, h3, h4, h5, h6) {
+  font-family: var(--blog-head);
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 1.2;
+  margin: 2em 0 0.6em;
+}
+body.blog .post-body h2 { font-size: 1.75rem; }
+body.blog .post-body h3 { font-size: 1.4rem; }
+body.blog .post-body :is(h4, h5, h6) { font-size: 1.15rem; }
+body.blog .post-body strong { font-weight: 600; color: var(--fill-text); }
+body.blog .post-body a {
+  color: var(--fill-accent);
+  font-weight: 600;
+  border: 0;
+  background: none;
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, var(--fill-accent) 55%, transparent);
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 2px;
+  transition: color 0.15s ease;
+}
+body.blog .post-body a:hover, body.blog .post-body a:focus-visible { color: var(--blog-link-hover); }
+body.blog .post-body :is(ul, ol) { padding-left: 1.5rem; margin: 0 0 1.1em; }
+body.blog .post-body li { margin: 0.35em 0; }
+body.blog .post-body img { margin: 1.6rem auto; border-radius: 6px; }
+
+/* a large hanging opening quote instead of a rule */
+body.blog .post-body blockquote {
+  position: relative;
+  border-left: 0;
+  padding-left: 0;
+  margin: 1.6rem 0 1.6rem 2.5rem;
+}
+body.blog .post-body blockquote::before {
+  content: "\201C";
+  position: absolute;
+  left: -2.5rem;
+  top: 0;
+  transform: translateY(-0.08em);
+  font-family: var(--blog-head);
+  font-size: 3.5rem;
+  line-height: 1;
+  color: var(--fill-accent);
+  opacity: 0.45;
+}
+
+/* section break: * * * */
+body.blog .post-body hr {
+  border: 0;
+  height: 0;
+  margin: 2.2em auto;
+  overflow: visible;
+  text-align: center;
+}
+body.blog .post-body hr::after {
+  content: "* * *";
+  display: inline-block;
+  margin-top: -0.75em;
+  font-size: 1.4em;
+  letter-spacing: 0.3em;
+  color: var(--fill-accent);
+}
+
+body.blog .post-body code { font-family: var(--blog-code); font-size: 0.86em; }
+body.blog .post-body pre { font-family: var(--blog-code); font-size: 0.85rem; line-height: 1.6; margin: 1.6rem 0; border-radius: 6px; }
+body.blog .post-body pre code { font-size: 1em; }
+
+/* writing index: date | title | tags rows */
+body.blog .post-count { color: var(--blog-dim); font-size: 0.95rem; margin: 0 0 1.6rem; }
+body.blog .post-list { list-style: none; padding: 0; margin: 0; }
+body.blog .post-list > li {
+  display: grid;
+  grid-template-columns: 7.2rem minmax(0, 1fr) auto;
+  align-items: baseline;
+  column-gap: 1rem;
+  margin: 0;
+  padding: 0.5rem 0;
+}
+body.blog .post-list__date { font-family: var(--font-hand); color: var(--blog-dim); font-size: 1rem; white-space: nowrap; }
+body.blog .post-list__title {
+  font-family: var(--blog-head);
+  font-size: 1.3rem;
+  line-height: 1.3;
+  color: var(--fill-accent);
+  border: 0;
+  background: none;
+  transition: color 0.15s ease;
+}
+body.blog .post-list__title:hover, body.blog .post-list__title:focus-visible { color: var(--blog-link-hover); }
+body.blog .post-list__tags { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 0.3rem; }
+body.blog .post-list__tags .chip { margin: 0; }
+
+@media (max-width: 560px) {
+  body.blog .post-list > li { grid-template-columns: minmax(0, 1fr); row-gap: 0.15rem; padding: 0.7rem 0; }
+  body.blog .post-list__tags { justify-content: flex-start; }
+  body.blog .post-body blockquote { margin-left: 1.75rem; }
+  body.blog .post-body blockquote::before { left: -1.75rem; font-size: 2.75rem; }
+}
+
 /* ---- 404 ---------------------------------------------------------------------- */
 .lost {
   min-height: 100vh;

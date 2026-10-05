@@ -2,7 +2,7 @@
 title: Of Human Bondage
 date: 2026-09-08
 tag: essay
-readingTime: ?? min
+readingTime: 1 min
 blurb: Short reflection regarding Of Human Bondage
 ---
 

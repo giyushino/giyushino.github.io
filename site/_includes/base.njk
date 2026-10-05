@@ -20,12 +20,12 @@
     <script src="/js/theme.js" defer></script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=IBM+Plex+Mono:ital,wght@0,400;1,400&family=Patrick+Hand&display=swap" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300..700&family=DM+Serif+Display:ital@0;1&family=JetBrains+Mono:ital,wght@0,400;0,600;1,400&family=Patrick+Hand&display=swap" />
     {% if '"katex' in content %}<link rel="stylesheet" href="/css/katex/katex.min.css" />{% endif %}
     <link rel="stylesheet" href="/css/styles.css" />
     {% if isHome %}<link rel="stylesheet" href="/css/home.css" />{% endif %}
   </head>
-  <body{% if isHome %} class="home"{% endif %}>
+  <body{% if isHome %} class="home"{% elif blog %} class="blog"{% endif %}>
     {{ content | safe }}
   </body>
 </html>

@@ -2,26 +2,31 @@
 layout: page.njk
 title: About
 permalink: /about/
+blog: true
 ---
-<h1 class="title">{{ site.author }}</h1>
+<article class="post">
+  <h1 class="post-title">{{ site.author }}</h1>
+  <p class="post-meta">ML researcher &middot; vim enthusiast</p>
+  <p class="post-lede">Traversing life&rsquo;s loss landscape.</p>
 
-<p class="epigraph">Traversing life&rsquo;s loss landscape.<br /><cite>&mdash; ML researcher &middot; vim enthusiast</cite></p>
+  <div class="post-body">
+    <p>
+      I'm Allan, a junior at UCLA studying computational mathematics. I work as an
+      undergraduate researcher at BigML, where I explore all things data under
+      Professor Baharan Mirzasoleiman. During Winter '25, I was a research intern at
+      DatologyAI working on multimodal data curation and reasoning VLMs.
+    </p>
 
-<p>
-  I'm Allan, a junior at UCLA studying computational mathematics. I work as an
-  undergraduate researcher at BigML, where I explore all things data under
-  Professor Baharan Mirzasoleiman. During Winter '25, I was a research intern at
-  DatologyAI working on multimodal data curation and reasoning VLMs.
-</p>
+    <p>
+      I enjoy working on my distributed training stack, thinking about how to make
+      silicon think, reading classical literature, writing poetry, coding in Neovim,
+      ricing Linux, and talking to friends (probably my favorite activity).
+    </p>
 
-<p>
-  I enjoy working on my distributed training stack, thinking about how to make
-  silicon think, reading classical literature, writing poetry, coding in Neovim,
-  ricing Linux, and talking to friends (probably my favorite activity).
-</p>
-
-<p>
-  Feel free to reach out about anything, especially if it's ML related! The
-  <a href="/contact/">contact page</a> has the ways to find me, and the
-  <a href="/writing/">writing</a> page has a loose collection of thoughts.
-</p>
+    <p>
+      Feel free to reach out about anything, especially if it's ML related! Email me at
+      <a href="mailto:{{ site.email }}">{{ site.email }}</a>, and the
+      <a href="/writing/">writing</a> page has a loose collection of thoughts.
+    </p>
+  </div>
+</article>

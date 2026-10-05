@@ -40,6 +40,12 @@ module.exports = function (eleventyConfig) {
       year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC',
     })
   )
+  // Aug 02, 2026
+  eleventyConfig.addFilter('shortDate', date =>
+    new Date(date).toLocaleDateString('en-US', {
+      year: 'numeric', month: 'short', day: '2-digit', timeZone: 'UTC',
+    })
+  )
   // 2026-09-08
   eleventyConfig.addFilter('isoDate', date => new Date(date).toISOString().slice(0, 10))
   // RFC 3339 for the feed

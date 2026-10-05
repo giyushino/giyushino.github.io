@@ -1,13 +1,21 @@
 ---
 layout: page.njk
+blog: true
 ---
 {%- set minutes = content | readingMinutes %}
-<article>
-  <h1 class="title">{{ title }}{% if draft %} <span class="pill pill-active"><span class="tag">draft</span></span>{% endif %}</h1>
-  <p class="tag meta">
-    {{ date | longDate }} · About {{ minutes | plural("minute") }} long
-    {%- if updated %} · Updated {{ updated | longDate }}{% endif %}
-    {%- if tag %} · {{ tag }}{% endif %}
+<article class="post">
+  <h1 class="post-title">{{ title }}</h1>
+  <p class="post-meta">
+    {{ date | shortDate }}, {{ minutes }} min read
+    {%- if updated %} · updated {{ updated | shortDate }}{% endif %}
   </p>
-  {{ content | safe }}
+  {%- if tag or draft %}
+  <p class="post-tags">
+    {%- if draft %}<span class="chip chip-draft">draft</span>{% endif %}
+    {%- if tag %}<span class="chip">#{{ tag }}</span>{% endif %}
+  </p>
+  {%- endif %}
+  <div class="post-body">
+    {{ content | safe }}
+  </div>
 </article>
