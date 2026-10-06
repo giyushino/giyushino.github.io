@@ -9,7 +9,7 @@ npm run serve:prod   # live-reloading server without drafts (what will ship), ht
 npm run build        # production build into _site/ (drafts dropped)
 ```
 
-- `site/index.njk` is the home scene: the aquarium layers in `site/img/aquarium/`, moved by `site/js/home.js`.
+- `site/pages/index.njk` is the home scene: the aquarium layers in `site/img/aquarium/`, moved by `site/js/home.js`.
 - Pages: `about`, `writing`, `research` (plus an unlinked `now`) (`site/*.njk`), laid out by `_includes/page.njk`.
 - Posts live in `site/posts/` (`in_prog/` is always draft). Reading time is computed, so `readingTime` in front matter is ignored.
 - Menu entries: `site/_data/nav.json`.
