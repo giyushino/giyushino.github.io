@@ -16,6 +16,9 @@ module.exports = function (eleventyConfig) {
     'site/img': 'img',
     'site/files': 'files',
     'site/favicon.svg': 'favicon.svg',
+    'site/favicon.png': 'favicon.png',
+    'site/favicon.ico': 'favicon.ico',
+    'site/apple-touch-icon.png': 'apple-touch-icon.png',
     'site/CNAME': 'CNAME',  // custom domain (allanyz.com) for GitHub Pages
     'node_modules/katex/dist/katex.min.css': 'css/katex/katex.min.css',
     'node_modules/katex/dist/fonts/*.woff2': 'css/katex/fonts',
