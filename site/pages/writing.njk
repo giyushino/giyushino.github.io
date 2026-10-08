@@ -5,13 +5,15 @@ permalink: /writing/
 blog: true
 ---
 <section class="post-index">
-  <h1 class="post-title">Loose Collection of Thoughts</h1>
-  <p class="post-count">{{ collections.posts.length | plural("post") }} so far.</p>
+  <header class="page-head">
+    <h1>Loose Collection of Thoughts</h1>
+    <p class="note">{{ collections.posts.length | plural("post") }} so far.</p>
+  </header>
 
   <ul class="post-list">
     {%- for post in collections.posts %}
     <li>
-      <span class="post-list__date">{{ post.date | shortDate }}</span>
+      <span class="post-list__date note">{{ post.date | shortDate }}</span>
       <a class="post-list__title" href="{{ post.url }}">{{ post.data.title }}</a>
       <span class="post-list__tags">
         {%- if post.data.draft %}<span class="chip chip-draft">draft</span>{% endif %}

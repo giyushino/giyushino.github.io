@@ -2,7 +2,7 @@
   <li class="pill pill-square"><a class="tag" href="/"{% if page.url == "/" %} aria-current="page"{% endif %}><strong>{{ site.initials }}</strong></a></li>
   {%- for item in nav.pages %}
   {%- set here = page.url == item.path or (page.url.startsWith(item.path) and item.path != "/") %}
-  <li class="pill"><a class="tag" href="{{ item.path }}"{% if here %} aria-current="page"{% endif %}>{% if here %}<strong>{{ item.title }}</strong>{% else %}{{ item.title }}{% endif %}</a></li>
+  <li class="pill"><a class="tag" href="{{ item.path }}" data-label="{{ item.title }}"{% if here %} aria-current="page"{% endif %}>{{ item.title }}</a></li>
   {%- endfor %}
   {%- for item in nav.elsewhere %}
   {# everything marked ↬ (CV included) opens in a new tab #}

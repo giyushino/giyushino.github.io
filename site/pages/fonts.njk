@@ -1,0 +1,239 @@
+---
+layout: page.njk
+title: Heading fonts
+permalink: /fonts/
+blog: true
+draft: true
+fonts:
+  - id: bricolage
+    name: Bricolage Grotesque
+    family: '"Bricolage Grotesque", system-ui, sans-serif'
+    weight: 650
+    tracking: -0.015em
+    lede: normal
+    about: "Current. Your body face at display size: one family, no serif, hierarchy from weight."
+  - id: dm
+    name: DM Serif Display
+    family: '"DM Serif Display", Georgia, serif'
+    weight: 400
+    about: "The old heading face. High-contrast display serif: the look that reads as AI-made."
+  - id: young
+    name: Young Serif
+    family: '"Young Serif", Georgia, serif'
+    weight: 400
+    lede: normal
+    about: "Low contrast, chunky and warm. One weight and no italic, so the lede goes upright."
+  - id: alegreya
+    name: Alegreya
+    family: 'Alegreya, Georgia, serif'
+    weight: 500
+    about: "Calligraphic book serif with a literary feel, plus a real italic for the lede."
+  - id: plex
+    name: IBM Plex Serif
+    family: '"IBM Plex Serif", Georgia, serif'
+    weight: 500
+    about: "Sturdy, low-contrast technical serif. Reads as research."
+  - id: zilla
+    name: Zilla Slab
+    family: '"Zilla Slab", Georgia, serif'
+    weight: 600
+    about: "Slab serif with a bit of quirk. Heavy and friendly."
+  - id: recursive
+    name: Recursive Casual
+    family: 'Recursive, system-ui, sans-serif'
+    weight: 650
+    variation: '"CASL" 1'
+    about: "Casual, brushy sans whose sibling is a code font. A nod to the vim side."
+---
+{#- Draft-only page for choosing a heading face: everything below uses the site's real
+    styles, and the switcher just swaps the --*-heading tokens on <html>. -#}
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Young+Serif&family=Alegreya:ital,wght@0,400..900;1,400..900&family=IBM+Plex+Serif:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Zilla+Slab:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Recursive:slnt,wght,CASL@-15..0,300..1000,0..1&display=swap" />
+<style>
+  {%- for f in fonts %}
+  [data-heading="{{ f.id }}"] {
+    --font-heading: {{ f.family | safe }};
+    --weight-heading: {{ f.weight }};
+    --tracking-heading: {{ f.tracking or 0 }};
+    --lede-style: {{ f.lede or "italic" }};
+  }
+  {%- if f.variation %}
+  [data-heading="{{ f.id }}"] :is(h1, h2, h3, h4, .lede, .post-list__title, .font-row__title) { font-variation-settings: {{ f.variation | safe }}; }
+  {%- endif %}
+  {%- endfor %}
+
+  .font-pick {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: var(--fill-bg);
+    padding: 0.75rem 0;
+    margin-bottom: 2.5rem;
+    border-bottom: 2px dashed var(--fill-soft);
+  }
+  .font-pick ul { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 6px; }
+  .font-pick li { margin: 0; }
+  .font-pick button, .font-row__pick {
+    font-size: var(--size-ui);
+    line-height: 1.35;
+    padding: 2px 10pt;
+    border: 0;
+    border-radius: 2px;
+    background: var(--fill-soft);
+    color: var(--fill-accent);
+    cursor: pointer;
+  }
+  .font-pick button[aria-pressed="true"] { background: var(--fill-current); color: var(--fill-current-text); }
+  .font-pick button:hover, .font-row__pick:hover { background: var(--fill-accent); color: var(--fill-bg); }
+  .font-pick .note { margin: 0.6rem 0 0; }
+
+  .font-section { margin-bottom: 4rem; }
+  .font-section > h5:first-child { margin-top: 0; margin-bottom: 1.25rem; color: var(--fill-accent); }
+
+  /* the home scene, scaled down: all five layers stacked, no parallax */
+  .font-scene { position: relative; aspect-ratio: 2000 / 1061; overflow: hidden; border-radius: 2px; }
+  .font-scene img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; max-width: none; margin: 0; border-radius: 0; }
+  .font-scene h1 { position: absolute; left: 1rem; bottom: 0.6rem; margin: 0; color: #f7f2ed; }
+
+  .font-row { padding: 1.25rem 0; border-top: 2px dashed var(--fill-soft); }
+  .font-row > * { margin: 0; }
+  .font-row > * + * { margin-top: 0.4rem; }
+  .font-row__title {
+    font-family: var(--font-heading);
+    font-weight: var(--weight-heading);
+    letter-spacing: var(--tracking-heading);
+    font-size: var(--size-h1);
+    line-height: var(--leading-tight);
+  }
+  .font-row__pick { font-size: var(--size-small); margin-left: 0.5rem; vertical-align: 1px; }
+</style>
+
+<div class="font-pick">
+  <ul>
+    {%- for f in fonts %}
+    <li><button type="button" data-pick="{{ f.id }}" data-about="{{ f.about }}" aria-pressed="false"
+      style="font-family: {{ f.family }}; font-weight: {{ f.weight }};{% if f.variation %} font-variation-settings: {{ f.variation | safe }};{% endif %}">{{ f.name }}</button></li>
+    {%- endfor %}
+  </ul>
+  <p class="note font-about" aria-live="polite"></p>
+</div>
+
+<section class="font-section">
+  <h5>Home (scaled down)</h5>
+  <div class="font-scene">
+    {%- for layer in ["0_water", "1_far", "2_sharks", "3_near", "4_walkway"] %}
+    <img src="/img/aquarium/{{ layer }}.webp" alt="" />
+    {%- endfor %}
+    <h1>{{ site.author }}</h1>
+  </div>
+</section>
+
+<section class="font-section post">
+  <h5>About</h5>
+  <header class="page-head">
+    <h1>{{ site.author }}</h1>
+    <p class="note">ML researcher &middot; vim enthusiast</p>
+    <p class="lede">Traversing life&rsquo;s loss landscape.</p>
+  </header>
+  <div class="post-body">
+    <p>I'm Allan, a junior at UCLA studying computational mathematics. I work as an undergraduate researcher at BigML, where I explore all things data.</p>
+  </div>
+</section>
+
+<section class="font-section post-index">
+  <h5>Writing</h5>
+  <header class="page-head">
+    <h1>Loose Collection of Thoughts</h1>
+    <p class="note">{{ collections.posts.length | plural("post") }} so far.</p>
+  </header>
+  <ul class="post-list">
+    {%- for post in collections.posts %}{% if loop.index <= 5 %}
+    <li>
+      <span class="post-list__date note">{{ post.date | shortDate }}</span>
+      <a class="post-list__title" href="{{ post.url }}">{{ post.data.title }}</a>
+      <span class="post-list__tags">
+        {%- if post.data.draft %}<span class="chip chip-draft">draft</span>{% endif %}
+        {%- if post.data.tag %}<span class="chip">#{{ post.data.tag }}</span>{% endif %}
+      </span>
+    </li>
+    {%- endif %}{% endfor %}
+  </ul>
+</section>
+
+<section class="font-section list-page">
+  <h5>Research</h5>
+  <header class="page-head">
+    <h1>Papers &amp; preprints</h1>
+  </header>
+  {%- for pub in publications | sortByYear %}
+  <div class="entry">
+    <h2 class="entry__title"><a href="{{ pub.url }}" target="_blank" rel="noopener">{{ pub.title }}</a></h2>
+    <p class="entry__authors">{{ pub.authors | highlightAuthor(site.author) | safe }}</p>
+    <p class="entry__meta note"><span class="venue">{{ pub.venue }}</span></p>
+  </div>
+  {%- endfor %}
+</section>
+
+<section class="font-section post">
+  <h5>A post, every heading level</h5>
+  <header class="page-head">
+    <h1>Torchure, My Very Own Training Stack!</h1>
+    <p class="note">Aug 16, 2026, 9 min read</p>
+    <p class="post-tags"><span class="chip">#technical</span></p>
+  </header>
+  <div class="post-body">
+    <p>After putting this project off for months, I finally opened Neovim and started writing my own distributed training stack, <a href="https://github.com/giyushino/torchure">Torchure</a>. Despite the name, <em>most</em> of the development process wasn't torturous.</p>
+    <h2>The Basics</h2>
+    <p>For most PyTorch tutorials you'll see, they usually train a model on one GPU. The flow is usually always the same.</p>
+    <h3>Gradient accumulation</h3>
+    <p>When a batch won't fit in memory, we split it into micro-batches and add up their gradients before stepping.</p>
+    <h4>A minor heading</h4>
+    <p>Body text under a fourth-level heading, for scale.</p>
+    <h5>A run-in label</h5>
+    <p>h5 and h6 stay in the body face whatever the heading font is.</p>
+  </div>
+</section>
+
+<section class="font-section">
+  <h5>All of them at once</h5>
+  {%- for f in fonts %}
+  <div class="font-row" data-heading="{{ f.id }}">
+    <p class="note">{{ f.name }}<button type="button" class="font-row__pick" data-pick="{{ f.id }}">try it</button></p>
+    <p class="font-row__title">Loose Collection of Thoughts</p>
+    <p class="lede">Traversing life&rsquo;s loss landscape.</p>
+  </div>
+  {%- endfor %}
+</section>
+
+<script>
+  // Pick a heading font for the whole page: buttons, ←/→, or #id in the URL.
+  (() => {
+    const root = document.documentElement
+    const buttons = [...document.querySelectorAll('.font-pick button')]
+    const ids = buttons.map(b => b.dataset.pick)
+    const about = document.querySelector('.font-about')
+
+    function pick(id) {
+      if (!ids.includes(id)) id = ids[0]
+      root.dataset.heading = id
+      for (const b of buttons) {
+        const on = b.dataset.pick === id
+        b.setAttribute('aria-pressed', on)
+        if (on) about.textContent = b.dataset.about
+      }
+      history.replaceState(null, '', '#' + id)
+    }
+
+    document.addEventListener('click', e => {
+      const b = e.target.closest('[data-pick]')
+      if (!b) return
+      pick(b.dataset.pick)
+      if (b.classList.contains('font-row__pick')) window.scrollTo({ top: 0, behavior: 'smooth' })
+    })
+    document.addEventListener('keydown', e => {
+      if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return
+      const i = ids.indexOf(root.dataset.heading)
+      pick(ids[(i + (e.key === 'ArrowRight' ? 1 : ids.length - 1)) % ids.length])
+    })
+    pick(location.hash.slice(1))
+  })()
+</script>

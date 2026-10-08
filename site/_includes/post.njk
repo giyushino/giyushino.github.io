@@ -4,17 +4,19 @@ blog: true
 ---
 {%- set minutes = content | readingMinutes %}
 <article class="post">
-  <h1 class="post-title">{{ title }}</h1>
-  <p class="post-meta">
-    {{ date | shortDate }}, {{ minutes }} min read
-    {%- if updated %} · updated {{ updated | shortDate }}{% endif %}
-  </p>
-  {%- if tag or draft %}
-  <p class="post-tags">
-    {%- if draft %}<span class="chip chip-draft">draft</span>{% endif %}
-    {%- if tag %}<span class="chip">#{{ tag }}</span>{% endif %}
-  </p>
-  {%- endif %}
+  <header class="page-head">
+    <h1>{{ title }}</h1>
+    <p class="note">
+      {{ date | shortDate }}, {{ minutes }} min read
+      {%- if updated %} · updated {{ updated | shortDate }}{% endif %}
+    </p>
+    {%- if tag or draft %}
+    <p class="post-tags">
+      {%- if draft %}<span class="chip chip-draft">draft</span>{% endif %}
+      {%- if tag %}<span class="chip">#{{ tag }}</span>{% endif %}
+    </p>
+    {%- endif %}
+  </header>
   <div class="post-body">
     {{ content | safe }}
   </div>

@@ -4,7 +4,9 @@ title: Research
 permalink: /research/
 ---
 <section class="list-page">
-  <h1 class="list-head">Papers &amp; preprints</h1>
+  <header class="page-head">
+    <h1>Papers &amp; preprints</h1>
+  </header>
 
   {%- for pub in publications | sortByYear %}
   <div class="entry">
@@ -12,7 +14,7 @@ permalink: /research/
       {%- if pub.url %}<a href="{{ pub.url }}" target="_blank" rel="noopener">{{ pub.title }}</a>{% else %}{{ pub.title }}{% endif -%}
     </h2>
     <p class="entry__authors">{{ pub.authors | highlightAuthor(site.author) | safe }}</p>
-    <p class="entry__meta">
+    <p class="entry__meta note">
       <span class="venue">{{ pub.venue }}</span>{% if pub.note %}<span class="entry__note">{{ pub.note }}</span>{% endif %}
     </p>
   </div>

@@ -1,5 +1,6 @@
 /* Home: one fixed screen, the aquarium layers behind a pill menu and the name. */
 html, body.home { height: 100%; overflow: hidden; }
+html { scrollbar-gutter: auto; }   /* never scrolls; no gutter strip beside the art */
 body.home { position: fixed; inset: 0; background: #050d24; touch-action: none; }
 
 .scene { position: fixed; inset: 0; overflow: hidden; }
@@ -54,6 +55,7 @@ body.home { position: fixed; inset: 0; background: #050d24; touch-action: none; 
 }
 .home-name .title {
   margin: 0;
+  font-size: var(--size-display);
   color: #f7f2ed;
 }
 
