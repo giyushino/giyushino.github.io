@@ -18,13 +18,13 @@
   --fill-code: #030b1f;        /* walkway abyss */
   --fill-dim: color-mix(in srgb, var(--fill-text) 58%, var(--fill-bg));  /* notes, ledes, h6 */
 
-  /* A family per role. Headings share the body face and stand apart by weight; swapping
-     them for another face only touches the --*-heading tokens and --lede-style (and
-     the Google Fonts link in base.njk). */
+  /* A family per role. Headings and notes share the body face: headings stand apart by
+     weight, notes by size and colour. Giving either its own face only touches its
+     tokens (plus --lede-style for headings, and the Google Fonts link in base.njk). */
   --font-body: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;  /* prose, menu, labels */
   --font-heading: var(--font-body);                                       /* h1–h4, ledes, list titles */
   --font-mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
-  --font-note: "Patrick Hand", "Comic Neue", "Segoe Print", sans-serif;   /* dates, venues, margin notes */
+  --font-note: var(--font-body);                                          /* dates, venues, margin notes */
   --weight-heading: 650;
   --tracking-heading: -0.015em;
   --lede-style: normal;        /* Bricolage has no italic; a faked slant looks off */
@@ -36,8 +36,7 @@
   --size-h2: 1.75rem;                                  /* 28 */
   --size-h3: 1.375rem;                                 /* 22 */
   --size-body: 1.125rem;                               /* 18 */
-  --size-note: 1.0625rem;                              /* 17  Patrick Hand runs narrow, so this reads a step under 18 */
-  --size-ui: 1rem;                                     /* 16  menu tabs, theme toggle */
+  --size-note: 1rem;                                   /* 16  also the menu */
   --size-small: 0.8125rem;                             /* 13 */
 
   --leading-tight: 1.15;   /* display, h1, h2 */
@@ -106,7 +105,7 @@ body {
      h5, h6    run-in labels (h6 dimmed)         body caps     --size-small
      p         prose                             body          --size-body
      .lede     subtitle under a title            heading ital  --size-h3, dimmed
-     .note     dates, meta lines, venues         note          --size-note, dimmed
+     .note     dates, meta lines, venues         body          --size-note, dimmed
      .chip     tags                              body          --size-small
      code      inline / blocks                   mono          0.875em / --size-small
 
@@ -279,7 +278,7 @@ th { font-family: var(--font-note); font-weight: normal; letter-spacing: 0.05em;
   list-style: none;
   text-wrap: balance;
   line-height: 1.9;
-  font-size: var(--size-ui);
+  font-size: var(--size-note);
 }
 .pill { display: inline-block; margin: 0; padding: 0; white-space: nowrap; }
 .pill a, .pill > span {
@@ -468,7 +467,7 @@ body.blog .post-list > li {
   margin: 0;
   padding: 0.5rem 0;
 }
-body.blog .post-list__date { white-space: nowrap; }
+body.blog .post-list__date { white-space: nowrap; font-variant-numeric: tabular-nums; }
 body.blog .post-list__title {
   font-family: var(--font-heading);
   font-weight: var(--weight-heading);
