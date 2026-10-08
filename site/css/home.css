@@ -59,8 +59,10 @@ body.home { position: fixed; inset: 0; background: #050d24; touch-action: none; 
   color: #f7f2ed;
 }
 
+/* Narrow screens keep the name on the walkway at the bottom, just with the column's
+   smaller gutter (and clear of the iPhone home bar). */
 @media (max-width: 900px) {
-  .home-name { position: relative; text-align: center; padding: 0 20pt; margin: 0 auto; max-width: var(--column); }
+  .home-name { padding: 20pt 20pt calc(20pt + env(safe-area-inset-bottom)); }
 }
 
 @media (prefers-color-scheme: dark) {
