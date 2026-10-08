@@ -457,15 +457,16 @@ body.blog .post-body hr::after {
 
 body.blog .post-body pre { margin: 1.6rem 0; border-radius: 6px; }
 
-/* writing index: date | title | tags rows. The rows share one grid (subgrid), so the
-   title column is only as wide as the longest title and the tags line up just past it,
-   instead of out at the column's edge. Titles wrap only once that runs out of room. */
+/* writing index: date | title | tags rows. The rows share one grid (subgrid). The
+   title column is at least 20rem (less if the screen can't spare it), so the tags line
+   up at a steady spot rather than out at the column's edge; a longer title widens the
+   column and pushes them out, and titles wrap only once that runs out of room. */
 body.blog .post-list {
   list-style: none;
   padding: 0;
   margin: 0;
   display: grid;
-  grid-template-columns: 7.2rem minmax(0, max-content) auto;
+  grid-template-columns: 7.2rem minmax(min(20rem, 100% - 16rem), max-content) auto;
   justify-content: start;
   column-gap: 1rem;
 }
