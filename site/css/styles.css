@@ -15,7 +15,16 @@
   --fill-soft: #d3e9ef;        /* shaft-tinted panel */
   --fill-current: #0d64a8;     /* current page in the menu */
   --fill-current-text: #eef7f8;
-  --fill-code: #030b1f;        /* walkway abyss */
+  --fill-code: #e2f0f3;        /* shaft-lit pane, a step off the page */
+  --code-text: #0b1a33;
+  --code-comment: #526a82;
+  --code-punct: #44596e;
+  --code-number: #1a4f9c;      /* numbers, constants, tags */
+  --code-string: #0a6b5a;      /* strings, builtins */
+  --code-operator: #2f4459;
+  --code-keyword: #0d64a8;     /* deep tank blue */
+  --code-function: #061229;
+  --code-variable: #4a45a8;
   --fill-dim: color-mix(in srgb, var(--fill-text) 58%, var(--fill-bg));  /* notes, ledes, h6 */
 
   /* A family per role. Headings and notes share the body face: headings stand apart by
@@ -58,7 +67,16 @@
     --fill-soft: #0e2244;      /* tank navy, lifted */
     --fill-current: #59dffc;
     --fill-current-text: #050d24;
-    --fill-code: #020818;
+    --fill-code: #020818;        /* walkway abyss */
+    --code-text: #dcecf2;
+    --code-comment: #6489a8;
+    --code-punct: #9fb8c8;
+    --code-number: #9ecbff;
+    --code-string: #b4f0e2;
+    --code-operator: #c8dce6;
+    --code-keyword: #59dffc;
+    --code-function: #f2fbff;
+    --code-variable: #bcd2ff;
     color-scheme: dark;
   }
 }
@@ -69,7 +87,16 @@
   --fill-soft: #0e2244;      /* tank navy, lifted */
   --fill-current: #59dffc;
   --fill-current-text: #050d24;
-  --fill-code: #020818;
+  --fill-code: #020818;        /* walkway abyss */
+  --code-text: #dcecf2;
+  --code-comment: #6489a8;
+  --code-punct: #9fb8c8;
+  --code-number: #9ecbff;
+  --code-string: #b4f0e2;
+  --code-operator: #c8dce6;
+  --code-keyword: #59dffc;
+  --code-function: #f2fbff;
+  --code-variable: #bcd2ff;
   color-scheme: dark;
 }
 
@@ -213,19 +240,19 @@ pre {
   overflow-x: auto;
   border-radius: 2px;
   background: var(--fill-code);
-  color: #dcecf2;
+  color: var(--code-text);
 }
 pre code { font-size: 1em; background: none; padding: 0; white-space: pre; overflow-wrap: normal; }
 
-/* Prism tokens (dark abyss block in both themes; cool sea tones from the painting) */
-.token.comment, .token.prolog, .token.doctype, .token.cdata { color: #6489a8; font-style: italic; }
-.token.punctuation { color: #9fb8c8; }
-.token.property, .token.tag, .token.boolean, .token.number, .token.constant, .token.symbol { color: #9ecbff; }
-.token.selector, .token.attr-name, .token.string, .token.char, .token.builtin, .token.inserted { color: #b4f0e2; }
-.token.operator, .token.entity, .token.url { color: #c8dce6; }
-.token.atrule, .token.attr-value, .token.keyword { color: #59dffc; }
-.token.function, .token.class-name { color: #f2fbff; font-weight: 600; }
-.token.regex, .token.important, .token.variable { color: #bcd2ff; }
+/* Prism tokens (pale shaft-lit pane in light, dark abyss in dark; sea tones from the painting) */
+.token.comment, .token.prolog, .token.doctype, .token.cdata { color: var(--code-comment); font-style: italic; }
+.token.punctuation { color: var(--code-punct); }
+.token.property, .token.tag, .token.boolean, .token.number, .token.constant, .token.symbol { color: var(--code-number); }
+.token.selector, .token.attr-name, .token.string, .token.char, .token.builtin, .token.inserted { color: var(--code-string); }
+.token.operator, .token.entity, .token.url { color: var(--code-operator); }
+.token.atrule, .token.attr-value, .token.keyword { color: var(--code-keyword); }
+.token.function, .token.class-name { color: var(--code-function); font-weight: 600; }
+.token.regex, .token.important, .token.variable { color: var(--code-variable); }
 
 /* ---- tables ------------------------------------------------------------------- */
 table { display: block; overflow-x: auto; margin: 20pt 0; border-collapse: collapse; }
