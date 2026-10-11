@@ -10,6 +10,45 @@ module.exports = function (eleventyConfig) {
     md.set({ typographer: true }).use(katex, { throwOnError: false, enableFencedBlocks: true })
   )
 
+  // Links to other sites open in a new tab; links within the site stay in this one.
+  eleventyConfig.amendLibrary('md', md => {
+    const linkOpen = md.renderer.rules.link_open || ((tokens, idx, options, env, self) =>
+      self.renderToken(tokens, idx, options))
+    md.renderer.rules.link_open = (tokens, idx, options, env, self) => {
+      const token = tokens[idx]
+      if (/^https?:\/\//i.test(token.attrGet('href') || '')) {
+        token.attrSet('target', '_blank')
+        token.attrSet('rel', 'noopener')
+      }
+      return linkOpen(tokens, idx, options, env, self)
+    }
+  })
+
+  // ![alt](src "caption") alone in a paragraph becomes a captioned <figure>, the same
+  // markup as {% figure %} below. Images inline with other text are left alone.
+  eleventyConfig.amendLibrary('md', md => {
+    md.core.ruler.push('figure', state => {
+      const tokens = state.tokens
+      for (let i = 0; i + 2 < tokens.length; i++) {
+        if (tokens[i].type !== 'paragraph_open' || tokens[i + 1].type !== 'inline') continue
+        const kids = tokens[i + 1].children.filter(t => !(t.type === 'text' && !t.content.trim()))
+        if (kids.length !== 1 || kids[0].type !== 'image' || !kids[0].attrGet('title')) continue
+        kids[0].meta = { ...kids[0].meta, figure: true }
+        tokens[i].hidden = tokens[i + 2].hidden = true  // drop the <p> wrapper
+      }
+    })
+    const image = md.renderer.rules.image
+    md.renderer.rules.image = (tokens, idx, options, env, self) => {
+      const token = tokens[idx]
+      if (!token.meta?.figure) return image(tokens, idx, options, env, self)
+      const caption = token.attrGet('title')
+      token.attrs = token.attrs.filter(([name]) => name !== 'title')
+      token.attrSet('loading', 'lazy')
+      const img = image(tokens, idx, options, env, self)
+      return `<figure>${img}<figcaption>${md.utils.escapeHtml(caption)}</figcaption></figure>\n`
+    }
+  })
+
   eleventyConfig.addPassthroughCopy({
     'site/css': 'css',
     'site/js': 'js',
@@ -69,6 +108,16 @@ module.exports = function (eleventyConfig) {
   // A margin note: {% aside %}a thought on the side{% endaside %}
   // Sits in the right margin on wide screens and folds inline in parentheses on narrow ones.
   eleventyConfig.addPairedShortcode('aside', content => `<span class="aside">${content.trim()}</span>`)
+
+  // An image with a caption: {% figure "/img/posts/x.png", "alt text", "The caption.", 500 %}
+  // Caption and width are optional; the caption may contain HTML. Kept on one line so
+  // markdown-it treats it as a single HTML block.
+  const attr = s => String(s).replace(/&/g, '&amp;').replace(/"/g, '&quot;')
+  eleventyConfig.addShortcode('figure', (src, alt = '', caption = '', width) => {
+    const w = width ? ` width="${attr(width)}"` : ''
+    const cap = caption ? `<figcaption>${caption}</figcaption>` : ''
+    return `<figure><img src="${attr(src)}" alt="${attr(alt)}"${w} loading="lazy">${cap}</figure>`
+  })
 
   return {
     dir: { input: 'site', includes: '_includes', data: '_data', output: '_site' },

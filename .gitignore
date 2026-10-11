@@ -1,13 +1,6 @@
 _site/
 _site-prod/
 node_modules/
-
-# ASCIInator exports and source images: ~8MB of originals that only the
-# converters in tools/ read. The generated site/js/ascii-scene.js is what the
-# site actually ships, so these stay local.
-asciinator_*.html
-asciinator_*.png
-asciinator_*.svg
 .cache/
 *.log
 .DS_Store

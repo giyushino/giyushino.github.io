@@ -6,6 +6,12 @@
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run", "serve"],
       "port": 8080
+    },
+    {
+      "name": "eleventy-prod",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "serve:prod"],
+      "port": 8091
     }
   ]
 }
