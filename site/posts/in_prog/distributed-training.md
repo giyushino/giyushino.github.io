@@ -50,7 +50,7 @@ GPU memory), but during training, we care about the communication between GPUs a
 Within a node, GPUs can transmit information very quickly using technology like NVLink,
 but transfer is much slower across nodes. 
 
-The key to blazingly fast TPS is to hide this communication somehow, and I'll
+The key to goooood TPS is to hide this communication somehow, and I'll
 walk you through how we can do this.
 
 
@@ -61,6 +61,11 @@ team is hard at work on research stuff, so it's up to us to make sure everything
 related to training infra goes smoothly!
 
 ### Training Allan-1B
-The research team finished curating the pretraining set, and our clutch CTO secured us a bunch of H100s! We already did a lot of testing to optimizing TPS on one GPU, so let's get scaling.
+The research team finished curating the pretraining set, and our clutch CTO secured us a bunch of H100s SXMs!
+We already did a lot of testing to optimizing TPS on one GPU, so let's get to scaling. We spent a lot
+of time optimizing the training loop on one GPU, where we achieved 8500 TPS. Since we're training on H100s,
+
+
+
 
 
