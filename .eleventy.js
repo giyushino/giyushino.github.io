@@ -24,6 +24,19 @@ module.exports = function (eleventyConfig) {
     }
   })
 
+  // Headings get slug ids ("Setting the Scene" -> #setting-the-scene) so they can be linked to.
+  eleventyConfig.amendLibrary('md', md => {
+    md.core.ruler.push('heading_ids', state => {
+      const tokens = state.tokens
+      for (let i = 0; i + 1 < tokens.length; i++) {
+        if (tokens[i].type !== 'heading_open' || tokens[i].attrGet('id')) continue
+        const slug = tokens[i + 1].content.toLowerCase().trim()
+          .replace(/[^\w\s-]/g, '').replace(/\s+/g, '-')
+        if (slug) tokens[i].attrSet('id', slug)
+      }
+    })
+  })
+
   // ![alt](src "caption") alone in a paragraph becomes a captioned <figure>, the same
   // markup as {% figure %} below. Images inline with other text are left alone.
   eleventyConfig.amendLibrary('md', md => {
@@ -63,17 +76,23 @@ module.exports = function (eleventyConfig) {
     'node_modules/katex/dist/fonts/*.woff2': 'css/katex/fonts',
   })
 
-  // `draft: true` (and everything in posts/in_prog/) renders on the dev server
-  // but is dropped from `npm run build`. `npm run serve:prod` (HIDE_DRAFTS=1) hides
-  // them on a live-reloading server too, so you can see exactly what will ship.
+  // `draft: true` (and everything in posts/in_prog/) shows up everywhere on the dev
+  // server. In `npm run build` (and `npm run serve:prod`, HIDE_DRAFTS=1) draft posts
+  // are unlisted: still rendered at their URL (in_prog/ posts live at /drafts/<slug>/)
+  // so the link can be shared, but left out of the writing page and feed, and marked
+  // noindex. Draft pages that aren't posts are dropped from the build entirely.
+  const hideDrafts = () =>
+    process.env.ELEVENTY_RUN_MODE === 'build' || process.env.HIDE_DRAFTS === '1'
   eleventyConfig.addPreprocessor('drafts', '*', data => {
-    const hide = process.env.ELEVENTY_RUN_MODE === 'build' || process.env.HIDE_DRAFTS === '1'
-    if (data.draft && hide) return false
+    const isPost = data.page.inputPath.startsWith('./site/posts/')
+    if (data.draft && hideDrafts() && !isPost) return false
   })
 
   // Posts, newest first.
   eleventyConfig.addCollection('posts', collection =>
-    collection.getFilteredByGlob('site/posts/**/*.md').sort((a, b) => b.date - a.date)
+    collection.getFilteredByGlob('site/posts/**/*.md')
+      .filter(post => !(post.data.draft && hideDrafts()))
+      .sort((a, b) => b.date - a.date)
   )
 
   // September 8, 2026
