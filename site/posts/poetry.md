@@ -1,7 +1,7 @@
 ---
 title: Poetry
 date: 2026-10-14
-tag: essay
+tag: poetry
 readingTime: 12 min
 blurb: Short collection of poems
 ---
@@ -58,5 +58,5 @@ walk with me where reason is rejected;
 let us speak with sighs and glances sent,
 loosen our tongues and laugh with our bellies.
 the reign of rationale runs tight, though
-far below thy brow, the heart remains free`
+far below thy brow, the heart remains free
 ```
