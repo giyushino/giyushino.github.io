@@ -24,7 +24,7 @@ care about:
 TPS is pretty self explanatory, it's the number of tokens we
 train on per second per GPU
 $$
-\text{TPS} = \frac{\text{num tokens}}{\Delta t \times \text{num GPUs}}
+\text{TPS} = \frac{\text{Num tokens}}{\Delta t \times \text{Num GPUs}}
 $$
 
 MFU is TPS times a constant for a fixed model and hardware. It's  the
@@ -64,6 +64,7 @@ related to training infra goes smoothly!
 The research team finished curating the pretraining set, and our clutch CTO secured us a bunch of H100s SXMs!
 We already did a lot of testing to optimizing TPS on one GPU, so let's get to scaling. We spent a lot
 of time optimizing the training loop on one GPU, where we achieved 8500 TPS. Since we're training on H100s,
+
 
 
 

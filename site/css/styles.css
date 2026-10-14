@@ -495,6 +495,19 @@ body.blog .post-body hr::after {
 
 body.blog .post-body pre { margin: 1.6rem 0; border-radius: 6px; }
 
+/* ```poem: line breaks kept, stanzas spaced, long lines wrap with a hanging indent.
+   Each line is its own block; the <br>s are only there for feed readers. */
+body.blog .post-body .poem { margin: 1.6rem 0; }
+body.blog .post-body .poem p { margin: 0 0 1.4em; }
+body.blog .post-body .poem p:last-child { margin-bottom: 0; }
+body.blog .post-body .poem br { display: none; }
+body.blog .post-body .poem .line {
+  display: block;
+  padding-left: calc(1.5em + var(--indent, 0) * 0.5ch);
+  text-indent: -1.5em;
+  text-wrap: pretty;
+}
+
 /* writing index: date | title | tags rows. The rows share one grid (subgrid). The
    title column is at least 20rem (less if the screen can't spare it), so the tags line
    up at a steady spot rather than out at the column's edge; a longer title widens the

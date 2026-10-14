@@ -62,6 +62,26 @@ module.exports = function (eleventyConfig) {
     }
   })
 
+  // ```poem fences keep their line breaks: each line is a line, blank lines split
+  // stanzas, and leading spaces indent. Lines still get inline markdown (*em*, links,
+  // curly quotes).
+  eleventyConfig.amendLibrary('md', md => {
+    const fence = md.renderer.rules.fence
+    md.renderer.rules.fence = (tokens, idx, options, env, self) => {
+      const token = tokens[idx]
+      if (token.info.trim() !== 'poem') return fence(tokens, idx, options, env, self)
+      const stanzas = token.content.trimEnd().split(/\n\s*\n/).map(stanza =>
+        stanza.split('\n').map(line => {
+          const indent = line.match(/^ */)[0].length
+          const text = md.renderInline(line.trim(), env)
+          const style = indent ? ` style="--indent:${indent}"` : ''
+          return `<span class="line"${style}>${text}</span>`
+        }).join('<br>\n')
+      )
+      return `<div class="poem">${stanzas.map(s => `<p>${s}</p>`).join('')}</div>\n`
+    }
+  })
+
   eleventyConfig.addPassthroughCopy({
     'site/css': 'css',
     'site/js': 'js',
