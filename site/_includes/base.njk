@@ -3,8 +3,23 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{% if title and not isHome %}{{ title }} · {% endif %}{{ site.title }}</title>
-    <meta name="description" content="{{ description or blurb or site.description }}" />
+    {%- set fullTitle %}{% if title and not isHome %}{{ title }} · {% endif %}{{ site.title }}{% endset %}
+    {%- set summary = description or blurb or site.description %}
+    <title>{{ fullTitle }}</title>
+    <meta name="description" content="{{ summary }}" />
+    {#- Link previews (LinkedIn, iMessage, Slack, X...). Without og:image they grab the
+        first <img> on the page, which on the home page is the blurred loading stand-in.
+        og.jpg is the aquarium layers flattened to 1200x630; remake it if the art changes. #}
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="{{ site.title }}" />
+    <meta property="og:title" content="{{ fullTitle }}" />
+    <meta property="og:description" content="{{ summary }}" />
+    <meta property="og:url" content="{{ site.url }}{{ page.url }}" />
+    <meta property="og:image" content="{{ site.url }}/img/og.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="A girl walks along an aquarium railing while whale sharks and schools of fish glide through the blue tank beside her." />
+    <meta name="twitter:card" content="summary_large_image" />
     {%- if draft %}
     <meta name="robots" content="noindex, nofollow" />
     {%- endif %}
